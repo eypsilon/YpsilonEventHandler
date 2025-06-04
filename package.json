@@ -1,0 +1,29 @@
+{
+  "name": "ypsilon-event-handler",
+  "version": "1.0.0",
+  "description": "A production-ready event handling system for web applications with built-in debugging, memory leak prevention, and method chaining support",
+  "main": "YpsilonEventHandler.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "echo \"No build step required\""
+  },
+  "keywords": [
+    "events",
+    "event-handler",
+    "dom-events",
+    "passive-events",
+    "browser",
+    "frontend",
+    "memory-efficient",
+    "debugging"
+  ],
+  "author": "Engin Ypsilon",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eypsilon/YpsilonEventHandler.git"
+  },
+  "bugs": {
+    "url": "https://github.com/eypsilon/YpsilonEventHandler/issues"
+  }
+}

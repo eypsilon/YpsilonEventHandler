@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YpsilonEventHandler Test Page</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .test-section {
+            margin: 30px 0;
+            padding: 20px;
+            border: 2px solid #e3f2fd;
+            border-radius: 8px;
+            background: #f8f9ff;
+        }
+
+        .test-section h2 {
+            color: #1976d2;
+            margin-top: 0;
+            border-bottom: 2px solid #e3f2fd;
+            padding-bottom: 10px;
+        }
+
+        button {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 16px;
+            margin: 5px 0;
+            transition: border-color 0.3s ease;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-group {
+            margin: 15px 0;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #555;
+        }
+
+        .console-output {
+            background: #1e1e1e;
+            color: #00ff00;
+            padding: 20px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            max-height: 300px;
+            overflow-y: auto;
+            margin-top: 20px;
+            border: 2px solid #333;
+        }
+
+        .scroll-area {
+            height: 200px;
+            overflow-y: scroll;
+            background: #f0f0f0;
+            padding: 20px;
+            border-radius: 6px;
+            margin: 10px 0;
+        }
+
+        .scroll-content {
+            height: 800px;
+            background: linear-gradient(to bottom, #ff9a9e 0%, #fecfef 50%, #fecfef 100%);
+            padding: 20px;
+            border-radius: 6px;
+        }
+
+        .clickable {
+            background: #4caf50;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            display: inline-block;
+            margin: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .clickable:hover {
+            background: #45a049;
+            transform: scale(1.05);
+        }
+
+        .status {
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+            font-weight: bold;
+        }
+
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .status.info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .stat-card {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            border: 2px solid #e9ecef;
+        }
+
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .floating-elements {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .floating-button {
+            background: #ff4757;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 50%;
+            cursor: pointer;
+            margin: 5px;
+            font-size: 18px;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 YpsilonEventHandler Test Suite</h1>
+
+        <div class="status success">
+            <strong>✅ Handler Status:</strong> <span id="handler-status">Initializing...</span>
+        </div>
+
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-number" id="click-count">0</div>
+                <div>Clicks Detected</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="input-count">0</div>
+                <div>Input Events</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="key-count">0</div>
+                <div>Key Events</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="total-events">0</div>
+                <div>Total Events</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="test-section">
+            <h2>🖱️ Click Event Testing</h2>
+            <p>Click on any of these elements to test click event handling:</p>
+
+            <button class="test-button">Standard Button</button>
+            <button class="test-button special-button">Special Button</button>
+            <div class="clickable">Clickable Div</div>
+            <span class="clickable">Clickable Span</span>
+
+            <p>Click count: <strong id="click-display">0</strong></p>
+        </div>
+
+        <div class="test-section">
+            <h2>📝 Form Event Testing</h2>
+
+            <form id="test-form">
+                <div class="form-group">
+                    <label for="text-input">Text Input (tests input/change events):</label>
+                    <input type="text" id="text-input" placeholder="Type something here...">
+                </div>
+
+                <div class="form-group">
+                    <label for="email-input">Email Input:</label>
+                    <input type="email" id="email-input" placeholder="test@example.com">
+                </div>
+
+                <div class="form-group">
+                    <label for="textarea">Textarea:</label>
+                    <textarea id="textarea" rows="4" placeholder="Write a longer message..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="select">Select Dropdown:</label>
+                    <select id="select">
+                        <option value="">Choose an option</option>
+                        <option value="option1">Option 1</option>
+                        <option value="option2">Option 2</option>
+                        <option value="option3">Option 3</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="checkbox"> Check this box
+                    </label>
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        <input type="radio" name="radio" value="1"> Radio Option 1
+                    </label>
+                    <label>
+                        <input type="radio" name="radio" value="2"> Radio Option 2
+                    </label>
+                </div>
+
+                <button type="submit">Submit Form (tests submit event)</button>
+                <button type="button" onclick="document.getElementById('test-form').reset()">Reset Form</button>
+            </form>
+        </div>
+
+        <div class="test-section">
+            <h2>⌨️ Keyboard Event Testing</h2>
+            <p>Click in the input below and type to test keydown/keyup events:</p>
+            <input type="text" id="keyboard-test" placeholder="Type here to test keyboard events...">
+            <p>Last key pressed: <strong id="last-key">None</strong></p>
+        </div>
+
+        <div class="test-section">
+            <h2>🎯 Focus/Blur Event Testing</h2>
+            <p>Click in and out of these inputs to test focus/blur events:</p>
+            <input type="text" placeholder="Focus test input 1">
+            <input type="text" placeholder="Focus test input 2">
+            <input type="text" placeholder="Focus test input 3">
+        </div>
+
+        <div class="test-section">
+            <h2>📏 Scroll Event Testing</h2>
+            <p>Scroll in the area below to test scroll events:</p>
+            <div class="scroll-area">
+                <div class="scroll-content">
+                    <h3>Scrollable Content</h3>
+                    <p>This is a scrollable area. Scroll up and down to trigger scroll events.</p>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                    <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                    <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+                    <p>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                    <p>Scroll more to see additional content...</p>
+                    <p>This content should trigger scroll events as you navigate through it.</p>
+                    <p>Keep scrolling to test the scroll event handler performance.</p>
+                    <p>The event handler should log scroll events to the console.</p>
+                    <p>You're near the end of the scrollable content now.</p>
+                    <p>Final paragraph of scrollable content.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h2>📊 Console Output</h2>
+            <p>Event logs will appear below (and in browser console):</p>
+            <div class="console-output" id="console-output">
+                <div>YpsilonEventHandler Console Output:</div>
+                <div>Open browser DevTools Console for full debug output.</div>
+            </div>
+            <button onclick="clearConsoleOutput()">Clear Console Output</button>
+        </div>
+
+        <div class="test-section">
+            <h2>🧪 Manual Tests</h2>
+            <button onclick="testResize()">Trigger Resize Test</button>
+            <button onclick="testError()">Trigger Error Test</button>
+            <button onclick="showDebugInfo()">Show Debug Info</button>
+            <button onclick="toggleConsole()">Toggle Console Logging</button>
+        </div>
+    </div>
+
+    <div class="floating-elements">
+        <button class="floating-button" title="Floating Click Test">🎯</button>
+        <button class="floating-button" title="Another Floating Button">⚡</button>
+    </div>
+
+    <script>
+        /**
+         * YpsilonEventHandler - A production-ready event handling system for web applications
+         */
+        class YpsilonEventHandler {
+            constructor(options = {}) {
+                this.elementListeners = new WeakMap();
+                this.eventListeners = new Map();
+                this.consoleLogsEnabled = options.enableConsole || false;
+                this.passiveListenersTested = false;
+                this.passiveSupported = false;
+
+                this.eventFunctionMap = options.eventFunctionMap || {
+                    click: 'handleClick',
+                    submit: 'handleSubmit',
+                    change: 'handleChange',
+                    input: 'handleInput',
+                    keydown: 'handleKeydown',
+                    keyup: 'handleKeyup',
+                    focus: 'handleFocus',
+                    blur: 'handleBlur',
+                    resize: 'handleResize',
+                    scroll: 'handleScroll',
+                    load: 'handleLoad',
+                    error: 'handleError'
+                };
+
+                this.eventMapping = options.eventMapping || {
+                    document: {
+                        element: 'document',
+                        events: [
+                            { type: 'click', handler: 'handleClick' },
+                            { type: 'submit', handler: 'handleSubmit' },
+                            { type: 'change', handler: 'handleChange' },
+                            { type: 'input', handler: 'handleInput' },
+                            { type: 'keydown', handler: 'handleKeydown' },
+                            { type: 'keyup', handler: 'handleKeyup' },
+                            { type: 'focus', handler: 'handleFocus' },
+                            { type: 'blur', handler: 'handleBlur' }
+                        ]
+                    },
+                    window: {
+                        element: 'window',
+                        events: [
+                            { type: 'resize', handler: 'handleResize' },
+                            { type: 'scroll', handler: 'handleScroll' },
+                            { type: 'load', handler: 'handleLoad' },
+                            { type: 'error', handler: 'handleError' }
+                        ]
+                    }
+                };
+
+                this.initializeEventSystem();
+                if (options.testPassive !== false) {
+                    this.setPassiveListenerIfApplicable();
+                }
+            }
+
+            _safeExecute(callback, errorMessage) {
+                try {
+                    return callback();
+                } catch (error) {
+                    this.consoleLog('error', errorMessage, error);
+                    throw error;
+                }
+            }
+
+            _validateParams(params, required) {
+                const missing = required.filter(param => !params[param]);
+                if (missing.length > 0) {
+                    throw new Error(`Missing required parameters: ${missing.join(', ')}`);
+                }
+            }
+
+            enableConsoleNotifications() {
+                this.consoleLogsEnabled = true;
+                return this;
+            }
+
+            disableConsoleNotifications() {
+                this.consoleLogsEnabled = false;
+                return this;
+            }
+
+            consoleLog(type = 'warn', ...args) {
+                if (!this.consoleLogsEnabled) return;
+
+                const validTypes = ['log', 'warn', 'error', 'debug', 'info'];
+                const logType = validTypes.includes(type) ? type : 'warn';
+
+                // eslint-disable-next-line no-console
+                if (typeof console[logType] === 'function') {
+                    console[logType](...args);
+                } else {
+                    console.warn(...args);
+                }
+            }
+
+            logToPageConsole(type, ...args) {
+                const consoleOutput = document.getElementById('console-output');
+                if (consoleOutput) {
+                    const timestamp = new Date().toLocaleTimeString();
+                    const logEntry = document.createElement('div');
+                    logEntry.innerHTML = `<span style="color: #666">[${timestamp}]</span> <span style="color: ${this.getLogColor(type)}">[${type.toUpperCase()}]</span> ${args.join(' ')}`;
+                    consoleOutput.appendChild(logEntry);
+                    consoleOutput.scrollTop = consoleOutput.scrollHeight;
+                }
+            }
+
+            getLogColor(type) {
+                const colors = {
+                    debug: '#00ff00',
+                    info: '#00ccff',
+                    warn: '#ffff00',
+                    error: '#ff0000',
+                    log: '#ffffff'
+                };
+                return colors[type] || '#ffffff';
+            }
+
+            setPassiveListenerIfApplicable() {
+                if (this.passiveListenersTested) return this;
+
+                try {
+                    let opts = Object.defineProperty({}, 'passive', {
+                        get: () => {
+                            this.passiveSupported = true;
+                            return true;
+                        }
+                    });
+
+                    window.addEventListener('testPassive', null, opts);
+                    window.removeEventListener('testPassive', null, opts);
+                } catch (e) {
+                    this.passiveSupported = false;
+                }
+
+                this.passiveListenersTested = true;
+                this.consoleLog('debug', 'Passive listener support:', this.passiveSupported);
+                return this;
+            }
+
+            _getPassiveOptions(eventType) {
+                if (!this.passiveSupported) {
+                    return false;
+                }
+
+                const passiveEvents = ['scroll', 'touchstart', 'touchmove', 'wheel', 'mousewheel'];
+                return passiveEvents.includes(eventType) ? { passive: true } : false;
+            }
+
+            initializeEventSystem() {
+                this.handleEvent = (event) => {
+                    try {
+                        // Update stats
+                        updateEventStats(event.type);
+
+                        if (this.eventFunctionMap?.[event.type]) {
+                            const handlerName = this.eventFunctionMap[event.type];
+                            if (typeof this[handlerName] === 'function') {
+                                return this[handlerName](event, event.target);
+                            }
+                        }
+
+                        this.consoleLog('warn', `Event handler not found for event: ${event.type}`, event);
+                    } catch (error) {
+                        this.consoleLog('error', 'Error in event handler:', error, event);
+                    }
+                };
+
+                this.registerEvents();
+            }
+
+            registerEvents() {
+                this._handleEventRegistering('addEventListener');
+            }
+
+            destroy() {
+                this._handleEventRegistering('removeEventListener');
+                this.eventListeners.clear();
+                this.consoleLog('debug', 'YpsilonEventHandler destroyed');
+                return this;
+            }
+
+            _handleEventRegistering(execFn) {
+                Object.entries(this.eventMapping).forEach(([key, config]) => {
+                    const element = this._getElement(config.element);
+                    if (!element) {
+                        this.consoleLog('warn', `Element not found for ${key}:`, config.element);
+                        return;
+                    }
+
+                    if (execFn === 'addEventListener') {
+                        this.eventListeners.set(key, { element, handlers: new Map() });
+                    }
+
+                    const events = Array.isArray(config.events) ? config.events : Object.values(config.events);
+
+                    events.forEach(eventConfig => {
+                        if (!eventConfig || !eventConfig.type || !eventConfig.handler) {
+                            this.consoleLog('warn', `Invalid event config for ${key}:`, eventConfig);
+                            return;
+                        }
+
+                        if (typeof this[eventConfig.handler] !== 'function') {
+                            this.consoleLog('warn', `Handler ${eventConfig.handler} not found for ${key}`);
+                            return;
+                        }
+
+                        const passiveOptions = this._getPassiveOptions(eventConfig.type);
+                        const listenerOptions = passiveOptions || eventConfig.capture || false;
+
+                        element[execFn](eventConfig.type, this, listenerOptions);
+
+                        if (execFn === 'addEventListener') {
+                            this.eventListeners.get(key).handlers.set(eventConfig.type, eventConfig.handler);
+                            this.consoleLog('debug', `Event registered: ${eventConfig.type} on ${key}`);
+                        }
+                    });
+                });
+            }
+
+            _getElement(elementSelector) {
+                if (typeof elementSelector === 'string') {
+                    if (elementSelector === 'document') return document;
+                    if (elementSelector === 'window') return window;
+                    return document.querySelector(elementSelector);
+                }
+                return elementSelector instanceof Element ? elementSelector : null;
+            }
+
+            getEventListenerDebugInfo() {
+                const debug = {
+                    mappingCount: Object.keys(this.eventMapping).length,
+                    registeredMappings: this.eventListeners.size,
+                    passiveSupported: this.passiveSupported,
+                    consoleEnabled: this.consoleLogsEnabled,
+                    mappings: []
+                };
+
+                this.eventListeners.forEach((config, key) => {
+                    debug.mappings.push({
+                        key,
+                        element: config.element,
+                        elementType: config.element?.tagName || 'unknown',
+                        elementId: config.element?.id || 'no-id',
+                        handlerCount: config.handlers.size,
+                        eventTypes: Array.from(config.handlers.keys())
+                    });
+                });
+
+                return debug;
+            }
+
+            // Event Handlers
+            handleClick(event, target) {
+                this.consoleLog('debug', 'Click event:', {
+                    type: event.type,
+                    target: target.tagName,
+                    className: target.className,
+                    id: target.id
+                });
+            }
+
+            handleSubmit(event, target) {
+                this.consoleLog('debug', 'Submit event:', {
+                    type: event.type,
+                    target: target.tagName,
+                    action: target.action
+                });
+            }
+
+            handleChange(event, target) {
+                this.consoleLog('debug', 'Change event:', {
+                    type: event.type,
+                    target: target.tagName,
+                    value: target.value
+                });
+            }
+
+            handleInput(event, target) {
+                this.consoleLog('debug', 'Input event:', {
+                    type: event.type,
+                    target: target.tagName,
+                    value: target.value
+                });
+            }
+
+            handleKeydown(event, target) {
+                this.consoleLog('debug', 'Keydown event:', {
+                    type: event.type,
+                    key: event.key,
+                    target: target.tagName
+                });
+                document.getElementById('last-key').textContent = event.key;
+            }
+
+            handleKeyup(event, target) {
+                this.consoleLog('debug', 'Keyup event:', {
+                    type: event.type,
+                    key: event.key,
+                    target: target.tagName
+                });
+            }
+
+            handleFocus(event, target) {
+                this.consoleLog('debug', 'Focus event:', {
+                    type: event.type,
+                    target: target.tagName,
+                    id: target.id
+                });
+            }
+
+            handleBlur(event, target) {
+                this.consoleLog('debug', 'Blur event:', {
+                    type: event.type,
+                    target: target.tagName,
+                    id: target.id
+                });
+            }
+
+            handleResize(event, target) {
+                this.consoleLog('debug', 'Resize event:', {
+                    type: event.type,
+                    innerWidth: window.innerWidth,
+                    innerHeight: window.innerHeight
+                });
+            }
+
+            handleScroll(event, target) {
+                this.consoleLog('debug', 'Scroll event:', {
+                    type: event.type,
+                    scrollY: window.scrollY,
+                    scrollX: window.scrollX
+                });
+            }
+
+            handleLoad(event, target) {
+                this.consoleLog('debug', 'Load event:', {
+                    type: event.type,
+                    target: target.tagName || 'window'
+                });
+            }
+
+            handleError(event, target) {
+                this.consoleLog('error', 'Error event:', {
+                    type: event.type,
+                    target: target.tagName,
+                    error: event.error
+                });
+            }
+        }
+
+        // Test page functionality
+        let eventHandler;
+        let eventStats = {
+            click: 0,
+            input: 0,
+            change: 0,
+            keydown: 0,
+            keyup: 0,
+            focus: 0,
+            blur: 0,
+            scroll: 0,
+            submit: 0,
+            total: 0
+        };
+
+        function updateEventStats(eventType) {
+            if (eventStats.hasOwnProperty(eventType)) {
+                eventStats[eventType]++;
+            }
+            eventStats.total++;
+
+            // Update UI
+            document.getElementById('click-count').textContent = eventStats.click;
+            document.getElementById('input-count').textContent = eventStats.input + eventStats.change;
+            document.getElementById('key-count').textContent = eventStats.keydown + eventStats.keyup;
+            document.getElementById('total-events').textContent = eventStats.total;
+
+            if (eventType === 'click') {
+                document.getElementById('click-display').textContent = eventStats.click;
+            }
+        }
+
+        function clearConsoleOutput() {
+            const consoleOutput = document.getElementById('console-output');
+            consoleOutput.innerHTML = '<div>Console cleared...</div>';
+        }
+
+        function testResize() {
+            // Simulate resize by dispatching event
+            window.dispatchEvent(new Event('resize'));
+        }
+
+        function testError() {
+            // Simulate error
+            window.dispatchEvent(new ErrorEvent('error', {
+                error: new Error('Test error for demonstration'),
+                message: 'Test error message'
+            }));
+        }
+
+        function showDebugInfo() {
+            const debugInfo = eventHandler.getEventListenerDebugInfo();
+            console.log('Debug Info:', debugInfo);
+            alert('Debug info logged to console. Check console for details.');
+        }
+
+        function toggleConsole() {
+            if (eventHandler.consoleLogsEnabled) {
+                eventHandler.disableConsoleNotifications();
+                document.getElementById('handler-status').textContent = 'Running (Console Disabled)';
+            } else {
+                eventHandler.enableConsoleNotifications();
+                document.getElementById('handler-status').textContent = 'Running (Console Enabled)';
+            }
+        }
+
+        // Initialize when DOM is ready
+        document.addEventListener('DOMContentLoaded', function() {
+            eventHandler = new YpsilonEventHandler()
+                .enableConsoleNotifications();
+
+            document.getElementById('handler-status').textContent = 'Running (Console Enabled)';
+
+            // Test form submission prevention
+            document.getElementById('test-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                alert('Form submission prevented for testing purposes');
+            });
+
+            console.log('YpsilonEventHandler Test Page Loaded');
+            console.log('EventHandler:', eventHandler);
+            console.log('Debug Info:', eventHandler.getEventListenerDebugInfo());
+        });
+    </script>
+</body>
+</html>
