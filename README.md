@@ -81,7 +81,7 @@ document.addEventListener ("DOMContentLoaded", () => {
 
 ### Live Demo
 
-Check out our [example page](example/public/index.html) for live demonstrations.
+Check out our [example page](https://eypsilon.github.io/YpsilonEventHandler/example/public/index.html) for live demonstrations.
 
 ## Contributing
 
