@@ -226,7 +226,7 @@ This enables:
 
 ### CDN
 ```html
-<script src="https://cdn.jsdelivr.net/gh/eypsilon/YpsilonEventHandler@main/ypsilon-event-handler.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/eypsilon/YpsilonEventHandler@latest/ypsilon-event-handler.js"></script>
 ```
 
 ### Download
