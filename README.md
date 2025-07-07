@@ -198,7 +198,7 @@ new YpsilonEventHandler(eventMapping)
 
 ## 🧪 Live Demo
 
-Check out the [interactive example](example/public/index.html) featuring:
+Check out the [interactive example](https://eypsilon.github.io/YpsilonEventHandler/example/public/index.html) featuring:
 - Real-time scroll metrics
 - Throttle/debounce demonstration
 - Destroy/recreate testing
