@@ -15,6 +15,50 @@ A minimal, extendable event handling system for web applications. Built around t
 - 🔗 **No bind() Required** - Automatic `this` context handling + safer event removal
 - 🫧 **Event Bubbling** - Leverages native event bubbling for efficient delegation
 
+## SPA Example
+
+Experience the **ultimate event delegation power** with our [full SPA demo](https://eypsilon.github.io/YpsilonEventHandler/example/public/spa.html):
+
+### 🤯 **ONLY 5 EVENT LISTENERS** for an entire Single Page Application!
+
+**What those 5 listeners handle:**
+- ✅ Dynamic content creation/deletion
+- ✅ Todo list management
+- ✅ Tab system with dynamic tabs
+- ✅ Form interactions & validation
+- ✅ Sticky statistics bar
+- ✅ Smart footer visibility
+- ✅ Real-time scroll tracking
+- ✅ Toast notifications
+- ✅ Live event logging
+- ✅ Element counters & metrics
+
+**Traditional approach would need:**
+- 🔴 50+ individual event listeners
+- 🔴 Manual cleanup for each dynamic element
+- 🔴 Memory leaks everywhere
+- 🔴 Performance bottlenecks
+- 🔴 Tons of `.bind(this)` calls
+
+**YpsilonEventHandler approach:**
+- 🟢 **5 listeners total** (`click`, `input`, `change`, `keydown`, `scroll`)
+- 🟢 **Zero memory leaks** (automatic cleanup)
+- 🟢 **Perfect performance** (native `handleEvent` interface)
+- 🟢 **No bind() needed** (automatic `this` context)
+- 🟢 **Infinite scalability** (works with any number of elements)
+
+### 🎯 **Key Demo Features:**
+- **Dynamic Element Creation** - Add/remove elements that work instantly
+- **Event Delegation Magic** - One listener handles thousands of elements
+- **Scroll Superiority** - Sticky stats + footer with zero layout shifts
+- **Form Mastery** - Debounced inputs, dynamic fields, proper accessibility
+- **Tab System** - Dynamic tabs with event delegation
+- **Live Metrics** - Real-time statistics powered by event delegation
+
+**[👉 Try the SPA Demo](https://eypsilon.github.io/YpsilonEventHandler/example/public/spa.html)**
+
+*"This is event handling perfection!" - Every developer who sees it*
+
 ## 🚀 Quick Start
 
 ```html

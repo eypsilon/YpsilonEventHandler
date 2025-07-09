@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YpsilonEventHandler - SPA Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: system-ui, sans-serif;
+            background: #f5f5f5;
+            line-height: 1.6;
+            padding-bottom: 120px; /* Always reserve space for footer */
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 0;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .section {
+            background: white;
+            margin: 20px 0;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .section h2 {
+            color: #333;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 5px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background: #28a745;
+        }
+
+        .btn-success:hover {
+            background: #218838;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+        }
+
+        .btn-warning {
+            background: #ffc107;
+            color: #212529;
+        }
+
+        .btn-warning:hover {
+            background: #e0a800;
+        }
+
+        .dynamic-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .card {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .card h3 {
+            color: #495057;
+            margin-bottom: 10px;
+        }
+
+        .todo-item {
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            padding: 15px;
+            margin: 10px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .todo-item.completed {
+            background: #d4edda;
+            text-decoration: line-through;
+            opacity: 0.7;
+        }
+
+        .form-group {
+            margin: 15px 0;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.2);
+        }
+
+        .counter {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-left: 10px;
+        }
+
+        .log {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            padding: 15px;
+            margin: 20px 0;
+            max-height: 200px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 12px;
+        }
+
+        .log-entry {
+            margin: 2px 0;
+            padding: 2px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .tabs {
+            display: flex;
+            background: #f8f9fa;
+            border-radius: 6px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            border: none;
+            background: #e9ecef;
+            transition: all 0.3s ease;
+        }
+
+        .tab.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 20px;
+            background: white;
+            border-radius: 6px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            background: #6c757d;
+            color: white;
+            border-radius: 12px;
+            font-size: 11px;
+            margin-left: 8px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: #e9ecef;
+            border-radius: 3px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            background: #28a745;
+            color: white;
+            border-radius: 6px;
+            transform: translateX(100%);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        .stats-section {
+            transition: all 0.3s ease;
+        }
+
+        .stats-section.sticky {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(102, 126, 234, 0.2);
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+        }
+
+        .stats-placeholder {
+            height: 0;
+            transition: height 0.3s ease;
+        }
+
+        .stats-placeholder.active {
+            height: 60px; /* Height of sticky stats */
+        }
+
+        .stats-section.sticky .container {
+            padding: 2px 20px;
+        }
+
+        .stats-section.sticky .section {
+            margin: 0;
+            padding: 4px;
+            background: transparent;
+            box-shadow: none;
+        }
+
+        .stats-section.sticky h2 {
+            display: none; /* Hide headline when sticky */
+        }
+
+        .stats-section.sticky .stats {
+            gap: 5px;
+        }
+
+        .stats-section.sticky .stat-card {
+            padding: 4px 6px;
+            border-radius: 3px;
+        }
+
+        .stats-section.sticky .stat-number {
+            font-size: 1.2em;
+            margin-bottom: 1px;
+        }
+
+        .stats-section.sticky .stat-label {
+            font-size: 0.7em;
+        }
+
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+
+        .footer.visible {
+            transform: translateY(0);
+        }
+
+        .footer h3 {
+            margin-bottom: 10px;
+        }
+
+        .footer p {
+            margin: 5px 0;
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="container">
+            <h1>🚀 YpsilonEventHandler SPA Demo</h1>
+            <p>Demonstrating the power of event delegation with dynamic content</p>
+            <p><strong>⚡ ONLY 5 EVENT LISTENERS for this ENTIRE SPA! ⚡</strong></p>
+            <p><strong>ONE handler on body handles ALL events - no matter when elements are created!</strong></p>
+        </div>
+    </div>
+
+    <div class="stats-section" id="stats-section">
+        <div class="container">
+            <!-- Stats Dashboard -->
+            <div class="section">
+                <h2>📊 Live Statistics</h2>
+                <div class="stats">
+                    <div class="stat-card">
+                        <div class="stat-number" id="click-count">0</div>
+                        <div class="stat-label">Total Clicks</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="element-count">0</div>
+                        <div class="stat-label">Dynamic Elements</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="todo-count">0</div>
+                        <div class="stat-label">Todo Items</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="event-count">0</div>
+                        <div class="stat-label">Events Handled</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="scroll-position">0</div>
+                        <div class="stat-label">Scroll Position</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Placeholder to prevent layout shift when stats become sticky -->
+    <div class="stats-placeholder" id="stats-placeholder"></div>
+
+    <div class="container">
+
+        <!-- Dynamic Content Creator -->
+        <div class="section">
+            <h2>🎯 Dynamic Content Creator</h2>
+            <p>Create new elements dynamically - they work instantly without new listeners!</p>
+
+            <div style="margin: 20px 0;">
+                <button class="btn btn-success y-btn" data-action="create-card">➕ Create Card</button>
+                <button class="btn btn-warning y-btn" data-action="create-button">🔘 Create Button</button>
+                <button class="btn btn-danger y-btn" data-action="clear-all">🗑️ Clear All</button>
+            </div>
+
+            <div class="dynamic-grid" id="dynamic-container">
+                <!-- Dynamic elements will be added here -->
+            </div>
+        </div>
+
+        <!-- Todo List Manager -->
+        <div class="section">
+            <h2>✅ Todo List Manager</h2>
+            <p>Add, complete, and delete todos - all handled by the same body listener!</p>
+
+            <div class="form-group">
+                <input type="text" class="form-control y-input" id="todo-input"
+                       placeholder="Enter a new todo..." data-action="todo-input">
+                <button class="btn y-btn" data-action="add-todo" style="margin-top: 10px;">➕ Add Todo</button>
+            </div>
+
+            <div id="todo-container">
+                <!-- Todo items will be added here -->
+            </div>
+        </div>
+
+        <!-- Tab System -->
+        <div class="section">
+            <h2>📑 Dynamic Tab System</h2>
+            <p>Switch between tabs - all handled by event delegation!</p>
+
+            <div class="tabs">
+                <button class="tab active y-tab" data-tab="tab1">Tab 1</button>
+                <button class="tab y-tab" data-tab="tab2">Tab 2</button>
+                <button class="tab y-tab" data-tab="tab3">Tab 3</button>
+                <button class="btn y-btn" data-action="add-tab" style="margin-left: auto;">➕ Add Tab</button>
+            </div>
+
+            <div class="tab-content active" id="tab1">
+                <h3>Tab 1 Content</h3>
+                <p>This is the content of tab 1. Click buttons below to test event delegation:</p>
+                <button class="btn y-btn" data-action="tab-action" data-message="Tab 1 button clicked!">Click Me</button>
+                <button class="btn btn-success y-btn" data-action="create-element" data-target="tab1">Create Element</button>
+            </div>
+
+            <div class="tab-content" id="tab2">
+                <h3>Tab 2 Content</h3>
+                <p>This is the content of tab 2. These buttons were here from the start:</p>
+                <button class="btn y-btn" data-action="tab-action" data-message="Tab 2 button clicked!">Click Me</button>
+                <button class="btn btn-warning y-btn" data-action="create-element" data-target="tab2">Create Element</button>
+            </div>
+
+            <div class="tab-content" id="tab3">
+                <h3>Tab 3 Content</h3>
+                <p>This is the content of tab 3. Event delegation works everywhere:</p>
+                <button class="btn y-btn" data-action="tab-action" data-message="Tab 3 button clicked!">Click Me</button>
+                <button class="btn btn-danger y-btn" data-action="create-element" data-target="tab3">Create Element</button>
+            </div>
+        </div>
+
+        <!-- Form Interactions -->
+        <div class="section">
+            <h2>📝 Form Interactions</h2>
+            <p>All form events handled by the same body listener with delegation:</p>
+
+            <div class="form-group">
+                <label for="name-input">Name:</label>
+                <input type="text" id="name-input" class="form-control y-input" data-action="name-input" placeholder="Enter your name">
+            </div>
+
+            <div class="form-group">
+                <label for="email-input">Email:</label>
+                <input type="email" id="email-input" class="form-control y-input" data-action="email-input" placeholder="Enter your email">
+            </div>
+
+            <div class="form-group">
+                <label for="message-input">Message:</label>
+                <textarea id="message-input" class="form-control y-input" data-action="message-input" placeholder="Enter your message" rows="3"></textarea>
+            </div>
+
+            <button class="btn y-btn" data-action="submit-form">📨 Submit Form</button>
+            <button class="btn btn-warning y-btn" data-action="add-form-field">➕ Add Field</button>
+        </div>
+
+        <!-- Event Log -->
+        <div class="section">
+            <h2>📋 Event Log</h2>
+            <p>Watch how ONE body listener handles ALL events:</p>
+            <div class="log" id="event-log">
+                <div class="log-entry">Event log will appear here...</div>
+            </div>
+            <button class="btn btn-warning y-btn" data-action="clear-log">🗑️ Clear Log</button>
+        </div>
+    </div>
+
+    <!-- Notification -->
+    <div class="notification" id="notification">
+        Action completed!
+    </div>
+
+    <!-- Footer -->
+    <div class="footer" id="footer">
+        <h3>🎉 You've reached the bottom!</h3>
+        <p>✨ This footer appeared thanks to scroll event delegation</p>
+        <p>🚀 ONE body listener handled ALL scroll events on this page</p>
+        <p>💫 YpsilonEventHandler - The power of native handleEvent interface</p>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/gh/eypsilon/YpsilonEventHandler@main/ypsilon-event-handler.js"></script>
+
+    <script>
+        // SPA Event Handler - ONE handler for the entire application!
+        class SPAEventHandler extends YpsilonEventHandler {
+            constructor() {
+                super({
+                    'body': [
+                        { type: 'click', handler: 'handleClick' },
+                        { type: 'input', handler: 'handleInput', debounce: 200 },
+                        { type: 'change', handler: 'handleChange' },
+                        { type: 'keydown', handler: 'handleKeydown' }
+                    ],
+                    'window': [
+                        { type: 'scroll', handler: 'handleScroll', throttle: 50 }
+                    ]
+                });
+
+                this.counters = {
+                    clicks: 0,
+                    elements: 0,
+                    todos: 0,
+                    events: 0
+                };
+
+                this.tabCounter = 3;
+                this.updateStats();
+            }
+
+            handleClick(event, target) {
+                this.counters.clicks++;
+                this.counters.events++;
+                this.updateStats();
+
+                // Handle tab switching first
+                if (target.classList.contains('y-tab')) {
+                    this.switchTab(target.dataset.tab);
+                    return;
+                }
+
+                // Handle dynamic buttons BEFORE checking for data-action
+                if (target.classList.contains('dynamic-btn')) {
+                    this.log(`🔘 Dynamic button: ${target.textContent}`);
+                    this.showNotification(`Dynamic button clicked: ${target.textContent}`);
+                    return;
+                }
+
+                // Handle different button types based on data-action
+                const action = target.dataset.action;
+                if (!action) return;
+
+                this.log(`🖱️ Click: ${action} (${target.textContent.trim()})`);
+
+                switch (action) {
+                    case 'create-card':
+                        this.createCard();
+                        break;
+                    case 'create-button':
+                        this.createButton();
+                        break;
+                    case 'clear-all':
+                        this.clearAll();
+                        break;
+                    case 'add-todo':
+                        this.addTodo();
+                        break;
+                    case 'complete-todo':
+                        this.completeTodo(target);
+                        break;
+                    case 'delete-todo':
+                        this.deleteTodo(target);
+                        break;
+                    case 'tab-action':
+                        this.showNotification(target.dataset.message || 'Tab action triggered!');
+                        break;
+                    case 'create-element':
+                        this.createElementInTab(target.dataset.target);
+                        break;
+                    case 'add-tab':
+                        this.addTab();
+                        break;
+                    case 'submit-form':
+                        this.submitForm();
+                        break;
+                    case 'add-form-field':
+                        this.addFormField();
+                        break;
+                    case 'clear-log':
+                        this.clearLog();
+                        break;
+                    case 'remove-card':
+                        this.removeElement(target.dataset.target);
+                        break;
+                    case 'remove-element':
+                        this.removeElement(target.dataset.target);
+                        break;
+                    case 'remove-field':
+                        this.removeElement(target.dataset.target);
+                        break;
+                    default:
+                        this.log(`🔧 Unknown action: ${action}`);
+                }
+
+            }
+
+            handleInput(event, target) {
+                this.counters.events++;
+                this.updateStats();
+
+                const action = target.dataset.action;
+                if (!action) return;
+
+                this.log(`⌨️ Input: ${action} = "${target.value}"`);
+
+                // Handle todo input enter key
+                if (action === 'todo-input' && event.type === 'keydown' && event.key === 'Enter') {
+                    this.addTodo();
+                }
+            }
+
+            handleChange(event, target) {
+                this.counters.events++;
+                this.updateStats();
+                this.log(`🔄 Change: ${target.dataset.action || 'unknown'} = "${target.value}"`);
+            }
+
+            handleKeydown(event, target) {
+                if (target.dataset.action === 'todo-input' && event.key === 'Enter') {
+                    this.addTodo();
+                }
+            }
+
+            handleScroll(event, target) {
+                this.counters.events++;
+                this.updateStats();
+
+                const scrollY = window.scrollY || window.pageYOffset;
+                const windowHeight = window.innerHeight;
+                const docHeight = document.documentElement.scrollHeight;
+
+                // Update scroll position in stats
+                this.updateScrollStats(scrollY, docHeight, windowHeight);
+
+                // Handle sticky stats
+                this.updateStickyStats(scrollY);
+
+                // Handle footer visibility
+                this.updateFooterVisibility(scrollY, docHeight, windowHeight);
+
+                this.log(`🌐 Window scroll: ${Math.round(scrollY)}px (throttled 50ms)`);
+            }
+
+            createCard() {
+                const container = document.getElementById('dynamic-container');
+                const cardId = `card-${Date.now()}`;
+
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.id = cardId;
+                card.innerHTML = `
+                    <h3>Dynamic Card #${this.counters.elements + 1}</h3>
+                    <p>This card was created dynamically but works instantly!</p>
+                    <button class="btn dynamic-btn" data-dynamic="true">Click Me!</button>
+                    <button class="btn btn-danger y-btn" data-action="remove-card" data-target="${cardId}">🗑️ Remove</button>
+                `;
+
+                container.appendChild(card);
+                this.counters.elements++;
+                this.updateStats();
+                this.log(`➕ Created card: ${cardId}`);
+            }
+
+            createButton() {
+                const container = document.getElementById('dynamic-container');
+                const buttonId = `btn-${Date.now()}`;
+
+                const wrapper = document.createElement('div');
+                wrapper.className = 'card';
+                wrapper.id = buttonId;
+                wrapper.innerHTML = `
+                    <h3>Dynamic Button #${this.counters.elements + 1}</h3>
+                    <button class="btn btn-success dynamic-btn" data-dynamic="true">I'm Dynamic!</button>
+                    <button class="btn btn-warning dynamic-btn" data-dynamic="true">Me Too!</button>
+                    <button class="btn btn-danger y-btn" data-action="remove-card" data-target="${buttonId}">🗑️ Remove</button>
+                `;
+
+                container.appendChild(wrapper);
+                this.counters.elements++;
+                this.updateStats();
+                this.log(`➕ Created button set: ${buttonId}`);
+            }
+
+            clearAll() {
+                const container = document.getElementById('dynamic-container');
+                const elementsToRemove = container.children.length;
+                container.innerHTML = '';
+                this.counters.elements = Math.max(0, this.counters.elements - elementsToRemove);
+                this.updateStats();
+                this.log(`🗑️ Cleared ${elementsToRemove} dynamic elements from content creator`);
+            }
+
+            addTodo() {
+                const input = document.getElementById('todo-input');
+                const text = input.value.trim();
+                if (!text) return;
+
+                const container = document.getElementById('todo-container');
+                const todoId = `todo-${Date.now()}`;
+
+                const todo = document.createElement('div');
+                todo.className = 'todo-item';
+                todo.id = todoId;
+                todo.innerHTML = `
+                    <span>${text}</span>
+                    <div>
+                        <button class="btn btn-success y-btn" data-action="complete-todo" data-target="${todoId}">✅ Complete</button>
+                        <button class="btn btn-danger y-btn" data-action="delete-todo" data-target="${todoId}">🗑️ Delete</button>
+                    </div>
+                `;
+
+                container.appendChild(todo);
+                input.value = '';
+                this.counters.todos++;
+                this.updateStats();
+                this.log(`➕ Added todo: ${text}`);
+            }
+
+            completeTodo(target) {
+                const todoId = target.dataset.target;
+                const todo = document.getElementById(todoId);
+                if (todo) {
+                    todo.classList.toggle('completed');
+                    this.log(`✅ Toggled todo: ${todoId}`);
+                }
+            }
+
+            deleteTodo(target) {
+                const todoId = target.dataset.target;
+                const todo = document.getElementById(todoId);
+                if (todo) {
+                    todo.remove();
+                    this.counters.todos--;
+                    this.updateStats();
+                    this.log(`🗑️ Deleted todo: ${todoId}`);
+                }
+            }
+
+            switchTab(tabId) {
+                // Hide all tabs
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    content.classList.remove('active');
+                });
+                document.querySelectorAll('.tab').forEach(tab => {
+                    tab.classList.remove('active');
+                });
+
+                // Show selected tab
+                const tabContent = document.getElementById(tabId);
+                const tabButton = document.querySelector(`[data-tab="${tabId}"]`);
+                if (tabContent) tabContent.classList.add('active');
+                if (tabButton) tabButton.classList.add('active');
+
+                this.log(`📑 Switched to tab: ${tabId}`);
+            }
+
+            addTab() {
+                this.tabCounter++;
+                const tabId = `tab${this.tabCounter}`;
+
+                // Add tab button
+                const tabsContainer = document.querySelector('.tabs');
+                const addButton = tabsContainer.querySelector('[data-action="add-tab"]');
+
+                const newTab = document.createElement('button');
+                newTab.className = 'tab y-tab';
+                newTab.dataset.tab = tabId;
+                newTab.textContent = `Tab ${this.tabCounter}`;
+
+                tabsContainer.insertBefore(newTab, addButton);
+
+                // Add tab content
+                const tabContent = document.createElement('div');
+                tabContent.className = 'tab-content';
+                tabContent.id = tabId;
+                tabContent.innerHTML = `
+                    <h3>Tab ${this.tabCounter} Content</h3>
+                    <p>This tab was created dynamically! Event delegation still works.</p>
+                    <button class="btn y-btn" data-action="tab-action" data-message="Dynamic tab ${this.tabCounter} button clicked!">Click Me</button>
+                    <button class="btn btn-success y-btn" data-action="create-element" data-target="${tabId}">Create Element</button>
+                `;
+
+                // Insert after the tabs container
+                tabsContainer.parentNode.appendChild(tabContent);
+                this.switchTab(tabId);
+                this.log(`➕ Added dynamic tab: ${tabId}`);
+            }
+
+            createElementInTab(targetTab) {
+                const tabContent = document.getElementById(targetTab);
+                if (!tabContent) return;
+
+                const elementId = `element-${Date.now()}`;
+                const element = document.createElement('div');
+                element.style.cssText = 'margin: 10px 0; padding: 10px; background: #f0f0f0; border-radius: 4px;';
+                element.innerHTML = `
+                    <p><strong>Dynamic Element #${this.counters.elements + 1}</strong></p>
+                    <button class="btn dynamic-btn" data-dynamic="true">I work too!</button>
+                    <button class="btn btn-danger y-btn" data-action="remove-element" data-target="${elementId}">Remove</button>
+                `;
+                element.id = elementId;
+
+                tabContent.appendChild(element);
+                this.counters.elements++;
+                this.updateStats();
+                this.log(`➕ Created element in ${targetTab}: ${elementId}`);
+            }
+
+            addFormField() {
+                // Find the form section by looking for the submit button
+                const submitButton = document.querySelector('[data-action="submit-form"]');
+                const section = submitButton.closest('.section');
+
+                const fieldId = `field-${Date.now()}`;
+                const inputId = `input-${Date.now()}`;
+                const formGroup = document.createElement('div');
+                formGroup.className = 'form-group';
+                formGroup.innerHTML = `
+                    <label for="${inputId}">Dynamic Field #${this.counters.elements + 1}:</label>
+                    <input type="text" id="${inputId}" class="form-control y-input" data-action="dynamic-field" placeholder="Dynamic field">
+                    <button class="btn btn-danger y-btn" data-action="remove-field" data-target="${fieldId}" style="margin-top: 5px;">Remove Field</button>
+                `;
+                formGroup.id = fieldId;
+
+                // Insert before the submit button
+                section.insertBefore(formGroup, submitButton);
+                this.counters.elements++;
+                this.updateStats();
+                this.log(`➕ Added form field: ${fieldId}`);
+            }
+
+            submitForm() {
+                const inputs = document.querySelectorAll('.y-input');
+                const formData = {};
+
+                inputs.forEach(input => {
+                    const action = input.dataset.action;
+                    if (action && input.value.trim()) {
+                        formData[action] = input.value.trim();
+                    }
+                });
+
+                this.log(`📨 Form submitted with data: ${JSON.stringify(formData)}`);
+                this.showNotification('Form submitted successfully!');
+            }
+
+            showNotification(message) {
+                const notification = document.getElementById('notification');
+                console.log('Showing notification:', message); // Debug log
+                notification.textContent = message;
+                notification.classList.add('show');
+
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                }, 3000);
+            }
+
+            updateStats() {
+                document.getElementById('click-count').textContent = this.counters.clicks;
+                document.getElementById('element-count').textContent = this.counters.elements;
+                document.getElementById('todo-count').textContent = this.counters.todos;
+                document.getElementById('event-count').textContent = this.counters.events;
+            }
+
+            updateScrollStats(scrollY, docHeight, windowHeight) {
+                document.getElementById('scroll-position').textContent = Math.round(scrollY);
+            }
+
+            updateStickyStats(scrollY) {
+                const statsSection = document.getElementById('stats-section');
+                const placeholder = document.getElementById('stats-placeholder');
+                const threshold = 200; // Start sticky after 200px scroll
+
+                if (scrollY > threshold) {
+                    statsSection.classList.add('sticky');
+                    placeholder.classList.add('active');
+                } else {
+                    statsSection.classList.remove('sticky');
+                    placeholder.classList.remove('active');
+                }
+            }
+
+            updateFooterVisibility(scrollY, docHeight, windowHeight) {
+                const footer = document.getElementById('footer');
+                const threshold = 100; // Show footer when 100px from bottom
+
+                if (scrollY + windowHeight >= docHeight - threshold) {
+                    footer.classList.add('visible');
+                } else {
+                    footer.classList.remove('visible');
+                }
+            }
+
+            log(message) {
+                const logContainer = document.getElementById('event-log');
+                const entry = document.createElement('div');
+                entry.className = 'log-entry';
+                entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+
+                logContainer.appendChild(entry);
+                logContainer.scrollTop = logContainer.scrollHeight;
+
+                // Keep only last 50 entries
+                const entries = logContainer.querySelectorAll('.log-entry');
+                if (entries.length > 50) {
+                    entries[0].remove();
+                }
+            }
+
+            clearLog() {
+                const logContainer = document.getElementById('event-log');
+                logContainer.innerHTML = '<div class="log-entry">Event log cleared...</div>';
+                this.log('📋 Event log cleared');
+            }
+
+            removeElement(elementId) {
+                const element = document.getElementById(elementId);
+                if (element) {
+                    element.remove();
+                    this.counters.elements = Math.max(0, this.counters.elements - 1);
+                    this.updateStats();
+                    this.log(`🗑️ Removed element: ${elementId}`);
+                }
+            }
+        }
+
+        // Initialize the SPA with ONE handler for everything!
+        const spa = new SPAEventHandler();
+        window.spa = spa; // Make globally accessible for debugging
+
+        // Initial log
+        spa.log('🚀 SPA initialized with ONE body listener handling ALL events!');
+        spa.log('✨ Try creating, deleting, and interacting with dynamic elements');
+        spa.log('🎯 Notice how everything works without adding new listeners!');
+    </script>
+</body>
+</html>

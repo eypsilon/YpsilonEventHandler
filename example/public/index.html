@@ -106,12 +106,18 @@
             <span id="handler-state" style="margin-left: 10px; font-weight: bold; color: #28a745;">ACTIVE</span>
         </div>
 
-        <div style="font-size: 12px; color: #666; margin: 10px 0;">
+        <div style="font-size: 12px; color: #666; margin: 10px 0 15px;">
             🎯 <strong>Custom Handlers:</strong> Each button uses a different click handler function<br>
             💡 Input is debounced (300ms) - handler only fires after you stop typing<br>
             💡 Scroll events are throttled (100ms div, 250ms window) - smooth performance<br>
             💡 All scroll events automatically use passive listeners<br>
             🧪 <strong>Test destroy:</strong> Click "Destroy Handler" then try clicking/typing/scrolling!
+        </div>
+
+        <hr />
+
+        <div style="margin: 5px 0 0;">
+            <a href="spa.html">SPA Example</a>
         </div>
 
         <div class="output" id="output">Events will appear here...</div>
@@ -189,7 +195,7 @@
         <p><a href="https://github.com/eypsilon/YpsilonEventHandler">github.com / YpsilonEventHandler</a></p>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/gh/eypsilon/YpsilonEventHandler@latest/ypsilon-event-handler.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/eypsilon/YpsilonEventHandler@main/ypsilon-event-handler.js"></script>
     <script>
         // Extend YpsilonEventHandler with custom handlers
         class MyEventHandler extends YpsilonEventHandler {
