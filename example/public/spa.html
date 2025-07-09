@@ -15,7 +15,7 @@
             font-family: system-ui, sans-serif;
             background: #f5f5f5;
             line-height: 1.6;
-            padding-bottom: 120px; /* Always reserve space for footer */
+            padding-bottom: 180px; /* Always reserve space for footer */
         }
 
         .container {
@@ -532,10 +532,10 @@
         <p>✨ This footer appeared thanks to scroll event delegation</p>
         <p>🚀 ONE body listener handled ALL scroll events on this page</p>
         <p>💫 YpsilonEventHandler - The power of native handleEvent interface</p>
+        <p><a href="https://github.com/eypsilon/YpsilonEventHandler">github.com / YpsilonEventHandler</a></p>
     </div>
 
     <script src="https://cdn.jsdelivr.net/gh/eypsilon/YpsilonEventHandler@main/ypsilon-event-handler.js"></script>
-
     <script>
         // SPA Event Handler - ONE handler for the entire application!
         class SPAEventHandler extends YpsilonEventHandler {
@@ -747,7 +747,7 @@
                 todo.className = 'todo-item';
                 todo.id = todoId;
                 todo.innerHTML = `
-                    <span>${text}</span>
+                    <span>${this.escapeHtml(text)}</span>
                     <div>
                         <button class="btn btn-success y-btn" data-action="complete-todo" data-target="${todoId}">✅ Complete</button>
                         <button class="btn btn-danger y-btn" data-action="delete-todo" data-target="${todoId}">🗑️ Delete</button>
@@ -966,6 +966,12 @@
                     this.updateStats();
                     this.log(`🗑️ Removed element: ${elementId}`);
                 }
+            }
+
+            escapeHtml(text) {
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
             }
         }
 
