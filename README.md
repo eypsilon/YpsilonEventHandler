@@ -117,7 +117,8 @@ super({
     { type: 'scroll', handler: 'handleScroll', throttle: 50 }
   ],
   'document': [
-    { type: 'keydown', handler: 'handleKeyboard', options: { once: true } }
+    { type: 'keydown', handler: 'handleKeyboard', options: { once: true } },
+    { type: 'change',  handler: 'handleChange' },
   ]
 });
 ```
@@ -161,12 +162,12 @@ const input = document.getElementById('input');
 const handleClick = (e) => { /* logic */ };
 const handleInput = debounce((e) => { /* logic */ }, 300);
 
-button.addEventListener('click', handleClick);
-input.addEventListener('input', handleInput);
+button.addEventListener('click', handleClick); // or even handleClick.bind(this)
+input.addEventListener('input', handleInput);  // or even handleClick.bind(handleInput)
 
 // Remember to clean up later... 😬
-button.removeEventListener('click', handleClick);
-input.removeEventListener('input', handleInput);
+button.removeEventListener('click', handleClick); // and don't forget the bindings...
+input.removeEventListener('input', handleInput);  // if bind(this) was used to add...
 ```
 
 ### After (YpsilonEventHandler)
@@ -270,7 +271,7 @@ This enables:
 
 ### CDN
 ```html
-<script src="https://cdn.jsdelivr.net/gh/eypsilon/YpsilonEventHandler@latest/ypsilon-event-handler.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/eypsilon/YpsilonEventHandler@main/ypsilon-event-handler.js"></script>
 ```
 
 ### Download
