@@ -274,6 +274,14 @@ This enables:
 <script src="https://cdn.jsdelivr.net/gh/eypsilon/YpsilonEventHandler@main/ypsilon-event-handler.js"></script>
 ```
 
+### Package Manager
+
+[NPM / ypsilon-event-handler](https://www.npmjs.com/package/ypsilon-event-handler)
+
+```sh
+npm i ypsilon-event-handler
+```
+
 ### Download
 - Download `ypsilon-event-handler.js`
 - Include in your HTML
