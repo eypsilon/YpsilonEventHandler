@@ -136,6 +136,24 @@
                 font-weight: bold;
                 color: #555;
             }
+
+            &.dynamic-group {
+                margin: 5px 0;
+                display: flex;
+                align-items: center;
+
+                &:last-of-type {
+                    margin-bottom: 20px;
+                }
+                label,
+                button {
+                    white-space: nowrap;
+                }
+                label {
+                    margin: 0 10px 0 0;
+                    opacity: .7;
+                }
+            }
         }
 
         .form-control {
@@ -247,7 +265,7 @@
         .notification {
             padding: 15px 20px;
             position: fixed;
-            top: 12px;
+            top: 6px;
             right: 20px;
             z-index: 1000;
             border-radius: 6px;
@@ -917,10 +935,10 @@
                 const fieldId = `field-${Date.now()}`;
                 const inputId = `input-${Date.now()}`;
                 const formGroup = document.createElement('div');
-                formGroup.className = 'form-group y-fade-in';
+                formGroup.className = 'form-group dynamic-group y-fade-in';
                 formGroup.innerHTML = `
                     <label for="${inputId}">Dynamic Field #${this.counters.elements + 1}:</label>
-                    <input type="text" id="${inputId}" class="form-control y-input" data-action="dynamic-field" placeholder="Dynamic field">
+                    <input type="text" id="${inputId}" name="${inputId}" class="form-control y-input" data-action="dynamic-field" placeholder="Dynamic field">
                     <button class="btn btn-danger y-btn" data-action="remove-field" data-target="${fieldId}" style="margin-top: 5px;">Remove Field</button>
                 `;
                 formGroup.id = fieldId;
@@ -936,10 +954,10 @@
                 const inputs = document.querySelectorAll('.y-input');
                 const formData = {};
 
-                inputs.forEach(input => {
+                inputs.forEach((input, idx) => {
                     const action = input.dataset.action;
                     if (action && input.value.trim()) {
-                        formData[action] = input.value.trim();
+                        formData[`${action}-${idx}`] = input.value.trim();
                     }
                 });
 

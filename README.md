@@ -21,7 +21,7 @@ Experience the **ultimate event delegation power** with our [full SPA demo](http
 
 ### 🤯 **ONLY 5 EVENT LISTENERS** for an entire Single Page Application!
 
-**What those 5 listeners handle:**
+**What those 5 listeners handle (without any reassignment):**
 - ✅ Dynamic content creation/deletion
 - ✅ Todo list management
 - ✅ Tab system with dynamic tabs
@@ -163,7 +163,7 @@ const handleClick = (e) => { /* logic */ };
 const handleInput = debounce((e) => { /* logic */ }, 300);
 
 button.addEventListener('click', handleClick); // or even handleClick.bind(this)
-input.addEventListener('input', handleInput);  // or even handleClick.bind(handleInput)
+input.addEventListener('input', handleInput);  // or even handleInput.bind(this)
 
 // Remember to clean up later... 😬
 button.removeEventListener('click', handleClick); // and don't forget the bindings...
