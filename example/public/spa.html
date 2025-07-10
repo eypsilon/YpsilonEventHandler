@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>YpsilonEventHandler - SPA Demo</title>
+    <meta name="description" content="YpsilonEventHandler - Single Page Application [SPA] Example Page">
     <link rel="icon" type="image/x-icon" href="./favicon.ico">
     <style>
         * {
@@ -17,6 +18,68 @@
             line-height: 1.6;
             background: #f5f5f5;
             font-family: system-ui, sans-serif;
+            scroll-behavior: smooth;
+
+            .scroll-to-top {
+                padding: 6px 12px;
+                position: fixed;
+                bottom: -4px;
+                right: -40px;
+                z-index: 1001;
+                opacity: 0;
+                font-size: 22px;
+
+                &:hover { transform: translateY(0); }
+            }
+            &.y-scrolled {
+                .scroll-to-top {
+                    bottom: 4px;
+                    right: 4px;
+                    opacity: 1;
+                }
+            }
+        }
+
+        ul {
+            margin: 0;
+            padding: 0;
+            list-style-type: none;
+
+            &.assigned-listener-list {
+                margin-top: 15px;
+            }
+            li {
+                margin: 0;
+                padding: 0;
+
+                li {
+                    display: flex;
+                    align-items: center;
+                    counter-increment: section;
+
+                    &::before {
+                        content: counters(section, ".") ". ";
+                        padding: 6px 6px 6px 8px;
+                        display: block;
+                        color: #aaa;
+                        font-size: 14px;
+                    }
+                    &:not(:last-of-type) {
+                        border-bottom: 1px solid #f1f1f1;
+                    }
+                }
+                span {
+                    display: block;
+                    &.selector {
+                        padding: 8px 10px;
+                        font-weight: bold;
+                        background: #f4f4f4;
+                    }
+                    &.config {
+                        padding: 10px 2px;
+                    }
+                }
+            }
         }
 
         .container {
@@ -44,13 +107,16 @@
                 margin-bottom: 20px;
                 padding-bottom: 10px;
                 color: #333;
-                border-bottom: 2px solid #667eea;
+                border-bottom: 2px solid rgb(122, 145, 248);
             }
         }
 
         .btn {
-            margin: 5px;
+            margin: 5px 2px;
             padding: 12px 24px;
+            display: inline-flex;
+            align-items: center;
+            white-space: nowrap;
             border: none;
             border-radius: 6px;
             font-size: 14px;
@@ -66,24 +132,18 @@
             &.btn-success {
                 background: #28a745;
 
-                &:hover {
-                    background: #218838;
-                }
+                &:hover { background: #218838; }
             }
             &.btn-danger {
                 background: #dc3545;
 
-                &:hover {
-                    background: #c82333;
-                }
+                &:hover { background: #c82333; }
             }
             &.btn-warning {
                 background: #ffc107;
                 color: #212529;
 
-                &:hover {
-                    background: #e0a800;
-                }
+                &:hover { background: #e0a800; }
             }
         }
 
@@ -181,25 +241,63 @@
             background: #667eea;
         }
 
-        .log {
-            margin: 20px 0;
-            padding: 15px;
-            max-height: 200px;
-            border: 1px solid #dee2e6;
-            border-radius: 6px;
+        .log-container {
             font-family: monospace;
             font-size: 12px;
-            background: #f8f9fa;
-            overflow-y: auto;
-            overscroll-behavior: contain;
 
-            .log-entry {
-                margin: 2px 0;
-                padding: 2px 0;
+            h2 {
+                margin: 5px 0 15px;
+            }
+            .log {
+                margin: 15px 0;
+                padding: 15px;
+                max-height: 200px;
+                background: #f5f5f5;
+                border-radius: 6px;
+                border: 1px solid #dee2e6;
+                overflow-y: auto;
+                overscroll-behavior: contain;
 
-                &:not(:last-of-type) {
-                    border-bottom: 1px solid #eee;
+                .log-entry {
+                    margin: 2px 0;
+                    padding: 2px 0;
+                    white-space: nowrap;
+
+                    &:not(:last-of-type) {
+                        border-bottom: 1px solid #eee;
+                    }
                 }
+            }
+            .show-logs-always {
+                margin: 0;
+                max-width: 1040px;
+                position: fixed;
+                left: 2px;
+                box-shadow: 0 0 8px 0px #c1b3b3;
+                bottom: 2px;
+                z-index: 11111;
+            }
+        }
+
+        body.show-logs-always {
+            padding-bottom: 440px;
+
+           &.y-scroll-bottom {
+                .show-logs-always {
+                    box-shadow: 0 0 8px 0px #c1b3b3;
+                    bottom: 200px;
+                }
+            }
+        }
+
+        .ypsi-buttons {
+            display: flex;
+            justify-content: space-between;
+
+            .helper-btn,
+            .starter-btn {
+                display: flex;
+                align-items: center;
             }
         }
 
@@ -232,9 +330,7 @@
             border-radius: 6px;
             background: white;
 
-            &.active {
-                display: block;
-            }
+            &.active { display: block; }
         }
 
         .badge {
@@ -275,9 +371,7 @@
             transition: all .3s ease;
             transform: translateX(100%);
 
-            &.show {
-                transform: translateX(0);
-            }
+            &.show { transform: translateX(0); }
         }
 
         .stats {
@@ -317,9 +411,7 @@
                 margin: 0 auto;
                 padding: 20px 20px 0;
 
-                .section {
-                    margin: 0;
-                }
+                .section { margin: 0; }
             }
             &.sticky {
                 position: fixed;
@@ -424,7 +516,7 @@
             animation: yFadeIn .4s ease forwards;
         }
         .y-blink {
-            animation: yFadeIn .4s ease forwards, yBlink 1.5s ease;
+            animation: yFadeIn .4s ease forwards, yBlink 1.5s ease forwards;
         }
         @keyframes yFadeIn { from { opacity: 0 } to { opacity: 1 } }
         @keyframes yBlink  { from { color: #0fec3f } to { color: #222 } }
@@ -482,9 +574,9 @@
             <p>Create new elements dynamically - they work instantly without new listeners!</p>
 
             <div style="margin: 20px 0;">
-                <button class="btn btn-success y-btn" data-action="create-card">➕ Create Card</button>
-                <button class="btn btn-warning y-btn" data-action="create-button">🔘 Create Button</button>
-                <button class="btn btn-danger y-btn" data-action="clear-all">🗑️ Clear All</button>
+                <button class="btn btn-success y-btn" data-action="createCard">➕ Create Card</button>
+                <button class="btn btn-warning y-btn" data-action="createButton">🔘 Create Button</button>
+                <button class="btn btn-danger y-btn" data-action="clearAll">🗑️ Clear All</button>
             </div>
 
             <div class="dynamic-grid" id="dynamic-container">
@@ -499,8 +591,8 @@
 
             <div class="form-group">
                 <input type="text" class="form-control y-input" id="todo-input"
-                       placeholder="Enter a new todo..." data-action="todo-input">
-                <button class="btn y-btn" data-action="add-todo" style="margin-top: 10px;">➕ Add Todo</button>
+                    placeholder="Enter a new todo..." data-action="todo-input">
+                <button class="btn y-btn" data-action="addTodo" style="margin-top: 10px;">➕ Add Todo</button>
             </div>
 
             <div id="todo-container">
@@ -514,31 +606,31 @@
             <p>Switch between tabs - all handled by event delegation!</p>
 
             <div class="tabs">
-                <button class="tab active y-tab" data-tab="tab1">Tab 1</button>
-                <button class="tab y-tab" data-tab="tab2">Tab 2</button>
-                <button class="tab y-tab" data-tab="tab3">Tab 3</button>
-                <button class="btn y-btn" data-action="add-tab" style="margin-left: auto;">➕ Add Tab</button>
+                <button class="tab active" data-action="switchTab" data-tab="tab1">Tab 1</button>
+                <button class="tab" data-action="switchTab" data-tab="tab2">Tab 2</button>
+                <button class="tab" data-action="switchTab" data-tab="tab3">Tab 3</button>
+                <button class="btn y-btn" data-action="addTab" style="margin-left: auto;">➕ Add Tab</button>
             </div>
 
             <div class="tab-content active" id="tab1">
                 <h3>Tab 1 Content</h3>
                 <p>This is the content of tab 1. Click buttons below to test event delegation:</p>
                 <button class="btn y-btn" data-action="tab-action" data-message="Tab 1 button clicked!">Click Me</button>
-                <button class="btn btn-success y-btn" data-action="create-element" data-target="tab1">Create Element</button>
+                <button class="btn btn-success y-btn" data-action="createElementInTab" data-target="tab1">Create Element</button>
             </div>
 
             <div class="tab-content" id="tab2">
                 <h3>Tab 2 Content</h3>
                 <p>This is the content of tab 2. These buttons were here from the start:</p>
                 <button class="btn y-btn" data-action="tab-action" data-message="Tab 2 button clicked!">Click Me</button>
-                <button class="btn btn-warning y-btn" data-action="create-element" data-target="tab2">Create Element</button>
+                <button class="btn btn-warning y-btn" data-action="createElementInTab" data-target="tab2">Create Element</button>
             </div>
 
             <div class="tab-content" id="tab3">
                 <h3>Tab 3 Content</h3>
                 <p>This is the content of tab 3. Event delegation works everywhere:</p>
                 <button class="btn y-btn" data-action="tab-action" data-message="Tab 3 button clicked!">Click Me</button>
-                <button class="btn btn-danger y-btn" data-action="create-element" data-target="tab3">Create Element</button>
+                <button class="btn btn-danger y-btn" data-action="createElementInTab" data-target="tab3">Create Element</button>
             </div>
         </div>
 
@@ -562,28 +654,53 @@
                 <textarea id="message-input" class="form-control y-input" data-action="message-input" placeholder="Enter your message" rows="3"></textarea>
             </div>
 
-            <button class="btn y-btn" data-action="submit-form">📨 Submit Form</button>
-            <button class="btn btn-warning y-btn" data-action="add-form-field">➕ Add Field</button>
+            <button class="btn y-btn" data-action="submitForm">📨 Submit Form</button>
+            <button class="btn btn-warning y-btn" data-action="addFormField">➕ Add Field</button>
+        </div>
+
+        <div class="section" id="ypsilon-assigned">
+            <h2>📡 Assigned Event Listeners</h2>
+            <p><strong>These are the ONLY event listeners assigned to this entire SPA!</strong></p>
+            <p>No additional listeners will be created - all dynamic content uses these same 5 listeners via event delegation.</p>
+            <div></div>
         </div>
 
         <!-- Event Log -->
         <div class="section">
-            <h2>📋 Event Log</h2>
-            <p>Watch how ONE body listener handles ALL events <small>(max: 50)</small>:</p>
-            <div class="log" id="event-log">
-                <div class="log-entry">Event log will appear here...</div>
+            <div class="log-container">
+                <h2>📋 Event Log</h2>
+                <p>Watch how ONE body listener handles ALL events <small>(max: 50)</small>:</p>
+                <div class="log y-fade-in" id="event-log">
+                    <div class="log-entry">Event log will appear here...</div>
+                </div>
             </div>
-            <button class="btn btn-warning y-btn" data-action="clear-log">🗑️ Clear Log</button>
-            <button class="btn y-btn" data-action="debug-handler" style="background: #6f42c1;">🔍 Debug Handler</button>
-            <button class="btn" style="background: #dc3545;" id="destroy-btn">💀 Destroy Handler</button>
-            <button class="btn" style="background: #28a745;" id="recreate-btn" disabled>🔄 Recreate Handler</button>
-            <span id="handler-status" style="margin-left: 10px; font-weight: bold; color: #28a745;">ACTIVE</span>
+            <div class="ypsi-buttons">
+                <div class="helper-btn">
+                    <button class="btn btn-warning y-btn" data-action="clearLog">🗑️ Clear Log</button>
+                    <button class="btn y-btn" data-action="debugHandler" style="background: #6f42c1;">🔍 Debug Handler</button>
+                    <label class="btn" title="Show Event Log Always" style="font-size: 11px;">
+                        <input type="checkbox" name="show-logs-always" value="true" data-action="showLogsAlways" style="">
+                        📌 Always
+                    </label>
+                </div>
+                <div class="starter-btn">
+                    <span id="handler-status" style="margin-right: 10px; font-weight: bold; color: #28a745;">ACTIVE</span>
+                    <button class="btn" style="background: #28a745;" id="recreate-btn" disabled>🔄 Recreate Handler</button>
+                    <button class="btn" style="background: #dc3545;" id="destroy-btn">💀 Destroy Handler</button>
+                </div>
+            </div>
+
         </div>
     </div>
 
     <!-- Notification -->
     <div class="notification" id="notification">
         Action completed!
+    </div>
+
+    <!-- Scroll to top -->
+    <div class="scroll-to-top-container">
+        <button type="button" class="scroll-to-top btn y-btn" data-action="scrollToTop">▲</button>
     </div>
 
     <!-- Footer -->
@@ -594,27 +711,34 @@
         <p>💫 YpsilonEventHandler - The power of native handleEvent interface</p>
         <p>
             <a href="https://github.com/eypsilon/YpsilonEventHandler">github</a> |
-            <a href="https://www.npmjs.com/package/ypsilon-event-handler">npm</a>
+            <a href="https://www.npmjs.com/package/ypsilon-event-handler">npm</a> |
+            <a href="./spa.html">reload</a>
         </p>
     </div>
 
     <script src="https://cdn.jsdelivr.net/gh/eypsilon/YpsilonEventHandler@main/ypsilon-event-handler.js"></script>
     <script>
-        const defaultDebounce = 350;
-        const defaultThrottle = 200;
-
+        const config = {
+            defaultDebounce: 350,
+            defaultThrottle: 300,
+            threshold: {
+                top: 100,
+                bottom: 20,
+                showFooter: 20,
+            }
+        }
         // SPA Event Handler - ONE handler for the entire application!
         class SPAEventHandler extends YpsilonEventHandler {
             constructor() {
                 super({
                     'body': [
                         { type: 'click', handler: 'handleClick' },
-                        { type: 'input', handler: 'handleInput', debounce: defaultDebounce },
+                        { type: 'input', handler: 'handleInput', debounce: config.defaultDebounce },
                         { type: 'change', handler: 'handleChange' },
                         { type: 'keydown', handler: 'handleKeydown' }
                     ],
                     'window': [
-                        { type: 'scroll', handler: 'handleScroll', throttle: defaultThrottle }
+                        { type: 'scroll', handler: 'handleScroll', throttle: config.defaultThrottle }
                     ]
                 });
 
@@ -629,107 +753,49 @@
                 this.updateStats();
                 this.initializePlaceholder();
 
-                // Set initial scroll class
                 document.body.classList.add('y-scroll-top');
             }
 
             handleClick(event, target) {
-                this.counters.clicks++;
-                this.counters.events++;
-                this.updateStats();
-
-                // Handle tab switching first
-                if (target.classList.contains('y-tab')) {
-                    this.switchTab(target.dataset.tab);
-                    return;
-                }
-
-                // Handle dynamic buttons BEFORE checking for data-action
-                if (target.classList.contains('dynamic-btn')) {
-                    this.log(`🔘 Dynamic button: ${target.textContent}`);
-                    this.showNotification(`Dynamic button clicked: ${target.textContent}`);
-                    return;
-                }
+                this._updateStats('clicks', 'events');
 
                 // Handle different button types based on data-action
                 const action = target.dataset.action;
                 if (!action) return;
 
-                this.log(`🖱️ Click: ${action} (${target.textContent.trim()})`);
+                if (typeof this[action] === 'function') {
+                    return this[action](target, event);
+                }
 
-                switch (action) {
-                    case 'create-card':
-                        this.createCard();
-                        break;
-                    case 'create-button':
-                        this.createButton();
-                        break;
-                    case 'clear-all':
-                        this.clearAll();
-                        break;
-                    case 'add-todo':
-                        this.addTodo();
-                        break;
-                    case 'complete-todo':
-                        this.completeTodo(target);
-                        break;
-                    case 'delete-todo':
-                        this.deleteTodo(target);
-                        break;
+                if (!target.classList.contains('y-btn')) return; // requirement
+
+                switch (action) { // Most complex tasks here
                     case 'tab-action':
                         this.showNotification(target.dataset.message || 'Tab action triggered!');
                         break;
-                    case 'create-element':
-                        this.createElementInTab(target.dataset.target);
-                        break;
-                    case 'add-tab':
-                        this.addTab();
-                        break;
-                    case 'submit-form':
-                        this.submitForm();
-                        break;
-                    case 'add-form-field':
-                        this.addFormField();
-                        break;
-                    case 'clear-log':
-                        this.clearLog();
-                        break;
-                    case 'debug-handler':
-                        this.debugHandler();
-                        break;
-                    case 'remove-card':
-                        this.removeElement(target.dataset.target);
-                        break;
-                    case 'remove-element':
-                        this.removeElement(target.dataset.target);
-                        break;
-                    case 'remove-field':
-                        this.removeElement(target.dataset.target);
-                        break;
-                    default:
-                        this.log(`🔧 Unknown action: ${action}`);
+                    default: this.log(`🔧 Unknown action: ${action}`);
                 }
 
+                this.log(`🖱️ Click: ${action} (${target.textContent.trim()})`);
             }
 
             handleInput(event, target) {
-                this.counters.events++;
-                this.updateStats();
+                this._updateStats('events');
 
                 const action = target.dataset.action;
                 if (!action) return;
-
-                this.log(`⌨️ Input: ${action} = "${target.value}" (debounced ${defaultDebounce})`);
 
                 // Handle todo input enter key
                 if (action === 'todo-input' && event.type === 'keydown' && event.key === 'Enter') {
                     this.addTodo();
                 }
+
+                this.log(`⌨️ Input: ${action} = "${target.value}" (debounced ${config.defaultDebounce})`);
             }
 
             handleChange(event, target) {
-                this.counters.events++;
-                this.updateStats();
+                this._updateStats('events');
+
                 this.log(`🔄 Change: ${target.dataset.action || 'unknown'} = "${target.value}"`);
             }
 
@@ -740,8 +806,7 @@
             }
 
             handleScroll(event, target) {
-                this.counters.events++;
-                this.updateStats();
+                this._updateStats('events');
 
                 const scrollY = window.scrollY || window.pageYOffset;
                 const windowHeight = window.innerHeight;
@@ -759,7 +824,29 @@
                 // Handle body scroll classes
                 this.updateScrollClasses(scrollY, docHeight, windowHeight);
 
-                this.log(`🌐 Window scroll: ${Math.round(scrollY)}px (throttled ${defaultThrottle})`);
+                setTimeout(() => {
+                    this.log(`🌐 Window scroll: ${Math.round(scrollY)}px (throttled ${config.defaultThrottle})`);
+                }, 200);
+            }
+
+            showLogsAlways(target) {
+                const logs = this.getEventLogContainer();
+
+                if (logs) {
+                    const logContainer = logs.parentNode;
+                    const exec = target.checked ? 'add' : 'remove';
+
+                    logContainer.style.minHeight = target.checked
+                        ? `${logContainer.offsetHeight + 16}px`
+                        : null ;
+
+                    logs.classList[exec]('show-logs-always');
+                    document.body.classList[exec]('show-logs-always');
+                }
+            }
+
+            scrollToTop() {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             }
 
             createCard() {
@@ -772,13 +859,13 @@
                 card.innerHTML = `
                     <h3>Dynamic Card #${this.counters.elements + 1}</h3>
                     <p>This card was created dynamically but works instantly!</p>
-                    <button class="btn dynamic-btn" data-dynamic="true">Click Me!</button>
-                    <button class="btn btn-danger y-btn" data-action="remove-card" data-target="${cardId}">🗑️ Remove</button>
+                    <button class="btn" data-action="dynamicBtn" data-dynamic="true">Click Me!</button>
+                    <button class="btn btn-danger y-btn" data-action="removeElement" data-target="${cardId}">🗑️ Remove</button>
                 `;
 
                 container.appendChild(card);
-                this.counters.elements++;
-                this.updateStats();
+                this._updateStats('elements');
+
                 this.log(`➕ Created card: ${cardId}`);
             }
 
@@ -791,23 +878,25 @@
                 wrapper.id = buttonId;
                 wrapper.innerHTML = `
                     <h3>Dynamic Button #${this.counters.elements + 1}</h3>
-                    <button class="btn btn-success dynamic-btn" data-dynamic="true">I'm Dynamic!</button>
-                    <button class="btn btn-warning dynamic-btn" data-dynamic="true">Me Too!</button>
-                    <button class="btn btn-danger y-btn" data-action="remove-card" data-target="${buttonId}">🗑️ Remove</button>
+                    <button class="btn btn-success" data-action="dynamicBtn" data-dynamic="true">I'm Dynamic!</button>
+                    <button class="btn btn-warning" data-action="dynamicBtn" data-dynamic="true">Me Too!</button>
+                    <button class="btn btn-danger y-btn" data-action="removeElement" data-target="${buttonId}">🗑️ Remove</button>
                 `;
 
                 container.appendChild(wrapper);
-                this.counters.elements++;
-                this.updateStats();
+                this._updateStats('elements');
+
                 this.log(`➕ Created button set: ${buttonId}`);
             }
 
             clearAll() {
                 const container = document.getElementById('dynamic-container');
                 const elementsToRemove = container.children.length;
+
                 container.innerHTML = '';
                 this.counters.elements = Math.max(0, this.counters.elements - elementsToRemove);
                 this.updateStats();
+
                 this.log(`🗑️ Cleared ${elementsToRemove} dynamic elements from content creator`);
             }
 
@@ -825,23 +914,25 @@
                 todo.innerHTML = `
                     <span>${this.escapeHtml(text)}</span>
                     <div>
-                        <button class="btn btn-success y-btn" data-action="complete-todo" data-target="${todoId}">✅ Complete</button>
-                        <button class="btn btn-danger y-btn" data-action="delete-todo" data-target="${todoId}">🗑️ Delete</button>
+                        <button class="btn btn-success y-btn" data-action="completeTodo" data-target="${todoId}">✅ Complete</button>
+                        <button class="btn btn-danger y-btn" data-action="deleteTodo" data-target="${todoId}">🗑️ Delete</button>
                     </div>
                 `;
 
-                container.appendChild(todo);
                 input.value = '';
-                this.counters.todos++;
-                this.updateStats();
+                container.appendChild(todo);
+                this._updateStats('todos');
+
                 this.log(`➕ Added todo: ${text}`);
             }
 
             completeTodo(target) {
                 const todoId = target.dataset.target;
                 const todo = document.getElementById(todoId);
+
                 if (todo) {
                     todo.classList.toggle('completed');
+
                     this.log(`✅ Toggled todo: ${todoId}`);
                 }
             }
@@ -849,15 +940,19 @@
             deleteTodo(target) {
                 const todoId = target.dataset.target;
                 const todo = document.getElementById(todoId);
+
                 if (todo) {
                     todo.remove();
                     this.counters.todos--;
                     this.updateStats();
+
                     this.log(`🗑️ Deleted todo: ${todoId}`);
                 }
             }
 
-            switchTab(tabId) {
+            switchTab(target) {
+                const tabId = target.dataset.tab;
+
                 // Hide all tabs
                 document.querySelectorAll('.tab-content').forEach(content => {
                     content.classList.remove('active');
@@ -875,16 +970,17 @@
                 this.log(`📑 Switched to tab: ${tabId}`);
             }
 
-            addTab() {
+            addTab(target) {
                 this.tabCounter++;
                 const tabId = `tab${this.tabCounter}`;
 
                 // Add tab button
                 const tabsContainer = document.querySelector('.tabs');
-                const addButton = tabsContainer.querySelector('[data-action="add-tab"]');
+                const addButton = tabsContainer.querySelector('[data-action="addTab"]');
 
                 const newTab = document.createElement('button');
-                newTab.className = 'tab y-tab y-fade-in';
+                newTab.className = 'tab y-fade-in';
+                newTab.dataset.action = 'switchTab';
                 newTab.dataset.tab = tabId;
                 newTab.textContent = `Tab ${this.tabCounter}`;
 
@@ -898,56 +994,61 @@
                     <h3>Tab ${this.tabCounter} Content</h3>
                     <p>This tab was created dynamically! Event delegation still works.</p>
                     <button class="btn y-btn" data-action="tab-action" data-message="Dynamic tab ${this.tabCounter} button clicked!">Click Me</button>
-                    <button class="btn btn-success y-btn" data-action="create-element" data-target="${tabId}">Create Element</button>
+                    <button class="btn btn-success y-btn" data-action="createElementInTab" data-target="${tabId}">Create Element</button>
                 `;
 
                 // Insert after the tabs container
                 tabsContainer.parentNode.appendChild(tabContent);
-                this.switchTab(tabId);
+                this.switchTab(newTab);
+
                 this.log(`➕ Added dynamic tab: ${tabId}`);
             }
 
-            createElementInTab(targetTab) {
+            dynamicBtn(target) {
+                this.log(`🔘 Dynamic button: ${target.textContent}`, `Dynamic button clicked: ${target.textContent}`);
+            }
+
+            createElementInTab(target) {
+                const targetTab = target.dataset.target;
                 const tabContent = document.getElementById(targetTab);
                 if (!tabContent) return;
 
                 const elementId = `element-${Date.now()}`;
                 const element = document.createElement('div');
+                element.id = elementId;
                 element.className = 'y-fade-in';
                 element.style.cssText = 'margin: 10px 0; padding: 10px; background: #f0f0f0; border-radius: 4px;';
                 element.innerHTML = `
                     <p><strong>Dynamic Element #${this.counters.elements + 1}</strong></p>
-                    <button class="btn dynamic-btn" data-dynamic="true">I work too!</button>
-                    <button class="btn btn-danger y-btn" data-action="remove-element" data-target="${elementId}">Remove</button>
+                    <button class="btn" data-action="dynamicBtn" data-dynamic="true">I work too!</button>
+                    <button class="btn btn-danger y-btn" data-action="removeElement" data-target="${elementId}">Remove</button>
                 `;
-                element.id = elementId;
 
                 tabContent.appendChild(element);
-                this.counters.elements++;
-                this.updateStats();
+                this._updateStats('elements');
+
                 this.log(`➕ Created element in ${targetTab}: ${elementId}`);
             }
 
             addFormField() {
                 // Find the form section by looking for the submit button
-                const submitButton = document.querySelector('[data-action="submit-form"]');
+                const submitButton = document.querySelector('[data-action="submitForm"]');
                 const section = submitButton.closest('.section');
 
                 const fieldId = `field-${Date.now()}`;
                 const inputId = `input-${Date.now()}`;
                 const formGroup = document.createElement('div');
+                formGroup.id = fieldId;
                 formGroup.className = 'form-group dynamic-group y-fade-in';
                 formGroup.innerHTML = `
                     <label for="${inputId}">Dynamic Field #${this.counters.elements + 1}:</label>
                     <input type="text" id="${inputId}" name="${inputId}" class="form-control y-input" data-action="dynamic-field" placeholder="Dynamic field">
-                    <button class="btn btn-danger y-btn" data-action="remove-field" data-target="${fieldId}" style="margin-top: 5px;">Remove Field</button>
+                    <button class="btn btn-danger y-btn" data-action="removeElement" data-target="${fieldId}" style="margin-top: 5px;">Remove Field</button>
                 `;
-                formGroup.id = fieldId;
 
-                // Insert before the submit button
                 section.insertBefore(formGroup, submitButton);
-                this.counters.elements++;
-                this.updateStats();
+                this._updateStats('elements');
+
                 this.log(`➕ Added form field: ${fieldId}`);
             }
 
@@ -962,32 +1063,16 @@
                     }
                 });
 
-                this.log(`📨 Form submitted with data: ${JSON.stringify(formData)}`);
-                this.showNotification('Form submitted successfully!');
+                this.log(`📨 Form submitted with data: ${JSON.stringify(formData)}`, 'Form submitted successfully!');
             }
 
-            showNotification(message) {
-                const notification = document.getElementById('notification');
-
-                if (!notification.classList.contains('y-nulled')) {
-                    notification.classList.add('y-nulled');
-                    if (!this.initialContent) {
-                        this.initialContent = notification.innerHTML;
+            _updateStats() {
+                for (const update of arguments) {
+                    if (typeof this.counters[update] !== 'undefined') {
+                        this.counters[update]++;
                     }
-                    notification.textContent = '';
                 }
-
-                const note = document.createElement('div');
-                note.className = 'toast y-fade-in';
-                note.textContent = message;
-                notification.classList.add('show');
-                notification.append(note);
-
-                setTimeout(() => {
-                    note.remove('show');
-                    notification.classList.remove('show', 'y-nulled');
-                    notification.textContent = this.initialContent;
-                }, 3000);
+                this.updateStats();
             }
 
             updateStats() {
@@ -1016,24 +1101,25 @@
                 if (shouldBeSticky && !statsSection.classList.contains('sticky')) {
                     statsSection.classList.add('sticky');
                     placeholder.classList.add('active');
+                    this._updateFadeInClass(statsSection);
                     this.log(`📌 Stats became sticky`);
                 } else if (!shouldBeSticky && statsSection.classList.contains('sticky')) {
                     statsSection.classList.remove('sticky');
                     placeholder.classList.remove('active');
-
-                    // Add fade-in effect when returning to normal size
-                    statsSection.classList.remove('y-fade-in');
-                    // Force reflow to ensure class removal is processed
-                    statsSection.offsetHeight;
-                    statsSection.classList.add('y-fade-in');
-
+                    this._updateFadeInClass(statsSection);
                     this.log(`📌 Stats unstuck with fade-in`);
                 }
             }
 
+            _updateFadeInClass(element) {
+                element.classList.remove('y-fade-in');
+                element.offsetHeight;
+                element.classList.add('y-fade-in');
+            }
+
             updateFooterVisibility(scrollY, docHeight, windowHeight) {
                 const footer = document.getElementById('footer');
-                const threshold = 20; // Show footer when 20px from bottom
+                const threshold = config.threshold.showFooter; // Show when x from bottom
 
                 if (scrollY + windowHeight >= docHeight - threshold) {
                     footer.classList.add('visible');
@@ -1044,11 +1130,8 @@
 
             updateScrollClasses(scrollY, docHeight, windowHeight) {
                 const body = document.body;
-                const topThreshold = 50; // 50px from top
-                const bottomThreshold = 50; // 50px from bottom
-
-                const isAtTop = scrollY <= topThreshold;
-                const isAtBottom = scrollY + windowHeight >= docHeight - bottomThreshold;
+                const isAtTop = scrollY <= config.threshold.top;
+                const isAtBottom = scrollY + windowHeight >= docHeight - config.threshold.bottom;
 
                 // Only change classes when needed to prevent flicker
                 if (isAtTop) {
@@ -1075,12 +1158,15 @@
                 }
             }
 
-            log(message) {
-                const logContainer = document.getElementById('event-log');
+            getEventLogContainer() {
+                return document.getElementById('event-log');
+            }
+
+            log(message, notification) {
+                const logContainer = this.getEventLogContainer();
                 const entry = document.createElement('div');
                 entry.className = 'log-entry y-fade-in y-blink';
                 entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
-
                 logContainer.appendChild(entry);
                 logContainer.scrollTop = logContainer.scrollHeight;
 
@@ -1089,6 +1175,34 @@
                 if (entries.length > 50) {
                     entries[0].remove();
                 }
+
+                if (notification) {
+                    this.showNotification(notification);
+                }
+            }
+
+            showNotification(message) {
+                const notification = document.getElementById('notification');
+
+                if (!notification.classList.contains('y-nulled')) {
+                    notification.classList.add('y-nulled');
+                    if (!this.initialContent) {
+                        this.initialContent = notification.innerHTML;
+                    }
+                    notification.textContent = '';
+                }
+
+                const note = document.createElement('div');
+                note.className = 'toast y-fade-in';
+                note.textContent = this.escapeHtml(message);
+                notification.classList.add('show');
+                notification.append(note);
+
+                setTimeout(() => {
+                    note.remove('show');
+                    notification.classList.remove('show', 'y-nulled');
+                    notification.textContent = this.initialContent;
+                }, 3000);
             }
 
             clearLog() {
@@ -1097,23 +1211,8 @@
                 this.log('📋 Event log cleared');
             }
 
-            debugHandler() {
-                console.group('🔍 YpsilonEventHandler Debug Info');
-                console.log('📊 Counters:', this.counters);
-                console.log('📋 Element Handlers:', this.elementHandlers);
-                console.log('⏱️ Throttle Timers:', this.throttleTimers);
-                console.log('⏰ Debounce Timers:', this.debounceTimers);
-                console.log('🎯 Event Listeners Map:', this.eventListeners);
-                console.log('🔧 Passive Supported:', this.passiveSupported);
-                console.log('📈 Tab Counter:', this.tabCounter);
-                console.log('🔍 Full Handler Object:', this);
-                console.groupEnd();
-
-                this.log('🔍 Handler debug info logged to console');
-                this.showNotification('Debug info logged to console! Check dev tools.');
-            }
-
-            removeElement(elementId) {
+            removeElement(target) {
+                const elementId = target.dataset.target;
                 const element = document.getElementById(elementId);
                 if (element) {
                     element.remove();
@@ -1132,6 +1231,11 @@
             initializePlaceholder() {
                 const statsSection = document.getElementById('stats-section');
                 const placeholder = document.getElementById('stats-placeholder');
+                const assignedListener = document.querySelector('#ypsilon-assigned div');
+
+                if (assignedListener) {
+                    assignedListener.innerHTML = this.createEventList(this.eventMapping);
+                }
 
                 // Set placeholder height immediately on page load
                 const initialHeight = statsSection.offsetHeight;
@@ -1139,6 +1243,49 @@
                     placeholder.style.height = initialHeight + 'px';
                     this.log(`📏 Placeholder initialized with height: ${initialHeight}px`);
                 }
+            }
+
+            createEventList(data) {
+                const ul = document.createElement("ul");
+                ul.className = 'assigned-listener-list';
+
+                for (const [scope, events] of Object.entries(data)) {
+                    const scopeLi = document.createElement("li");
+                    scopeLi.innerHTML = `<span class="selector">${scope}</span>`;
+
+                    const innerUl = document.createElement("ul");
+
+                    for (const event of events) {
+                        const { type, handler, ...rest } = event;
+                        const li = document.createElement("li");
+
+                        const restStr = Object.keys(rest).length > 0 ? `, ${JSON.stringify(rest)}` : '';
+                        li.innerHTML = `<span class="config">${type}, ${handler}${restStr}</span>`;
+
+                        innerUl.appendChild(li);
+                    }
+
+                    scopeLi.appendChild(innerUl);
+                    ul.appendChild(scopeLi);
+                }
+
+                return ul.outerHTML;
+            }
+
+            debugHandler() {
+                console.group('🔍 YpsilonEventHandler Debug Info');
+                console.log('⚙️ Configuration:', config);
+                console.log('📊 Counters:', this.counters);
+                console.log('📋 Element Handlers:', this.elementHandlers);
+                console.log('⏱️ Throttle Timers:', this.throttleTimers);
+                console.log('⏰ Debounce Timers:', this.debounceTimers);
+                console.log('🎯 Event Listeners Map:', this.eventListeners);
+                console.log('🔧 Passive Supported:', this.passiveSupported);
+                console.log('📈 Tab Counter:', this.tabCounter);
+                console.log('🔍 Full Handler Object:', this);
+                console.groupEnd();
+
+                this.log('🔍 Handler debug info logged to console', 'Debug info logged to console!');
             }
         }
 
@@ -1152,12 +1299,9 @@
         const handlerStatus = document.getElementById('handler-status');
 
         destroyBtn.addEventListener('click', () => {
-            // Call the destroy method
-            spa.destroy();
+            if (spa.getMainStatsEl()) spa.getMainStatsEl().classList.remove('sticky');
 
-            if (spa.getMainStatsEl() && spa.getMainStatsEl().classList.contains('sticky')) {
-                spa.getMainStatsEl().classList.remove('sticky');
-            }
+            spa.destroy();
 
             // Update UI
             destroyBtn.disabled = true;
@@ -1165,19 +1309,15 @@
             handlerStatus.textContent = 'DESTROYED';
             handlerStatus.style.color = '#dc3545';
 
-            spa.log('💀 Handler DESTROYED - All event listeners removed! Try clicking/scrolling/typing now!');
-            spa.showNotification('Handler destroyed! Events are disabled until recreated.');
             console.log('🔍 Destroyed Handler Object:', spa);
+            spa.log('💀 Handler DESTROYED - Listeners removed! Try clicking/scrolling/typing now!', 'Handler destroyed!');
         });
 
         recreateBtn.addEventListener('click', () => {
-            // Create new handler and replace references
+            if (spa.getMainStatsEl()) spa.getMainStatsEl().classList.add('sticky');
+
             spa = new SPAEventHandler();
             window.spa = spa;
-
-            if (spa.getMainStatsEl()) {
-                spa.getMainStatsEl().classList.add('sticky');
-            }
 
             // Update UI
             destroyBtn.disabled = false;
@@ -1185,9 +1325,8 @@
             handlerStatus.textContent = 'ACTIVE';
             handlerStatus.style.color = '#28a745';
 
-            spa.log('🔄 Handler RECREATED - All events are working again!');
-            spa.showNotification('Handler recreated! Events are active again.');
             console.log('🔍 Recreated Handler Object:', spa);
+            spa.log('🔄 Handler RECREATED - All events are working again!', 'Handler recreated!');
         });
 
         // Initial log
