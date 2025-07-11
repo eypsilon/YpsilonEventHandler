@@ -25,5 +25,8 @@
   },
   "bugs": {
     "url": "https://github.com/eypsilon/YpsilonEventHandler/issues"
+  },
+  "dependencies": {
+    "ypsilon-event-handler": "^1.0.7"
   }
 }

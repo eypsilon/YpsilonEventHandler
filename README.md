@@ -65,11 +65,31 @@ Experience the **ultimate event delegation power** with our [full SPA demo](http
 
 ## 🚀 Quick Start
 
+**CDN (Recommended for testing):**
 ```html
-<script src="ypsilon-event-handler.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/eypsilon/YpsilonEventHandler@main/ypsilon-event-handler.js"></script>
+<script>
+  class YourHandler extends YpsilonEventHandler {
+    constructor() {
+      super({
+        body: [{ type: 'click', handler: 'handleClick' }]
+      });
+    }
+
+    handleClick(event, target) {
+      console.log('Clicked:', target.tagName);
+    }
+  }
+
+  const handler = new YourHandler();
+  // handler.destroy(); // Clean up when done
+</script>
 ```
 
+**NPM Usage:**
 ```js
+import { YpsilonEventHandler } from 'ypsilon-event-handler';
+
 class MyEventHandler extends YpsilonEventHandler {
   constructor() {
     super({
@@ -128,22 +148,21 @@ super({
   'document': [
     { type: 'keydown', handler: 'handleKeyboard', options: { once: true } },
     { type: 'change',  handler: 'handleChange' },
+  ],
+
+  /**
+   * Performance Options
+   */
+  '.fast-button': [
+    { type: 'click', handler: 'handleClick', throttle: 100 }  // Max once per 100ms
+  ],
+  '.search-input': [
+    { type: 'input', handler: 'handleSearch', debounce: 300 }  // Wait 300ms after typing
+  ],
+  '.modal': [
+    { type: 'click', handler: 'handleModal', options: { once: true } }  // Fire only once
   ]
 });
-```
-
-### Performance Options
-
-```js
-'.fast-button': [
-  { type: 'click', handler: 'handleClick', throttle: 100 }  // Max once per 100ms
-],
-'.search-input': [
-  { type: 'input', handler: 'handleSearch', debounce: 300 }  // Wait 300ms after typing
-],
-'.modal': [
-  { type: 'click', handler: 'handleModal', options: { once: true } }  // Fire only once
-]
 ```
 
 ## 🎯 Why YpsilonEventHandler?
@@ -242,18 +261,6 @@ This enables:
 ```html
 <script src="https://cdn.jsdelivr.net/gh/eypsilon/YpsilonEventHandler@main/ypsilon-event-handler.js"></script>
 ```
-```js
-class YourHandler extends YpsilonEventHandler {
-    super({
-        body: [{ type: 'click', handler: 'handleClick' }]
-    });
-
-    handleClick(event, target) {
-        console.log(event);
-    }
-}
-```
-
 
 ### Package Manager
 
@@ -261,13 +268,6 @@ class YourHandler extends YpsilonEventHandler {
 
 ```sh
 npm i ypsilon-event-handler
-```
-```js
-// Import (ES6):
-import { YpsilonEventHandler } from 'ypsilon-event-handler';
-
-// Require (CommonJS):
-const { YpsilonEventHandler } = require('ypsilon-event-handler');
 ```
 
 ### Download

@@ -193,7 +193,14 @@ class YpsilonEventHandler {
 
 // Export for ES6 modules and CommonJS
 if (typeof module !== 'undefined' && module.exports) {
+    // CommonJS
     module.exports = { YpsilonEventHandler };
+    // Also support default export for compatibility
+    module.exports.default = YpsilonEventHandler;
 } else if (typeof window !== 'undefined') {
+    // Browser global
     window.YpsilonEventHandler = YpsilonEventHandler;
 }
+
+// ES6 module export (for modern bundlers)
+export { YpsilonEventHandler };
