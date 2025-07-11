@@ -202,5 +202,5 @@ if (typeof module !== 'undefined' && module.exports) {
     window.YpsilonEventHandler = YpsilonEventHandler;
 }
 
-// ES6 module export (for modern bundlers)
-export { YpsilonEventHandler };
+// Note: ES6 export syntax not compatible with browser script tags
+// Use import maps or bundlers for ES6 module support
