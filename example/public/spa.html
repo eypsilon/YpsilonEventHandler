@@ -739,7 +739,7 @@
                     <button class="btn btn-warning y-btn" data-action="clearLog">🗑️ Clear Log</button>
                     <button class="btn y-btn" data-action="debugHandler" style="background: #6f42c1;">🔍 Debug Handler</button>
                     <label class="btn" title="Show Event Log Always" style="font-size: 11px;">
-                        <input type="checkbox" name="show-logs-always" value="true" data-action="showLogsAlways" style="">
+                        <input type="checkbox" name="show-logs-always" value="true" data-action="showLogsAlways">
                         📌 Always
                     </label>
                 </div>
@@ -860,7 +860,7 @@
                     this.addTodo();
                 }
 
-                this.log(`⌨️ Input: ${action} = "${target.value}" (debounced ${config.defaultDebounce})`);
+                this.log(`⌨️ Input: ${action} = "${target.value}" (debounced ${config.debounce})`);
             }
 
             handleChange(event, target) {
