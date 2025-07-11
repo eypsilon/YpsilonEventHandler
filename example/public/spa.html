@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YpsilonEventHandler - SPA Demo</title>
+    <title>YpsilonEventHandler - SPA Demo (Single Page Application)</title>
     <meta name="description" content="YpsilonEventHandler - Single Page Application [SPA] Example Page">
     <link rel="icon" type="image/x-icon" href="./favicon.ico">
     <style>
@@ -79,6 +79,33 @@
                         padding: 10px 2px;
                     }
                 }
+            }
+        }
+
+        del {
+            text-decoration-line: overline underline line-through;
+            text-decoration-color: #f00;
+            text-decoration-thickness: auto;
+            text-shadow: 0px 2px 11px #f00;
+            opacity: .8;
+        }
+        ins { font-weight: bold; }
+
+        .d-none { display: none; }
+
+        .flex-center-center {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            a, small {
+                margin: 0 5px;
+            }
+
+            &.src-nav {
+                margin-top: 15px;
+                padding-top: 15px;
+                border-top: 1px solid
             }
         }
 
@@ -282,22 +309,11 @@
         body.show-logs-always {
             padding-bottom: 440px;
 
-           &.y-scroll-bottom {
+            &.y-scroll-bottom {
                 .show-logs-always {
                     box-shadow: 0 0 8px 0px #c1b3b3;
-                    bottom: 200px;
+                    bottom: 220px;
                 }
-            }
-        }
-
-        .ypsi-buttons {
-            display: flex;
-            justify-content: space-between;
-
-            .helper-btn,
-            .starter-btn {
-                display: flex;
-                align-items: center;
             }
         }
 
@@ -360,18 +376,54 @@
         }
 
         .notification {
-            padding: 15px 20px;
+            padding: 6px;
+            max-width: 380px;
             position: fixed;
             top: 6px;
             right: 20px;
             z-index: 1000;
             border-radius: 6px;
             color: white;
-            background: #28a745;
-            transition: all .3s ease;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             transform: translateX(100%);
+            transition: all .4s ease-in-out;
+            color: transparent;
 
             &.show { transform: translateX(0); }
+        }
+
+        .toast {
+            margin-bottom: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #28a745;
+            color: white;
+            border-radius: 4px;
+            cursor: default;
+            transition: all .4s ease-in-out;
+
+            span {
+                padding: 0 15px;
+                display: block;
+                max-width: 95%;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+            button {
+                padding: 10px 15px;
+                background:rgb(35, 126, 56);
+                border: none;
+                color: white;
+                cursor: pointer;
+                font-weight: bold;
+                font-size: 22px;
+            }
+            &:not(:last-of-type) {
+                border-bottom: 1px solid #c3c3c3;
+            }
         }
 
         .stats {
@@ -482,6 +534,18 @@
             }
         }
 
+        @media only screen and (min-width: 640px) {
+            .ypsi-buttons {
+                display: flex;
+                justify-content: space-between;
+                .helper-btn,
+                .starter-btn {
+                    display: flex;
+                    align-items: center;
+                }
+            }
+        }
+
         @media only screen and (max-width: 480px) {
             body {
                 padding-bottom: 260px;
@@ -527,7 +591,7 @@
         <div class="container">
             <h1>🚀 YpsilonEventHandler SPA Demo</h1>
             <p>Demonstrating the power of event delegation with dynamic content</p>
-            <p><strong>⚡ ONLY 5 EVENT LISTENERS for this ENTIRE SPA! ⚡</strong></p>
+            <p><strong>⚡ ONLY <del>5</del> <ins>6</ins> EVENT LISTENERS for this ENTIRE SPA! ⚡</strong></p>
             <p><strong>ONE handler on body handles ALL events - no matter when elements are created!</strong></p>
         </div>
     </div>
@@ -579,9 +643,7 @@
                 <button class="btn btn-danger y-btn" data-action="clearAll">🗑️ Clear All</button>
             </div>
 
-            <div class="dynamic-grid" id="dynamic-container">
-                <!-- Dynamic elements will be added here -->
-            </div>
+            <div class="dynamic-grid" id="dynamic-container"><!-- Dynamic elements --></div>
         </div>
 
         <!-- Todo List Manager -->
@@ -595,9 +657,7 @@
                 <button class="btn y-btn" data-action="addTodo" style="margin-top: 10px;">➕ Add Todo</button>
             </div>
 
-            <div id="todo-container">
-                <!-- Todo items will be added here -->
-            </div>
+            <div id="todo-container"><!-- Todo items --></div>
         </div>
 
         <!-- Tab System -->
@@ -660,13 +720,13 @@
 
         <div class="section" id="ypsilon-assigned">
             <h2>📡 Assigned Event Listeners</h2>
-            <p><strong>These are the ONLY event listeners assigned to this entire SPA!</strong></p>
-            <p>No additional listeners will be created - all dynamic content uses these same 5 listeners via event delegation.</p>
+            <p><strong>These are the event listeners assigned to this entire SPA!</strong></p>
+            <p>No additional listeners will be created - all dynamic content uses these same <del>5</del> <ins>6</ins> listeners via event delegation.</p>
             <div></div>
         </div>
 
         <!-- Event Log -->
-        <div class="section">
+        <div class="section log-wrapper">
             <div class="log-container">
                 <h2>📋 Event Log</h2>
                 <p>Watch how ONE body listener handles ALL events <small>(max: 50)</small>:</p>
@@ -694,9 +754,7 @@
     </div>
 
     <!-- Notification -->
-    <div class="notification" id="notification">
-        Action completed!
-    </div>
+    <div class="notification" id="notification">Action completed!</div>
 
     <!-- Scroll to top -->
     <div class="scroll-to-top-container">
@@ -709,22 +767,26 @@
         <p>✨ This footer appeared thanks to scroll event delegation</p>
         <p>🚀 ONE body listener handled ALL scroll events on this page</p>
         <p>💫 YpsilonEventHandler - The power of native handleEvent interface</p>
-        <p>
+        <div class="flex-center-center src-nav">
+            <small>© Engin Ypsilon</small> |
             <a href="https://github.com/eypsilon/YpsilonEventHandler">github</a> |
             <a href="https://www.npmjs.com/package/ypsilon-event-handler">npm</a> |
             <a href="./spa.html">reload</a>
-        </p>
+        </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/gh/eypsilon/YpsilonEventHandler@main/ypsilon-event-handler.js"></script>
     <script>
         const config = {
-            defaultDebounce: 350,
-            defaultThrottle: 300,
+            debounce: 350,
+            throttle: 200,
             threshold: {
                 top: 100,
                 bottom: 20,
                 showFooter: 20,
+            },
+            notification: {
+                timeout: 3000
             }
         }
         // SPA Event Handler - ONE handler for the entire application!
@@ -733,12 +795,13 @@
                 super({
                     'body': [
                         { type: 'click', handler: 'handleClick' },
-                        { type: 'input', handler: 'handleInput', debounce: config.defaultDebounce },
+                        { type: 'input', handler: 'handleInput', debounce: config.debounce },
                         { type: 'change', handler: 'handleChange' },
                         { type: 'keydown', handler: 'handleKeydown' }
                     ],
                     'window': [
-                        { type: 'scroll', handler: 'handleScroll', throttle: config.defaultThrottle }
+                        { type: 'scroll', handler: 'handleScroll', throttle: config.throttle },
+                        { type: 'beforeunload', handler: 'beforeUnload', capture: true }
                     ]
                 });
 
@@ -754,6 +817,13 @@
                 this.initializePlaceholder();
 
                 document.body.classList.add('y-scroll-top');
+            }
+
+            beforeUnload() {
+                if (Object.values(this.counters).some(v => v > 0)) {
+                    event.preventDefault();
+                    event.returnValue = 'Are you sure you want to leave Ypsilon?';
+                }
             }
 
             handleClick(event, target) {
@@ -824,9 +894,15 @@
                 // Handle body scroll classes
                 this.updateScrollClasses(scrollY, docHeight, windowHeight);
 
-                setTimeout(() => {
-                    this.log(`🌐 Window scroll: ${Math.round(scrollY)}px (throttled ${config.defaultThrottle})`);
-                }, 200);
+                if (!this.waitingScroll) {
+                    this.waitingScroll = true;
+
+                    setTimeout(() => {
+                        this.waitingScroll = false;
+                        this.log(`🌐 Window scroll: ${Math.round(scrollY)}px (throttled ${config.throttle})`);
+                    }, 250);
+                }
+
             }
 
             showLogsAlways(target) {
@@ -842,6 +918,10 @@
 
                     logs.classList[exec]('show-logs-always');
                     document.body.classList[exec]('show-logs-always');
+
+                    if (exec === 'add') {
+                        document.body.style.paddingBottom = null;
+                    }
                 }
             }
 
@@ -964,6 +1044,7 @@
                 // Show selected tab
                 const tabContent = document.getElementById(tabId);
                 const tabButton = document.querySelector(`[data-tab="${tabId}"]`);
+
                 if (tabContent) tabContent.classList.add('active');
                 if (tabButton) tabButton.classList.add('active');
 
@@ -1015,12 +1096,14 @@
 
                 const elementId = `element-${Date.now()}`;
                 const element = document.createElement('div');
+                const useIndex = this.counters.elements + 1;
+
                 element.id = elementId;
                 element.className = 'y-fade-in';
                 element.style.cssText = 'margin: 10px 0; padding: 10px; background: #f0f0f0; border-radius: 4px;';
                 element.innerHTML = `
-                    <p><strong>Dynamic Element #${this.counters.elements + 1}</strong></p>
-                    <button class="btn" data-action="dynamicBtn" data-dynamic="true">I work too!</button>
+                    <p><strong>Dynamic Element #${useIndex}</strong></p>
+                    <button class="btn" data-action="dynamicBtn" data-dynamic="true">I work too! <u class="d-none">${useIndex}</u></button>
                     <button class="btn btn-danger y-btn" data-action="removeElement" data-target="${elementId}">Remove</button>
                 `;
 
@@ -1162,47 +1245,26 @@
                 return document.getElementById('event-log');
             }
 
-            log(message, notification) {
-                const logContainer = this.getEventLogContainer();
-                const entry = document.createElement('div');
-                entry.className = 'log-entry y-fade-in y-blink';
-                entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
-                logContainer.appendChild(entry);
-                logContainer.scrollTop = logContainer.scrollHeight;
+            removeToast(toastElement) {
+                // If toastElement is the close button, get the parent toast div
+                const actualToast = toastElement.classList?.contains('toast') ? toastElement : toastElement.closest('.toast');
 
-                // Keep only last 50 entries
-                const entries = logContainer.querySelectorAll('.log-entry');
-                if (entries.length > 50) {
-                    entries[0].remove();
+                if (!actualToast || !actualToast.parentNode) return;
+
+                // Clear the timer if it exists
+                if (actualToast.dataset.timerId) {
+                    clearTimeout(parseInt(actualToast.dataset.timerId));
                 }
 
-                if (notification) {
-                    this.showNotification(notification);
-                }
-            }
+                actualToast.remove();
 
-            showNotification(message) {
                 const notification = document.getElementById('notification');
 
-                if (!notification.classList.contains('y-nulled')) {
-                    notification.classList.add('y-nulled');
-                    if (!this.initialContent) {
-                        this.initialContent = notification.innerHTML;
-                    }
-                    notification.textContent = '';
-                }
-
-                const note = document.createElement('div');
-                note.className = 'toast y-fade-in';
-                note.textContent = this.escapeHtml(message);
-                notification.classList.add('show');
-                notification.append(note);
-
-                setTimeout(() => {
-                    note.remove('show');
+                // If no toasts left, reset notification container
+                if (notification.children.length === 0) {
                     notification.classList.remove('show', 'y-nulled');
-                    notification.textContent = this.initialContent;
-                }, 3000);
+                    notification.textContent = this.initialContent || '';
+                }
             }
 
             clearLog() {
@@ -1232,9 +1294,16 @@
                 const statsSection = document.getElementById('stats-section');
                 const placeholder = document.getElementById('stats-placeholder');
                 const assignedListener = document.querySelector('#ypsilon-assigned div');
+                const footer = document.getElementById('footer');
+                const docBody = document.body
 
                 if (assignedListener) {
                     assignedListener.innerHTML = this.createEventList(this.eventMapping);
+                }
+
+                if (footer && !docBody.classList.contains('footer-size-padding')) {
+                    docBody.style.paddingBottom = `${footer.offsetHeight}px`
+                    docBody.classList.add('footer-size-padding');
                 }
 
                 // Set placeholder height immediately on page load
@@ -1270,6 +1339,57 @@
                 }
 
                 return ul.outerHTML;
+            }
+
+            log(message, notification) {
+                const logContainer = this.getEventLogContainer();
+                const entry = document.createElement('div');
+                entry.className = 'log-entry y-fade-in y-blink';
+                entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+                logContainer.appendChild(entry);
+                logContainer.scrollTop = logContainer.scrollHeight;
+
+                // Keep only last 50 entries
+                const entries = logContainer.querySelectorAll('.log-entry');
+                if (entries.length > 50) {
+                    entries[0].remove();
+                }
+
+                if (notification) {
+                    this.showNotification(notification);
+                }
+            }
+
+            showNotification(message) {
+                const notification = document.getElementById('notification');
+
+                if (!notification.classList.contains('y-nulled')) {
+                    notification.classList.add('y-nulled');
+                    if (!this.initialContent) {
+                        this.initialContent = notification.innerHTML;
+                    }
+                    notification.textContent = '';
+                }
+
+                const note = document.createElement('div');
+                note.style.cssText = '';
+                note.innerHTML = `
+                    <span>${this.escapeHtml(message)}</span>
+                    <button style="" data-action="removeToast">×</button>
+                `;
+
+                notification.classList.add('show');
+                note.className = 'toast y-fade-in';
+
+                notification.append(note);
+
+                // Individual timer for this specific toast
+                const toastTimer = setTimeout(() => {
+                    this.removeToast(note);
+                }, config.notification.timeout);
+
+                // Store timer on the element for potential manual cancellation
+                note.dataset.timerId = toastTimer;
             }
 
             debugHandler() {

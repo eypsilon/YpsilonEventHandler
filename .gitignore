@@ -5,6 +5,8 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 package-lock.json*
+.DS_Store
+*.log
 
 # Runtime data
 pids
@@ -41,3 +43,4 @@ node_modules/
 *.swo
 CLAUDE.md
 notes.md
+example/public/install.html

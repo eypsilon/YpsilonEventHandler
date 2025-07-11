@@ -190,3 +190,10 @@ class YpsilonEventHandler {
         return this;
     }
 }
+
+// Export for ES6 modules and CommonJS
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = { YpsilonEventHandler };
+} else if (typeof window !== 'undefined') {
+    window.YpsilonEventHandler = YpsilonEventHandler;
+}
