@@ -154,7 +154,7 @@ Create a file, e.g. `test.html` (need to have `.html` extension) and put the fol
 </head>
 <body style="height:100vh">
 <!-- At the end of body -->
-<script src="https://cdn.jsdelivr.net/npm/ypsilon-event-handler@1.1.0/ypsilon-event-handler.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/ypsilon-event-handler@1.2.0/ypsilon-event-handler.js"></script>
 <script>
   class YourHandler extends YpsilonEventHandler {
     constructor() {
@@ -411,7 +411,7 @@ This enables:
 ### CDN
 ```html
 <!-- npm -->
-<script src="https://cdn.jsdelivr.net/npm/ypsilon-event-handler@1.1.0/ypsilon-event-handler.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/ypsilon-event-handler@1.2.0/ypsilon-event-handler.js"></script>
 <!-- github -->
 <script src="https://cdn.jsdelivr.net/gh/eypsilon/YpsilonEventHandler@main/ypsilon-event-handler.js"></script>
 ```
