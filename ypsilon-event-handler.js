@@ -98,6 +98,249 @@ class YpsilonEventHandler {
         }
     }
 
+    /**
+     * Dynamically add a single event listener to existing instance
+     * @param {string} target - CSS selector for target element
+     * @param {string|object} eventConfig - Event type string or config object
+     * @returns {boolean} - True if added, false if already exists
+     */
+    addEvent(target, eventConfig) {
+        // Normalize the event config
+        const normalizedConfig = typeof eventConfig === 'string' 
+            ? { type: eventConfig } 
+            : eventConfig;
+
+        // Check if event already exists to prevent duplicates
+        if (this.hasEvent(target, normalizedConfig.type)) {
+            return false; // Already exists
+        }
+
+        // Add to eventMapping
+        if (!this.eventMapping[target]) {
+            this.eventMapping[target] = [];
+        }
+        this.eventMapping[target].push(normalizedConfig);
+
+        // Register the new event
+        this.registerSingleEvent(target, normalizedConfig);
+        
+        return true; // Successfully added
+    }
+
+    /**
+     * Remove a specific event listener from target
+     * @param {string} target - CSS selector for target element
+     * @param {string} eventType - Event type to remove
+     * @returns {boolean} - True if removed, false if not found
+     */
+    removeEvent(target, eventType) {
+        // Check if mapping exists
+        if (!this.eventMapping[target]) {
+            return false;
+        }
+
+        // Find and remove from eventMapping
+        const initialLength = this.eventMapping[target].length;
+        this.eventMapping[target] = this.eventMapping[target].filter(config => {
+            const configType = typeof config === 'string' ? config : config.type;
+            return configType !== eventType;
+        });
+
+        // If nothing was removed, return false
+        if (this.eventMapping[target].length === initialLength) {
+            return false;
+        }
+
+        // Clean up empty target
+        if (this.eventMapping[target].length === 0) {
+            delete this.eventMapping[target];
+        }
+
+        // Remove from internal tracking
+        this.unregisterSingleEvent(target, eventType);
+        
+        return true; // Successfully removed
+    }
+
+    /**
+     * Check if an event is currently registered
+     * @param {string} target - CSS selector for target element
+     * @param {string} eventType - Event type to check
+     * @returns {boolean} - True if event exists
+     */
+    hasEvent(target, eventType) {
+        if (!this.eventMapping[target]) {
+            return false;
+        }
+
+        return this.eventMapping[target].some(config => {
+            const configType = typeof config === 'string' ? config : config.type;
+            return configType === eventType;
+        });
+    }
+
+    /**
+     * Create a wrapped handler with throttle/debounce if needed
+     * @private
+     */
+    createWrappedHandler(eventConfig, key, eventType) {
+        let handler = this;
+        
+        // Apply throttle/debounce if specified
+        if (typeof eventConfig === 'object') {
+            const originalHandleEvent = this.handleEvent;
+            
+            if (eventConfig.throttle) {
+                handler = {
+                    handleEvent: this.throttle(originalHandleEvent, eventConfig.throttle, `${key}-${eventType}-throttle`)
+                };
+            } else if (eventConfig.debounce) {
+                handler = {
+                    handleEvent: this.debounce(originalHandleEvent, eventConfig.debounce, `${key}-${eventType}-debounce`)
+                };
+            }
+        }
+        
+        return handler;
+    }
+
+    /**
+     * Clean up throttle/debounce timers for a specific event
+     * @private
+     */
+    cleanupEventTimers(key, eventType) {
+        const throttleKey = `${key}-${eventType}-throttle`;
+        const debounceKey = `${key}-${eventType}-debounce`;
+        
+        if (this.throttleTimers.has(throttleKey)) {
+            const timerData = this.throttleTimers.get(throttleKey);
+            if (timerData.timeout) clearTimeout(timerData.timeout);
+            if (timerData.trailingTimeout) clearTimeout(timerData.trailingTimeout);
+            this.throttleTimers.delete(throttleKey);
+        }
+        
+        if (this.debounceTimers.has(debounceKey)) {
+            clearTimeout(this.debounceTimers.get(debounceKey));
+            this.debounceTimers.delete(debounceKey);
+        }
+    }
+
+    /**
+     * Register a single event listener (internal helper)
+     * @private
+     */
+    registerEventListener(element, eventConfig, key, selector) {
+        const eventType = typeof eventConfig === 'string' ? eventConfig : eventConfig.type;
+        const options = this.getEventOptions(eventConfig);
+        const handler = this.createWrappedHandler(eventConfig, key, eventType);
+        
+        // Add the event listener
+        element.addEventListener(eventType, handler, options);
+
+        // Initialize tracking structures
+        if (!this.eventListeners.has(key)) {
+            this.eventListeners.set(key, { element, events: [] });
+        }
+        
+        if (!this.elementHandlers.has(element)) {
+            this.elementHandlers.set(element, []);
+        }
+
+        // Get handler method name
+        const handlerMethod = typeof eventConfig === 'object' && eventConfig.handler 
+            ? eventConfig.handler 
+            : `handle${eventType.charAt(0).toUpperCase() + eventType.slice(1)}`;
+
+        // Validate handler exists
+        if (typeof this[handlerMethod] !== 'function') {
+            console.warn(`YpsilonEventHandler: Handler method '${handlerMethod}' not found for event '${eventType}' on element '${selector}'`);
+        }
+
+        // Store tracking info
+        this.eventListeners.get(key).events.push({ type: eventType, handler, options });
+        this.elementHandlers.get(element).push({ type: eventType, handler, options });
+
+        // Update handler mapping for multi-handler support
+        if (!this.eventHandlerMap.has(eventType)) {
+            this.eventHandlerMap.set(eventType, []);
+        }
+
+        this.eventHandlerMap.get(eventType).push({
+            element: element,
+            handler: handlerMethod,
+            config: eventConfig
+        });
+    }
+
+    /**
+     * Register a single event (internal helper)
+     * @private
+     */
+    registerSingleEvent(selector, eventConfig) {
+        const eventType = typeof eventConfig === 'string' ? eventConfig : eventConfig.type;
+        const element = this.getElement(selector);
+        
+        if (!element) return;
+
+        const key = `${selector}_${eventType}`;
+
+        // Check if this exact combination is already registered
+        if (this.eventListeners.has(key)) {
+            return; // Already registered
+        }
+
+        this.registerEventListener(element, eventConfig, key, selector);
+    }
+
+    /**
+     * Unregister a single event (internal helper)
+     * @private
+     */
+    unregisterSingleEvent(selector, eventType) {
+        const element = this.getElement(selector);
+        if (!element) return;
+
+        const key = `${selector}_${eventType}`;
+
+        // Remove from event listeners tracking
+        const listenerConfig = this.eventListeners.get(key);
+        if (listenerConfig) {
+            // Remove the actual event listener using the stored handler
+            const eventData = listenerConfig.events.find(e => e.type === eventType);
+            if (eventData) {
+                element.removeEventListener(eventType, eventData.handler, eventData.options);
+            }
+            
+            // Clean up tracking
+            this.eventListeners.delete(key);
+
+            // Clean up WeakMap entries
+            const elementEvents = this.elementHandlers.get(element);
+            if (elementEvents) {
+                const filteredEvents = elementEvents.filter(e => e.type !== eventType);
+                if (filteredEvents.length === 0) {
+                    this.elementHandlers.delete(element);
+                } else {
+                    this.elementHandlers.set(element, filteredEvents);
+                }
+            }
+
+            // Clean up any timers for this event
+            this.cleanupEventTimers(key, eventType);
+        }
+
+        // Remove from handler mapping
+        const handlers = this.eventHandlerMap.get(eventType);
+        if (handlers) {
+            const filteredHandlers = handlers.filter(h => h.element !== element);
+            if (filteredHandlers.length === 0) {
+                this.eventHandlerMap.delete(eventType);
+            } else {
+                this.eventHandlerMap.set(eventType, filteredHandlers);
+            }
+        }
+    }
+
     getEventOptions(eventConfig) {
         const shouldBePassive = this.passiveSupported && this.passiveEvents.includes(eventConfig.type || eventConfig);
 
@@ -175,60 +418,12 @@ class YpsilonEventHandler {
             const element = this.getElement(elementSelector);
             if (!element) return;
 
-            this.eventListeners.set(key, { element, events: [] });
-
-            // Initialize WeakMap entry for this element
-            if (!this.elementHandlers.has(element)) {
-                this.elementHandlers.set(element, []);
-            }
-
             events.forEach(eventConfig => {
                 const eventType = typeof eventConfig === 'string' ? eventConfig : eventConfig.type;
-                const options = this.getEventOptions(eventConfig);
-
-                // Store handler mapping for this element/event combination
-                const handlerName = (typeof eventConfig === 'object' && eventConfig.handler)
-                    ? eventConfig.handler
-                    : `handle${eventType.charAt(0).toUpperCase() + eventType.slice(1)}`;
-
-                // Validate handler exists
-                if (typeof this[handlerName] !== 'function') {
-                    console.warn(`YpsilonEventHandler: Handler method '${handlerName}' not found for event '${eventType}' on element '${elementSelector}'`);
-                    return; // Skip this event registration
-                }
-
-                if (!this.eventHandlerMap.has(eventType)) {
-                    this.eventHandlerMap.set(eventType, []);
-                }
-
-                this.eventHandlerMap.get(eventType).push({
-                    element,
-                    handler: handlerName,
-                    selector: elementSelector
-                });
-
-                let handler = this;
-
-                // Apply throttle/debounce if specified
-                if (typeof eventConfig === 'object') {
-                    const originalHandleEvent = handler.handleEvent ? handler.handleEvent : this.handleEvent;
-
-                    if (eventConfig.throttle) {
-                        handler = {
-                            handleEvent: this.throttle(originalHandleEvent, eventConfig.throttle, `${key}-${eventType}-throttle`)
-                        };
-                    } else if (eventConfig.debounce) {
-                        handler = {
-                            handleEvent: this.debounce(originalHandleEvent, eventConfig.debounce, `${key}-${eventType}-debounce`)
-                        };
-                    }
-                }
-
-                element.addEventListener(eventType, handler, options);
-
-                // Store in both regular Map (for cleanup) and WeakMap (for memory safety)
-                this.eventListeners.get(key).events.push({ type: eventType, handler, options });
-                this.elementHandlers.get(element).push({ type: eventType, handler, options });
+                const eventKey = `${elementSelector}_${eventType}`;
+                
+                // Use the shared registration logic
+                this.registerEventListener(element, eventConfig, eventKey, elementSelector);
             });
         });
         return this;

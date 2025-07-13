@@ -10,7 +10,7 @@ A minimal, extendable event handling system for web applications. Built around t
 - 🔄 **Built-in Throttle/Debounce** - Performance optimization out of the box
 - 🧩 **Extension-First Design** - Built to be extended, not configured
 - 🧹 **Zero Memory Leaks** - WeakMap + explicit cleanup guarantee safety
-- 📏 **Minimal Footprint** - Less than 300 lines of focused code
+- 📏 **Minimal Footprint** - Under 500 lines with comprehensive features
 - 🚀 **Convention-Based** - `click` → `handleClick`, `scroll` → `handleScroll`
 - ✨ **CSS-Like Syntax** - `'.btn-primary': [...]` - selectors as keys!
 - 🔗 **No bind() Required** - Automatic `this` context handling + safer event removal
@@ -154,7 +154,7 @@ Create a file, e.g. `test.html` (need to have `.html` extension) and put the fol
 </head>
 <body style="height:100vh">
 <!-- At the end of body -->
-<script src="https://cdn.jsdelivr.net/npm/ypsilon-event-handler@1.2.0/ypsilon-event-handler.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/ypsilon-event-handler@1.3.0/ypsilon-event-handler.js"></script>
 <script>
   class YourHandler extends YpsilonEventHandler {
     constructor() {
@@ -411,7 +411,7 @@ This enables:
 ### CDN
 ```html
 <!-- npm -->
-<script src="https://cdn.jsdelivr.net/npm/ypsilon-event-handler@1.2.0/ypsilon-event-handler.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/ypsilon-event-handler@1.3.0/ypsilon-event-handler.js"></script>
 <!-- github -->
 <script src="https://cdn.jsdelivr.net/gh/eypsilon/YpsilonEventHandler@main/ypsilon-event-handler.js"></script>
 ```
