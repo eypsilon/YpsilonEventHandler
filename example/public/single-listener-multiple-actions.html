@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8" />
     <title>YpsilonEventHandler ~ Single listener, multiple actions example</title>
+    <meta name="description" content="YpsilonEventHandler - Example on how to use single listener for multiple actions">
+    <link rel="icon" type="image/x-icon" href="./favicon.ico">
     <style>
         body {
             font-family: sans-serif;
@@ -46,6 +48,7 @@
     <button class="y-btn" data-action="actionOne" data-message="You triggered Action 1!">Action 1</button>
     <button class="y-btn" data-action="actionTwo" data-message="Action 2 was executed.">Action 2</button>
     <button class="y-btn" data-action="actionThree" data-message="This is Action 3's message.">Action 3</button>
+    <button class="y-btn" data-action="actionAsync" data-message="Async action completed!">Async Action</button>
 
     <hr />
     <div id="button-response">Click a button above.</div>
@@ -85,6 +88,20 @@
 
         actionThree(target) {
             this.updateResponse(target.dataset.message);
+        }
+
+        // Async action with loading state
+        async actionAsync(target) {
+            target.disabled = true;
+            target.textContent = 'Loading...';
+            this.updateResponse('Processing async action...');
+            
+            // Simulate async work (API call, etc.)
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            
+            this.updateResponse(target.dataset.message);
+            target.disabled = false;
+            target.textContent = 'Async Action';
         }
 
         // Updates response div
