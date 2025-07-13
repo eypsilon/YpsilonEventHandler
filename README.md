@@ -64,6 +64,20 @@ Experience the **ultimate event delegation power** with our [full SPA demo](http
 
 *"This is event handling perfection!" - Every developer who sees it*
 
+## 📚 Learning Examples
+
+### Single Listener, Multiple Actions
+Perfect for understanding the core delegation pattern:
+
+**[👉 Try the Single-Listener Demo](https://eypsilon.github.io/YpsilonEventHandler/example/public/single-listener-multiple-actions.html)**
+
+- **One body listener** handles multiple button actions
+- **Dynamic method routing** via `data-action` attributes  
+- **Async action example** with loading states
+- **Clear code breakdown** - see exactly how delegation works
+
+*Ideal starting point for learning YpsilonEventHandler!*
+
 ## 🚀 Quick Start
 
 **CDN (Recommended for testing):**
@@ -118,18 +132,16 @@ class MyEventHandler extends YpsilonEventHandler {
         { type: 'beforeunload', handler: 'beforeUnload', capture: true }
       ]
     });
-    this.counters.clicks = 0;
   }
 
   beforeUnload() {
-    if (this.counters.clicks > 0) {
+    if (this.hasUserInteracted()) {
       event.preventDefault();
       event.returnValue = 'Are you sure you want to leave?';
     }
   }
 
   handlePrimaryClick(event, target) {
-    this.counters.clicks++;
     console.log('Primary button clicked!');
   }
 
