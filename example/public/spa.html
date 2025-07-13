@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YpsilonEventHandler - SPA Demo (Single Page Application)</title>
+    <title>YpsilonEventHandler ~ SPA Demo (Single Page Application)</title>
     <meta name="description" content="YpsilonEventHandler - Single Page Application [SPA] Example Page">
     <link rel="icon" type="image/x-icon" href="./favicon.ico">
     <style>
@@ -31,6 +31,7 @@
 
                 &:hover { transform: translateY(0); }
             }
+
             &.y-scrolled {
                 .scroll-to-top {
                     bottom: 4px;
@@ -82,6 +83,27 @@
             }
         }
 
+        .table-container {
+            margin: 20px 0;
+            overflow: auto;
+
+            table,
+            td {
+                border: 1px solid rgb(129, 114, 114);
+                border-collapse: collapse;
+            }
+
+            table {
+                width: 100%;
+
+                td,
+                tr {
+                    padding: 8px;
+                    white-space: nowrap;
+                }
+            }
+        }
+
         del {
             text-decoration-line: overline underline line-through;
             text-decoration-color: #f00;
@@ -89,7 +111,24 @@
             text-shadow: 0px 2px 11px #f00;
             opacity: .8;
         }
+
         ins { font-weight: bold; }
+
+        hr { margin: .5rem 0 .75rem; }
+
+        nav {
+            display: flex;
+
+            a {
+                margin: 0 .8rem 0 0;
+                padding: 0 .8rem 0 0;
+                display: inline-block;
+
+                &:not(:last-of-type) {
+                    border-right: 1px solid;
+                }
+            }
+        }
 
         .d-none { display: none; }
 
@@ -111,7 +150,7 @@
 
         .container {
             margin: 0 auto;
-            padding: 20px;
+            padding: 0 20px;
             max-width: 1200px;
         }
 
@@ -124,7 +163,7 @@
         }
 
         .section {
-            margin: 20px 0;
+            margin: 30px 0;
             padding: 30px;
             border-radius: 10px;
             background: white;
@@ -278,12 +317,11 @@
             .log {
                 margin: 15px 0;
                 padding: 15px;
-                max-height: 200px;
+                height: 200px;
                 background: #f5f5f5;
                 border-radius: 6px;
                 border: 1px solid #dee2e6;
                 overflow-y: auto;
-                overscroll-behavior: contain;
 
                 .log-entry {
                     margin: 2px 0;
@@ -296,13 +334,17 @@
                 }
             }
             .show-logs-always {
-                margin: 0;
                 max-width: 1040px;
                 position: fixed;
                 left: 2px;
-                box-shadow: 0 0 8px 0px #c1b3b3;
-                bottom: 2px;
+                bottom: 1px;
                 z-index: 11111;
+                box-shadow: 0 0 8px 2px #c1b3b3;
+
+                .log {
+                    margin: 0;
+                    overscroll-behavior: contain;
+                }
             }
         }
 
@@ -379,12 +421,12 @@
             padding: 6px;
             max-width: 380px;
             position: fixed;
-            top: 6px;
+            top: 2px;
             right: 20px;
             z-index: 1000;
             border-radius: 6px;
             color: white;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #667eeaaa 0%, #764ba2ee 100%);
             transform: translateX(100%);
             transition: all .4s ease-in-out;
             color: transparent;
@@ -431,6 +473,7 @@
             display: grid;
             gap: 20px;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            line-height: 1;
 
             .stat-card {
                 padding: 20px;
@@ -440,7 +483,7 @@
                 background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             }
             .stat-number {
-                margin-bottom: 5px;
+                margin-bottom: 10px;
                 font-size: 2em;
                 font-weight: bold;
             }
@@ -461,7 +504,7 @@
 
             .container {
                 margin: 0 auto;
-                padding: 20px 20px 0;
+                padding: 0 20px;
 
                 .section { margin: 0; }
             }
@@ -474,7 +517,7 @@
                 background: rgba(255, 255, 255, 0.75);
                 backdrop-filter: blur(10px);
                 border-bottom: 1px solid rgba(102, 126, 234, 0.2);
-                box-shadow: 0 2px 20px rgba(0, 0, 0, 0.25);
+                box-shadow: 0 0px 16px 1px rgba(0, 0, 0, 0.3);
 
                 .container {
                     padding: 0 20px;
@@ -494,15 +537,35 @@
                     border-radius: 3px;
                 }
                 .stat-number {
-                    margin-bottom: 1px;
+                    margin: 4px 0;
                     font-size: 1.2em;
                 }
                 .stat-label {
+                    margin-bottom: 4px;
                     font-size: 0.7em;
                 }
                 h2 {
                     display: none;
                 }
+            }
+        }
+
+        .ypsi-buttons {
+            flex-wrap: wrap;
+        }
+
+        .scroll-area {
+            height: 300px;
+            overflow-y: scroll;
+            background: linear-gradient(to bottom, #e3f2fd, #bbdefb);
+            border: 2px solid #2196f3;
+            border-radius: 8px;
+            padding: 20px;
+
+            .scroll-content {
+                background: linear-gradient(to bottom, #fff3e0, #ffcc02);
+                padding: 20px;
+                border-radius: 4px;
             }
         }
 
@@ -538,6 +601,7 @@
             .ypsi-buttons {
                 display: flex;
                 justify-content: space-between;
+
                 .helper-btn,
                 .starter-btn {
                     display: flex;
@@ -586,12 +650,12 @@
         @keyframes yBlink  { from { color: #0fec3f } to { color: #222 } }
     </style>
 </head>
-<body>
+<body class="y-scroll-top">
     <div class="header y-fade-in">
         <div class="container">
             <h1>🚀 YpsilonEventHandler SPA Demo</h1>
             <p>Demonstrating the power of event delegation with dynamic content</p>
-            <p><strong>⚡ ONLY <del>5</del> <ins>6</ins> EVENT LISTENERS for this ENTIRE SPA! ⚡</strong></p>
+            <p><strong>⚡ ONLY <del>5</del> <ins>9</ins> EVENT LISTENERS for this ENTIRE SPA! ⚡</strong></p>
             <p><strong>ONE handler on body handles ALL events - no matter when elements are created!</strong></p>
         </div>
     </div>
@@ -675,21 +739,21 @@
             <div class="tab-content active" id="tab1">
                 <h3>Tab 1 Content</h3>
                 <p>This is the content of tab 1. Click buttons below to test event delegation:</p>
-                <button class="btn y-btn" data-action="tab-action" data-message="Tab 1 button clicked!">Click Me</button>
+                <button class="btn y-btn" data-action="tabAction" data-message="Tab 1 button clicked!">Click Me</button>
                 <button class="btn btn-success y-btn" data-action="createElementInTab" data-target="tab1">Create Element</button>
             </div>
 
             <div class="tab-content" id="tab2">
                 <h3>Tab 2 Content</h3>
                 <p>This is the content of tab 2. These buttons were here from the start:</p>
-                <button class="btn y-btn" data-action="tab-action" data-message="Tab 2 button clicked!">Click Me</button>
+                <button class="btn y-btn" data-action="tabAction" data-message="Tab 2 button clicked!">Click Me</button>
                 <button class="btn btn-warning y-btn" data-action="createElementInTab" data-target="tab2">Create Element</button>
             </div>
 
             <div class="tab-content" id="tab3">
                 <h3>Tab 3 Content</h3>
                 <p>This is the content of tab 3. Event delegation works everywhere:</p>
-                <button class="btn y-btn" data-action="tab-action" data-message="Tab 3 button clicked!">Click Me</button>
+                <button class="btn y-btn" data-action="tabAction" data-message="Tab 3 button clicked!">Click Me</button>
                 <button class="btn btn-danger y-btn" data-action="createElementInTab" data-target="tab3">Create Element</button>
             </div>
         </div>
@@ -718,11 +782,65 @@
             <button class="btn btn-warning y-btn" data-action="addFormField">➕ Add Field</button>
         </div>
 
+        <!-- Scroll area -->
+        <div class="section">
+            <h2>Scroll Test (Passive Listeners)</h2>
+            <p>Scroll in the area below to test passive scroll events:</p>
+
+            <div class="scroll-area" id="scroll-area">
+                <div class="scroll-content">
+                    <h3>Scrollable Content</h3>
+                    <p>This scroll area demonstrates passive event listeners.</p>
+                    <p>When you scroll here, the event will be handled with passive:true automatically.</p>
+                    <p>This improves performance by telling the browser that preventDefault() won't be called.</p>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                    <p>Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                    <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.</p>
+                    <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore.</p>
+                    <p>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia.</p>
+                    <p>Keep scrolling to see more content...</p>
+                    <p>The scroll events are being logged to the output area above.</p>
+                    <p>Notice how smooth the scrolling is with passive listeners!</p>
+                    <p>This is the power of automatic passive listener detection.</p>
+                    <p>YpsilonEventHandler handles this optimization automatically.</p>
+                    <p>No manual configuration needed!</p>
+                    <p>You're near the bottom now.</p>
+                    <p>Final paragraph of scrollable content.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Assigned Event Listeners -->
         <div class="section" id="ypsilon-assigned">
             <h2>📡 Assigned Event Listeners</h2>
             <p><strong>These are the event listeners assigned to this entire SPA!</strong></p>
-            <p>No additional listeners will be created - all dynamic content uses these same <del>5</del> <ins>6</ins> listeners via event delegation.</p>
+            <p>No additional listeners will be created - all dynamic content uses these same <del>5</del> <ins>9</ins> listeners via event delegation.</p>
             <div></div>
+            <hr />
+            <nav>
+                <a href="./index.html">Simple example</a>
+                <a href="./single-listener-multiple-actions.html">Delegation example</a>
+            </nav>
+        </div>
+
+        <!-- Staggeringly Performant -->
+        <div class="section">
+            <h2>🏆 Staggeringly Performant</h2>
+            <p>Just click or focus on any button that generates something visual, like "➕ Create Card" and keep enter pressed! While you generate, scroll using the scrollbar. It allows us to scroll fast. Try it for yourself, it took me seconds.</p>
+
+            <div class="table-container">
+                <table class="performance-table">
+                    <tr>
+                        <td class="stat-label-number">Clicks: <b>2,887</b></td>
+                        <td class="stat-label-number">Dynamic Elements: <b>2,627</b></td>
+                        <td class="stat-label-number">Events Handled: <b>3,664</b></td>
+                        <td class="stat-label-number">Scroll Position: <b>143k</b></td>
+                        <td class="stat-label-number">Event Listeners: <b>6</b></td>
+                    </tr>
+                </table>
+            </div>
+
+            <p><em>All achieved with ~300 lines of vanilla JavaScript + native handleEvent interface.</em> One has to see it to believe it.</p>
         </div>
 
         <!-- Event Log -->
@@ -730,14 +848,17 @@
             <div class="log-container">
                 <h2>📋 Event Log</h2>
                 <p>Watch how ONE body listener handles ALL events <small>(max: 50)</small>:</p>
-                <div class="log y-fade-in" id="event-log">
-                    <div class="log-entry">Event log will appear here...</div>
+                <div class="log-wrapper">
+                    <div class="log y-fade-in" id="event-log">
+                        <div class="log-entry">Event log will appear here...</div>
+                    </div>
                 </div>
             </div>
             <div class="ypsi-buttons">
                 <div class="helper-btn">
                     <button class="btn btn-warning y-btn" data-action="clearLog">🗑️ Clear Log</button>
                     <button class="btn y-btn" data-action="debugHandler" style="background: #6f42c1;">🔍 Debug Handler</button>
+                    <button class="btn y-btn" data-action="testDispatch" style="background: #fd7e14;">🔥 Test Dispatch</button>
                     <label class="btn" title="Show Event Log Always" style="font-size: 11px;">
                         <input type="checkbox" name="show-logs-always" value="true" data-action="showLogsAlways">
                         📌 Always
@@ -775,11 +896,13 @@
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/gh/eypsilon/YpsilonEventHandler@main/ypsilon-event-handler.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/ypsilon-event-handler/ypsilon-event-handler.js"></script>
     <script>
         const config = {
-            debounce: 350,
-            throttle: 200,
+            debounce: 300,
+            throttle: 150,
+            throttleResize: 500,
+            throttleScrollArea: 400,
             threshold: {
                 top: 100,
                 bottom: 20,
@@ -794,15 +917,20 @@
             constructor() {
                 super({
                     'body': [
-                        { type: 'click', handler: 'handleClick' },
-                        { type: 'input', handler: 'handleInput', debounce: config.debounce },
-                        { type: 'change', handler: 'handleChange' },
-                        { type: 'keydown', handler: 'handleKeydown' }
+                        { type: 'click' },
+                        { type: 'input', debounce: config.debounce },
+                        { type: 'change' },
+                        { type: 'keydown' },
+                        { type: 'testdispatch' }
                     ],
                     'window': [
-                        { type: 'scroll', handler: 'handleScroll', throttle: config.throttle },
-                        { type: 'beforeunload', handler: 'beforeUnload', capture: true }
-                    ]
+                        { type: 'scroll', throttle: config.throttle },
+                        { type: 'resize', throttle: config.throttleResize },
+                        { type: 'beforeunload', capture: true }
+                    ],
+                    '#scroll-area': [
+                        { type: 'scroll', handler: 'handleAreaScroll', throttle: config.throttleScrollArea }
+                    ],
                 });
 
                 this.counters = {
@@ -815,15 +943,29 @@
                 this.tabCounter = 3;
                 this.updateStats();
                 this.initializePlaceholder();
-
-                document.body.classList.add('y-scroll-top');
             }
 
-            beforeUnload() {
-                if (Object.values(this.counters).some(v => v > 0)) {
+            handleBeforeunload(event) {
+                if (this.hasUserInteracted()) {
                     event.preventDefault();
                     event.returnValue = 'Are you sure you want to leave Ypsilon?';
                 }
+            }
+
+            handleAreaScroll(event, target) {
+                this._updateStats('events');
+                const scrollTop = target.scrollTop || 0;
+                this.log(`📜 DIV scroll: ${Math.round(scrollTop)}px (throttled ${config.throttleScrollArea}ms)`);
+            }
+
+            handleResize(event, target) {
+                this._updateStats('events');
+                if (!document.querySelector('.stats-placeholder.active')) {
+                    this.updatePlaceholderHeights();
+                }
+                const width = window.innerWidth;
+                const height = window.innerHeight;
+                this.log(`📏 Window resize: ${width}x${height}px (throttled ${config.throttleResize}ms)`);
             }
 
             handleClick(event, target) {
@@ -835,15 +977,6 @@
 
                 if (typeof this[action] === 'function') {
                     return this[action](target, event);
-                }
-
-                if (!target.classList.contains('y-btn')) return; // requirement
-
-                switch (action) { // Most complex tasks here
-                    case 'tab-action':
-                        this.showNotification(target.dataset.message || 'Tab action triggered!');
-                        break;
-                    default: this.log(`🔧 Unknown action: ${action}`);
                 }
 
                 this.log(`🖱️ Click: ${action} (${target.textContent.trim()})`);
@@ -902,31 +1035,28 @@
                         this.log(`🌐 Window scroll: ${Math.round(scrollY)}px (throttled ${config.throttle})`);
                     }, 250);
                 }
-
             }
 
             showLogsAlways(target) {
                 const logs = this.getEventLogContainer();
 
                 if (logs) {
-                    const logContainer = logs.parentNode;
+                    const logContainer = logs.parentNode.parentNode;
                     const exec = target.checked ? 'add' : 'remove';
 
                     logContainer.style.minHeight = target.checked
-                        ? `${logContainer.offsetHeight + 16}px`
+                        ? `${logContainer.offsetHeight + 15}px`
                         : null ;
 
-                    logs.classList[exec]('show-logs-always');
+                    logs.parentNode.classList[exec]('show-logs-always');
                     document.body.classList[exec]('show-logs-always');
-
-                    if (exec === 'add') {
-                        document.body.style.paddingBottom = null;
-                    }
                 }
             }
 
             scrollToTop() {
+                this._updateStats('events');
                 window.scrollTo({ top: 0, behavior: 'smooth' });
+                this.log(`▲ Scrolling to top`);
             }
 
             createCard() {
@@ -1074,7 +1204,7 @@
                 tabContent.innerHTML = `
                     <h3>Tab ${this.tabCounter} Content</h3>
                     <p>This tab was created dynamically! Event delegation still works.</p>
-                    <button class="btn y-btn" data-action="tab-action" data-message="Dynamic tab ${this.tabCounter} button clicked!">Click Me</button>
+                    <button class="btn y-btn" data-action="tabAction" data-message="Dynamic tab ${this.tabCounter} button clicked!">Click Me</button>
                     <button class="btn btn-success y-btn" data-action="createElementInTab" data-target="${tabId}">Create Element</button>
                 `;
 
@@ -1083,6 +1213,10 @@
                 this.switchTab(newTab);
 
                 this.log(`➕ Added dynamic tab: ${tabId}`);
+            }
+
+            tabAction(target, event) {
+                this.showNotification(target.dataset.message || 'Tab action triggered!');
             }
 
             dynamicBtn(target) {
@@ -1179,7 +1313,7 @@
 
                 // Use placeholder position to determine when to stick/unstick
                 const placeholderRect = placeholder.getBoundingClientRect();
-                const shouldBeSticky = placeholderRect.top + 150 <= 0;
+                const shouldBeSticky = placeholderRect.top + 130 <= 0;
 
                 if (shouldBeSticky && !statsSection.classList.contains('sticky')) {
                     statsSection.classList.add('sticky');
@@ -1314,6 +1448,35 @@
                 }
             }
 
+            updatePlaceholderHeights() {
+                const statsSection = document.getElementById('stats-section');
+                const placeholder = document.getElementById('stats-placeholder');
+                const footer = document.getElementById('footer');
+                const docBody = document.body;
+
+                // Recalculate stats section placeholder height
+                if (statsSection && placeholder) {
+                    const newHeight = statsSection.offsetHeight;
+                    const oldHeight = placeholder.style.height;
+                    placeholder.style.height = newHeight + 'px';
+
+                    if (oldHeight !== newHeight + 'px') {
+                        this.log(`📏 Placeholder height updated: ${oldHeight} → ${newHeight}px`);
+                    }
+                }
+
+                // Recalculate footer padding if needed
+                if (footer && docBody.classList.contains('footer-size-padding')) {
+                    const newPadding = footer.offsetHeight;
+                    const oldPadding = docBody.style.paddingBottom;
+                    docBody.style.paddingBottom = `${newPadding}px`;
+
+                    if (oldPadding !== `${newPadding}px`) {
+                        this.log(`📏 Footer padding updated: ${oldPadding} → ${newPadding}px`);
+                    }
+                }
+            }
+
             createEventList(data) {
                 const ul = document.createElement("ul");
                 ul.className = 'assigned-listener-list';
@@ -1325,10 +1488,14 @@
                     const innerUl = document.createElement("ul");
 
                     for (const event of events) {
-                        const { type, handler, ...rest } = event;
+                        let { type, handler, ...rest } = event;
                         const li = document.createElement("li");
-
                         const restStr = Object.keys(rest).length > 0 ? `, ${JSON.stringify(rest)}` : '';
+
+                        if (!handler) {
+                            handler = `handle${type.charAt(0).toUpperCase() + type.slice(1)}`;
+                        }
+
                         li.innerHTML = `<span class="config">${type}, ${handler}${restStr}</span>`;
 
                         innerUl.appendChild(li);
@@ -1396,16 +1563,48 @@
                 console.group('🔍 YpsilonEventHandler Debug Info');
                 console.log('⚙️ Configuration:', config);
                 console.log('📊 Counters:', this.counters);
+                console.log('🗺️ Event Handler Map (Multi-Handler System):', this.eventHandlerMap);
                 console.log('📋 Element Handlers:', this.elementHandlers);
                 console.log('⏱️ Throttle Timers:', this.throttleTimers);
                 console.log('⏰ Debounce Timers:', this.debounceTimers);
                 console.log('🎯 Event Listeners Map:', this.eventListeners);
                 console.log('🔧 Passive Supported:', this.passiveSupported);
+                console.log('👤 User Has Interacted:', this.userHasInteracted);
+                console.log('🚫 Passive Events List:', this.passiveEvents);
                 console.log('📈 Tab Counter:', this.tabCounter);
+
+                // Show handler mapping breakdown
+                console.group('🎯 Handler Mapping Breakdown');
+                this.eventHandlerMap.forEach((handlers, eventType) => {
+                    console.log(`${eventType}:`, handlers.map(h => ({
+                        selector: h.selector,
+                        handler: h.handler,
+                        element: h.element.tagName || h.element.constructor.name
+                    })));
+                });
+                console.groupEnd();
+
                 console.log('🔍 Full Handler Object:', this);
                 console.groupEnd();
 
                 this.log('🔍 Handler debug info logged to console', 'Debug info logged to console!');
+            }
+
+            testDispatch() {
+                const testData = {
+                    timestamp: Date.now(),
+                    message: 'Hello from dispatch!',
+                    random: Math.floor(Math.random() * 100)
+                };
+                this.dispatch('testdispatch', testData, document.body);
+                this.log('🔥 Dispatched custom event with data', `Custom event dispatched: ${JSON.stringify(testData)}`);
+            }
+
+            handleTestdispatch(event, target) {
+                this._updateStats('events');
+                console.log(event)
+
+                this.log(`🔥 Custom Event: ${event.type} - Detail: ${JSON.stringify(event.detail)}`);
             }
         }
 

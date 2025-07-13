@@ -5,11 +5,12 @@ A minimal, extendable event handling system for web applications. Built around t
 ## ✨ Features
 
 - 🎯 **Native Performance** - Uses browser's built-in `handleEvent` interface
+- 🎖️ **Multi-Handler System** - Multiple handlers per event type with closest-match resolution
 - ⚡ **Auto Passive Listeners** - Automatically applies `{passive: true}` to scroll/touch events
 - 🔄 **Built-in Throttle/Debounce** - Performance optimization out of the box
 - 🧩 **Extension-First Design** - Built to be extended, not configured
 - 🧹 **Zero Memory Leaks** - WeakMap + explicit cleanup guarantee safety
-- 📏 **Minimal Footprint** - Less than 200 lines of focused code
+- 📏 **Minimal Footprint** - Less than 300 lines of focused code
 - 🚀 **Convention-Based** - `click` → `handleClick`, `scroll` → `handleScroll`
 - ✨ **CSS-Like Syntax** - `'.btn-primary': [...]` - selectors as keys!
 - 🔗 **No bind() Required** - Automatic `this` context handling + safer event removal
@@ -19,9 +20,9 @@ A minimal, extendable event handling system for web applications. Built around t
 
 Experience the **ultimate event delegation power** with our [full SPA demo](https://eypsilon.github.io/YpsilonEventHandler/example/public/spa.html):
 
-### 🤯 **ONLY <del>5</del> <ins>6</ins> EVENT LISTENERS** for an entire Single Page Application!
+### 🤯 **ONLY <del>5</del> <ins>9</ins> EVENT LISTENERS** for an entire Single Page Application!
 
-**What those <del>5</del> <ins>6</ins> listeners handle (without any reassignment):**
+**What those 9 listeners handle (without any reassignment):**
 - ✅ **Dynamic content creation/deletion** - Cards, buttons, form fields created on-the-fly
 - ✅ **Todo list management** - Add, complete, delete todos with individual buttons
 - ✅ **Tab system with dynamic tabs** - Switch tabs + create new tabs dynamically
@@ -45,7 +46,7 @@ Experience the **ultimate event delegation power** with our [full SPA demo](http
 - 🔴 Tons of `.bind(this)` calls
 
 **YpsilonEventHandler approach:**
-- 🟢 **6 listeners total** (`click`, `input`, `change`, `keydown`, `scroll`, `beforeunload`)
+- 🟢 **9 listeners total** (`click`, `input`, `change`, `keydown`, `scroll`, `resize`, `testdispatch`, `beforeunload`)
 - 🟢 **Zero memory leaks** (automatic cleanup)
 - 🟢 **Perfect performance** (native `handleEvent` interface)
 - 🟢 **No bind() needed** (automatic `this` context)
@@ -66,13 +67,24 @@ Experience the **ultimate event delegation power** with our [full SPA demo](http
 ## 🚀 Quick Start
 
 **CDN (Recommended for testing):**
+
+Create a file, e.g. `test.html` (need to have `.html` extension) and put the following into it:
+
 ```html
-<script src="https://cdn.jsdelivr.net/gh/eypsilon/YpsilonEventHandler@main/ypsilon-event-handler.js"></script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>YpsilonEventHandler - Comprehensive event system in seconds</title>
+</head>
+<body style="height:100vh">
+<!-- At the end of body -->
+<script src="https://cdn.jsdelivr.net/npm/ypsilon-event-handler/ypsilon-event-handler.js"></script>
 <script>
   class YourHandler extends YpsilonEventHandler {
     constructor() {
       super({
-        body: [{ type: 'click', handler: 'handleClick' }]
+        body: [{ type: 'click' }] // handler falls back to "handleClick"
       });
     }
 
@@ -80,11 +92,13 @@ Experience the **ultimate event delegation power** with our [full SPA demo](http
       console.log('Clicked:', target.tagName);
     }
   }
-
-  const handler = new YourHandler();
-  // handler.destroy(); // Clean up when done
+  const handler = new YourHandler(); // handler.destroy()
 </script>
+</body>
+</html>
 ```
+
+> Open the file with your Browser and check Dev console.
 
 **NPM Usage:**
 ```js
@@ -165,6 +179,70 @@ super({
 });
 ```
 
+## 🎯 Multi-Handler System (Advanced)
+
+YpsilonEventHandler supports **multiple handlers per event type** with **closest-match resolution**. This allows different DOM areas to have specialized handlers for the same event:
+
+```js
+class AdvancedHandler extends YpsilonEventHandler {
+  constructor() {
+    super({
+      // General click handler for the entire page
+      'body': [
+        { type: 'click', handler: 'handleGeneralClick' }
+      ],
+
+      // Specialized click handler for a specific section
+      '.special-section': [
+        { type: 'click', handler: 'handleSpecialClick' }
+      ],
+
+      // Most specific click handler for individual buttons
+      '#important-button': [
+        { type: 'click', handler: 'handleImportantClick' }
+      ],
+
+      // Multiple scroll handlers with different throttling
+      'window': [
+        { type: 'scroll', handler: 'handleWindowScroll', throttle: 250 }
+      ],
+      '.scroll-area': [
+        { type: 'scroll', handler: 'handleAreaScroll', throttle: 100 }
+      ]
+    });
+  }
+
+  handleGeneralClick(event, target) {
+    console.log('General click handler - lowest priority');
+  }
+
+  handleSpecialClick(event, target) {
+    console.log('Special section click - medium priority');
+  }
+
+  handleImportantClick(event, target) {
+    console.log('Important button click - highest priority');
+    // This handler wins for clicks on #important-button
+  }
+}
+```
+
+### How Closest-Match Resolution Works
+
+When an event fires, YpsilonEventHandler:
+
+1. **Finds all handlers** registered for that event type
+2. **Checks containment** - which handler elements contain the event target
+3. **Calculates distance** - how many DOM levels from target to handler element
+4. **Picks the closest** - handler with minimum distance wins
+
+**Example:** Clicking `#important-button` inside `.special-section` inside `body`:
+- `body` click handler: distance ~15 levels
+- `.special-section` click handler: distance ~3 levels
+- `#important-button` click handler: distance 0 levels ← **This wins!**
+
+This allows you to create sophisticated event hierarchies while maintaining the performance benefits of delegation.
+
 ## 🎯 Why YpsilonEventHandler?
 
 ### Before (Traditional Approach)
@@ -190,7 +268,7 @@ input.removeEventListener('input', handleInput);  // if bind(this) was used to a
 class MyHandler extends YpsilonEventHandler {
   constructor() {
     super({
-      document: [
+      body: [
         { type: 'click', handler: 'handleClick' },
         { type: 'input', handler: 'handleInput', debounce: 300 }
       ]
@@ -259,6 +337,9 @@ This enables:
 
 ### CDN
 ```html
+<!-- npm -->
+<script src="https://cdn.jsdelivr.net/npm/ypsilon-event-handler/ypsilon-event-handler.js"></script>
+<!-- github -->
 <script src="https://cdn.jsdelivr.net/gh/eypsilon/YpsilonEventHandler@main/ypsilon-event-handler.js"></script>
 ```
 
@@ -278,11 +359,11 @@ npm i ypsilon-event-handler
 
 ## 🌍 Browser Compatibility
 
-**🟢 YpsilonEventHandler core library (< 200 lines of Code):**
-- **Internet Explorer 9+** - Full support (2011!)
-- **Chrome 1+** - Full support (2008!)
-- **Firefox 6+** - Full support (2011!)
-- **Safari 5+** - Full support (2010!)
+**🟢 YpsilonEventHandler core library (< 300 lines of Code):**
+- **Internet Explorer 11+** - Full support (2013!)
+- **Chrome 38+** - Full support (2014!)
+- **Firefox 13+** - Full support (2012!)
+- **Safari 7+** - Full support (2013!)
 - **Edge (all versions)** - Full support
 
 **🟡 SPA Demo compatibility:**
@@ -292,7 +373,7 @@ npm i ypsilon-event-handler
 - **IE11** - Demo needs build tools for CSS nesting
 
 **💪 Why this beats most frameworks:**
-- **Core library**: Works on browsers from **2011**!
+- **Core library**: Works on browsers from **2012**!
 - **Native `handleEvent`** - Ancient browser support
 - **Zero dependencies** - Nothing to break
 - **Progressive enhancement** - Degrades gracefully
