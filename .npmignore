@@ -1,0 +1,13 @@
+# Development and documentation files
+.claude/
+.github/
+CLAUDE.md
+notes.md
+example/public/node_modules/
+
+# Keep in NPM package:
+# - ypsilon-event-handler.js (main library)
+# - package.json & package-lock.json
+# - LICENSE
+# - README.md  
+# - example/ folder (for documentation)
