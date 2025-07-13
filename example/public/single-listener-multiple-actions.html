@@ -10,17 +10,23 @@
             font-family: sans-serif;
             padding: 2rem;
             background: #f9f9f9;
+            max-width: 600px;
+            margin: 0 auto;
         }
         h1 {
             margin: 0 0 .5rem;
             font-size: 1.5rem;
         }
+        nav,
         .button-group {
             background: #fff;
             border: 1px solid #ddd;
             border-radius: 4px;
             padding: 2rem;
-            max-width: 340px;
+        }
+        nav {
+            display: flex;
+            justify-content: space-between;
         }
         .y-btn {
             margin: 0.5rem 0;
@@ -42,7 +48,7 @@
 <body>
 
 <div class="button-group">
-    <h1>YpsilonEventHandler</h1>
+    <h1>Single listener, multiple actions</h1>
     <p>Single click listener handling multiple actions via <code>data-action</code>.</p>
 
     <button class="y-btn" data-action="actionOne" data-message="You triggered Action 1!">Action 1</button>
@@ -64,6 +70,7 @@
             super({
                 body: [{ type: 'click' }] // binds handleClick to body click events
             });
+            this.isLoading = false;
         }
 
         handleClick(event, target) {
@@ -71,6 +78,12 @@
 
             const action = target.dataset.action;
             if (!action) return;
+
+            // Block requests when loading
+            if (this.isLoading) {
+                console.log('⏳ Request blocked - already loading');
+                return;
+            }
 
             if (typeof this[action] === 'function') {
                 this[action](target, event);
@@ -92,16 +105,21 @@
 
         // Async action with loading state
         async actionAsync(target) {
+            this.isLoading = true;
             target.disabled = true;
             target.textContent = 'Loading...';
             this.updateResponse('Processing async action...');
-            
-            // Simulate async work (API call, etc.)
-            await new Promise(resolve => setTimeout(resolve, 2000));
-            
-            this.updateResponse(target.dataset.message);
-            target.disabled = false;
-            target.textContent = 'Async Action';
+
+            try {
+                // Simulate async work (API call, etc.)
+                await new Promise(resolve => setTimeout(resolve, 2000));
+
+                this.updateResponse(target.dataset.message);
+            } finally {
+                this.isLoading = false;
+                target.disabled = false;
+                target.textContent = 'Async Action';
+            }
         }
 
         // Updates response div
@@ -143,7 +161,13 @@
 <span class="line_wrapper"></span>
 <span class="line_wrapper">    actionThree<span style="color:#0000ff; ">(</span>target<span style="color:#0000ff; ">)</span> <span style="color:#0000ff; ">{</span><span style="color:#008000; ">/* logic here */</span><span style="color:#0000ff; ">}</span></span>
 <span class="line_wrapper"><span style="color:#0000ff; ">}</span></span>
-<span class="line_wrapper"><span style="color:#000080; ">&lt;/</span><span style="color:#0000ff; font-weight:bold; ">script</span><span style="color:#000080; ">&gt;</span></span></pre>
+<span class="line_wrapper"><span style="color:#000080;">&lt;/</span><span style="color:#0000ff; font-weight:bold; ">script</span><span style="color:#000080; ">&gt;</span></span></pre>
+
+<nav>
+    <a href="./index.html">Index</a>
+    <a href="./spa.html">SPA Example</a>
+    <a href="./reactive-y.html">Reactive Example</a>
+</nav>
 
 </body>
 </html>

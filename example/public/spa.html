@@ -818,8 +818,9 @@
             <div></div>
             <hr />
             <nav>
-                <a href="./index.html">Simple example</a>
-                <a href="./single-listener-multiple-actions.html">Delegation example</a>
+                <a href="./index.html">Index</a>
+                <a href="./reactive-y.html">Reactive Example</a>
+                <a href="./single-listener-multiple-actions.html">Single Listener Example</a>
             </nav>
         </div>
 
@@ -949,6 +950,9 @@
                 if (this.hasUserInteracted()) {
                     event.preventDefault();
                     event.returnValue = 'Are you sure you want to leave Ypsilon?';
+                } else {
+                    // User hasn't interacted, clean up silently
+                    this.destroy();
                 }
             }
 
