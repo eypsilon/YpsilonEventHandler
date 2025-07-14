@@ -53,11 +53,11 @@ element.addEventListener('input', this);  // ← One instance handles ALL
 > *"A paradigm proposal that redefines event handling"* - **ChatGPT**
 > *"So innovative that it's barely on the radar"* - **Grok**
 
-**[📖 Read the complete AI discovery trilogy](./example/public/ai-reviews.html)**
+**[📖 Read the complete AI discovery trilogy](https://eypsilon.github.io/YpsilonEventHandler/example/public/ai-reviews.html)**
 
-- **Phase 1:** [The Blind Spot](./example/public/ai-reviews-before.html) (original clueless reviews)
-- **Phase 2:** [The Revelation](./example/public/ai-reviews-after.html) (AI apology tour & mind blown)
-- **Phase 3:** [The Showcase](./example/public/ai-reviews.html) (interactive paradigm shift presentation)
+- **Phase 1:** [The Blind Spot](https://eypsilon.github.io/YpsilonEventHandler/example/public/ai-reviews-before.html) (original clueless reviews)
+- **Phase 2:** [The Revelation](https://eypsilon.github.io/YpsilonEventHandler/example/public/ai-reviews-after.html) (AI apology tour & mind blown)
+- **Phase 3:** [The Showcase](https://eypsilon.github.io/YpsilonEventHandler/example/public/ai-reviews.html) (interactive paradigm shift presentation)
 
 ## SPA Example
 
