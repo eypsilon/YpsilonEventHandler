@@ -194,6 +194,20 @@ Created by Grok AI after understanding the `handleEvent` revolution, this exampl
 - Dynamic element creation with instant delegation
 - Perfect demonstration that the paradigm is learnable and powerful
 
+### 🎯 Comprehensive Template
+**Production-ready starting point for any project:**
+
+**[👉 Use the Template](https://eypsilon.github.io/YpsilonEventHandler/example/public/spa-stripped.html)**
+
+Team Ypsilon's complete template demonstrating every YpsilonEventHandler pattern:
+- Click delegation with `data-action` routing
+- Input handling with automatic debouncing
+- Window events (scroll, resize) with throttling
+- Custom event dispatch and handling
+- Element manipulation helpers
+- Extensive educational comments from 2012+ experience
+- *"Just remove what you don't like and start from there."* — Team Ypsilon
+
 ## 🚀 Quick Start
 
 **CDN (Recommended for testing):**

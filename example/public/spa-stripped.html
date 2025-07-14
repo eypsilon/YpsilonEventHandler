@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YpsilonEventHandler ~ SPA Demo (Stripped Page Application)</title>
+    <meta name="description" content="YpsilonEventHandler - Stripped Page Application [SPA] Example Page">
+</head>
+<body class="y-scroll-top">
+    <style>
+        body { font-family: system-ui, -apple-system, sans-serif; line-height: 1.6; margin: 0; padding: 2rem; }
+        .y-btn { padding: 0.5rem 1rem; margin: 0.25rem; background: #3b82f6; color: white; border: none; border-radius: 0.375rem; cursor: pointer; }
+        .y-btn:hover { background: #2563eb; }
+        .y-btn:disabled { background: #94a3b8; cursor: not-allowed; }
+        .y-input { padding: 0.5rem; margin: 0.25rem; border: 1px solid #d1d5db; border-radius: 0.375rem; }
+        .demo-section { margin: 2rem 0; padding: 1rem; border: 1px solid #e5e7eb; border-radius: 0.5rem; }
+        .demo-section h3 { margin-top: 0; color: #374151; }
+        .output { padding: 1rem; margin: 1rem 0; background: #f3f4f6; border-radius: 0.375rem; font-family: monospace; }
+        .navigation { text-align: center; margin: 2rem 0; }
+        .navigation a { margin: 0 0.5rem; padding: 0.5rem 1rem; background: #6b7280; color: white; text-decoration: none; border-radius: 0.375rem; }
+        .navigation a:hover { background: #4b5563; }
+    </style>
+
+    <header>
+        <h1>YpsilonEventHandler - Comprehensive Template</h1>
+        <p>A complete, working template demonstrating all YpsilonEventHandler patterns. Perfect starting point for any project.</p>
+        <blockquote>
+            "Just remove what you don't like and start from there."<br> <small>&mdash; Team Ypsilon</small>
+        </blockquote>
+    </header>
+
+    <div class="demo-section">
+        <h3>🖱️ Click Events with Data-Action Routing</h3>
+        <button class="y-btn" data-action="appTestDispatch">Test Custom Event</button>
+        <button class="y-btn" data-action="scrollToTop">Scroll to Top</button>
+        <button class="y-btn" data-action="removeElement" data-target="#removable">Remove Element</button>
+        <button class="y-btn" data-action="removeElements" data-target=".removable">Remove All .removable</button>
+
+        <div id="removable" style="margin-top: 1rem; padding: 1rem; background: #fef3c7; border-radius: 0.375rem;">
+            <strong>Removable Element:</strong> Click "Remove Element" to remove this box.
+        </div>
+
+        <div class="removable" style="margin-top: 0.5rem; padding: 0.5rem; background: #fde68a; border-radius: 0.375rem;">
+            Removable item #1
+        </div>
+        <div class="removable" style="margin-top: 0.5rem; padding: 0.5rem; background: #fde68a; border-radius: 0.375rem;">
+            Removable item #2
+        </div>
+    </div>
+
+    <div class="demo-section">
+        <h3>📝 Input Events with Debouncing</h3>
+        <input type="text" class="y-input" data-action="demoInputHandler" placeholder="Type something (debounced 300ms)">
+        <input type="email" class="y-input" data-action="demoInputHandler" placeholder="Email validation demo">
+        <div class="output" id="input-output">Input events will appear here...</div>
+    </div>
+
+    <div class="demo-section">
+        <h3>🔄 Change Events</h3>
+        <select class="y-input" data-action="demoChangeHandler">
+            <option value="">Select an option</option>
+            <option value="option1">Option 1</option>
+            <option value="option2">Option 2</option>
+            <option value="option3">Option 3</option>
+        </select>
+        <div class="output" id="change-output">Change events will appear here...</div>
+    </div>
+
+    <div class="demo-section">
+        <h3>⌨️ Keyboard Events</h3>
+        <p>Press any key while focused on this page to see keydown events in the console.</p>
+        <div class="output" id="key-output">Press a key to see keydown events...</div>
+    </div>
+
+    <div class="demo-section">
+        <h3>📏 Window Events</h3>
+        <p>Resize the window or scroll to see throttled events in the console.</p>
+        <div class="output" id="window-output">Window events will appear here...</div>
+    </div>
+
+    <div class="demo-section">
+        <h3>🚀 Custom Events</h3>
+        <p>YpsilonEventHandler includes a powerful <code>dispatch()</code> method for custom events.</p>
+        <div class="output" id="custom-output">Custom events will appear here...</div>
+    </div>
+
+    <div style="height: 1000px; background: linear-gradient(to bottom, #f3f4f6, #e5e7eb); margin: 2rem 0; display: flex; align-items: center; justify-content: center;">
+        <p style="font-size: 1.2rem; color: #6b7280;">Scroll content for testing scroll events</p>
+    </div>
+
+    <footer class="navigation">
+        <a href="./index.html">Basic Examples</a>
+        <a href="./spa.html">Full SPA Demo</a>
+        <a href="./reactive-y.html">Reactive Demo</a>
+        <a href="./single-listener-multiple-actions.html">Single Listener</a>
+        <a href="./ypsilon-feat-grok-example.html">Grok's Example</a>
+        <a href="./ai-reviews.html">AI Reviews</a>
+        <a href="https://github.com/eypsilon/YpsilonEventHandler">GitHub</a>
+    </footer>
+
+    <!--
+        Include scripts always at the end of body. You don't need
+        async or defer, if you just put your code at the bottom
+    -->
+    <script src="https://cdn.jsdelivr.net/npm/ypsilon-event-handler@1.3.2/ypsilon-event-handler.js"></script>
+
+    <script>
+        class AppEventHandler extends YpsilonEventHandler {
+            constructor() {
+                /**
+                 * What does delegation even mean?
+                 *
+                 * Imagine YpsilonEventHandler as a routing system for Events, scoped to
+                 * the class that extends it. Its whole purpose is to listen to Events, and
+                 * when the Event gets fired, find the correct handler and call it.
+                 *
+                 * That's it. That's the whole purpose `YpsilonEventHandler` has. It's a more
+                 * interactive configuration tool, but a configuration nonetheless. You
+                 * practically tell the system:
+                 *
+                 * > "Hey sys, when element 'body' fires a click event, call handleClick with options"
+                 * > "Hey sys, when element 'window' fires a scroll event, call handleScroll"
+                 * > "Hey sys, when element '#ctx-btn' fires a click event, call importantBtn"
+                 *
+                 * Once the events are routed, you can from there on use data-attributes to control
+                 * the behavior, like a handler to call. Yes, in super(), you configure your superHandler,
+                 * and the affected elements can then set their own handlers. So when all clicks on body
+                 * are listened to, you can control all click trigger elements via data-attributes.
+                 *
+                 * For most cases the following setup will already do 99% of whatever
+                 * you plan to do. The rest can be easily extended.
+                 *
+                 * Each event type that has no handler declared will fall
+                 * back to prefix + capitalized type, e.g. for click: 'handleClick'
+                 */
+                super({
+                    // 'document': [{ type: 'visibilitychange', capture: true }],
+                    'body': [
+                        { type: 'click' },
+                        { type: 'input', debounce: 300 },
+                        { type: 'change' },
+                        { type: 'keydown' },
+                        { type: 'testdispatch' }
+                    ],
+                    'window': [
+                        { type: 'scroll', throttle: 150 },
+                        { type: 'resize', throttle: 500 },
+                        { type: 'beforeunload', capture: true }
+                    ],
+                });
+            }
+
+            /**
+             * Event notes
+             *
+             * 'visibilityChange' works reliably for task-switching on mobile platforms.
+             * 'beforeunload'     is of limited value as it only fires on desktop navigations.
+             * 'unload'           does not fire on mobile and desktop Safari.
+             */
+
+            /**
+             * Useful to perform final actions right before user leaves
+             */
+            handleVisibilitychange(event) {
+                if (document.visibilityState == 'hidden') { console.log('Bye bye!') }
+            }
+
+            /**
+             * If user has interacted with the page, this acts as a
+             * `prevent-data-loss` tool, a pretty unreliable `prevent-data-loss`
+             *
+             * This can be used as is. The getter 'hasUserInteracted' gets set internally. That
+             * check is important for at least Google Chrome. When the user hasn't touched the
+             * page in any way, Chrome throws an Error ('hasUserInteracted' prevents that).
+             *
+             * [Intervention] Blocked attempt to show a 'beforeunload' ...
+             */
+            handleBeforeunload(event) {
+                if (this.hasUserInteracted()) {
+                    event.preventDefault();
+                    event.returnValue = 'Are you sure you want to leave Ypsilon?';
+                } else { // User hasn't interacted, clean up silently
+                    this.destroy();
+                }
+            }
+
+            /**
+             * Reusable pattern for multiple events with condition check. Apply to 'input', 'change', etc.
+             * Set markers to Event triggering Elements and ignore all unmarked elements when they fire.
+             *
+             * Performance Boost: pretty high, depends on usage, potentially significant
+             */
+            handleClick(event, target) {
+                // The 2 if statements below can be combined.
+                if (!(target instanceof Element)) return;
+
+                // Just wanna make sure nobody misses this part
+                if (!target.classList.contains('y-btn')) return;
+
+                /**
+                 * Method routing using data-attributes like data-action or data-callback.
+                 *
+                 * When an Event reaches this point, means it was marked.
+                 * The action attribute could be counted as second condition check.
+                 */
+                const {
+                    action,         // =target.dataset.action         || data-action="handlerName"
+                    blur,           // =target.dataset.blur           || data-blur
+                    preventDefault, // =target.dataset.preventDefault || data-prevent-default
+                    stopPropagation // =target.dataset.preventDefault || data-prevent-default
+                } = target.dataset;
+
+                if (!action) return;
+
+                if (typeof blur !== 'undefined') target.blur();
+                if (typeof preventDefault !== 'undefined') event.preventDefault();
+                if (typeof stopPropagation !== 'undefined') event.stopPropagation();
+
+                // Final action call, the handler to call must in the class scope.
+                if (typeof this[action] === 'function') {
+                    return this[action](target, event);
+                }
+
+                // I'm using this pattern since ~2012, and practically nothing has changed.
+                // You ask, how did my code look back then? Like above. Ok, I admit,
+                // the way we can declare constants nowadays is much cooler.
+            }
+
+            /**
+             * Same as `handleClick`, you can use your own conventions, but the core logic is the same.
+             */
+            handleInput(event, target) {
+                // The 2 if statements below can be combined.
+                if (!(target instanceof Element)) return;
+                if (!target.classList.contains('y-input')) return;
+
+                // If you need some fancy button extras for input, select, copy & paste
+                // it here and adjust to your needs
+
+                const action = target.dataset.action;
+                if (!action) return;
+
+                if (typeof this[action] === 'function') {
+                    return this[action](target, event);
+                }
+            }
+
+            handleKeydown(event, target) {
+                console.log(event.key)
+                document.getElementById('key-output').textContent = `Key pressed: ${event.key} (${event.code})`;
+            }
+
+            handleResize(event, target) {
+                console.log(window.innerWidth, 'x', window.innerHeight)
+                document.getElementById('window-output').textContent = `Window resized: ${window.innerWidth}x${window.innerHeight}`;
+            }
+
+            handleChange(event, target) {
+                console.log(event.type, event)
+
+                const action = target.dataset.action;
+                if (action && typeof this[action] === 'function') {
+                    return this[action](target, event);
+                }
+            }
+
+            handleScroll(event, target) {
+                const scrollY = window.scrollY || window.pageYOffset;
+
+                // Manually throttle
+                if (!this.waitingScroll) {
+                    this.waitingScroll = true;
+
+                    setTimeout(() => {
+                        this.waitingScroll = false;
+                        console.log(`🌐 Window scroll: ${Math.round(scrollY)}px`);
+                    }, 250);
+                }
+            }
+
+            // Call this function, to trigger `handleTestdispatch` below.
+            appTestDispatch() {
+                // this will call the method `handleTestdispatch` below, when dispatched.
+                this.dispatch('testdispatch', { timestamp: Date.now() }, document.body);
+            }
+
+            handleTestdispatch(event, target) {
+                // This is an undeclared listener that listens while it's not listening.
+                // If that makes sense. Useful however after AJAX calls for example.
+                console.log(`🔥 Custom Event: ${event.type} - Detail: ${JSON.stringify(event.detail)}`);
+                document.getElementById('custom-output').textContent = `Custom Event: ${event.type} - Detail: ${JSON.stringify(event.detail)}`;
+            }
+
+            /**
+             * Demo handlers for the interactive examples
+             */
+
+            demoInputHandler(target, event) {
+                const value = target.value;
+                const type = target.type;
+                const timestamp = new Date().toLocaleTimeString();
+                document.getElementById('input-output').textContent = `[${timestamp}] ${type} input: "${value}"`;
+            }
+
+            demoChangeHandler(target, event) {
+                const value = target.value;
+                const timestamp = new Date().toLocaleTimeString();
+                document.getElementById('change-output').textContent = `[${timestamp}] Selection changed to: "${value}"`;
+            }
+
+            /**
+             * Some helpers one always needs
+             */
+
+            scrollToTop(target, event) {
+                if (!(target instanceof Element) || !target.classList.contains('y-btn')) return;
+
+                // If click event is set for body, just put the button to your footer
+                // <button class="y-btn" data-action="scrollToTop"></button>
+
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+            removeElement(target, event) {
+                if (!(target instanceof Element) || !target.classList.contains('y-btn')) return;
+
+                // Remove a targeted element
+                // <button class="y-btn" data-action="removeElement" data-target="#header"></button>
+
+                const element = document.querySelector(target.dataset.target);
+                if (element) {
+                    element.remove();
+                }
+            }
+
+            removeElements(target, event) {
+                if (!(target instanceof Element) || !target.classList.contains('y-btn')) return;
+
+                // Remove targeted elements
+                // <button class="y-btn" data-action="removeElements" data-target=".isLoading"></button>
+
+                document.querySelectorAll(target.dataset.target).forEach(rm => rm.remove());
+            }
+
+            escapeHtml(text) {
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            }
+        }
+
+        let spa = new AppEventHandler();
+        window.spa = spa;
+    </script>
+</body>
+</html>

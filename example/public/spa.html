@@ -924,6 +924,9 @@
                         { type: 'keydown' },
                         { type: 'testdispatch' }
                     ],
+                    'document': [
+                        { type: 'visibilitychange', capture: true }
+                    ],
                     'window': [
                         { type: 'scroll', throttle: config.throttle },
                         { type: 'resize', throttle: config.throttleResize },
@@ -946,12 +949,18 @@
                 this.initializePlaceholder();
             }
 
+            handleVisibilitychange(event) {
+                // Useful to perform final actions right before user leaves
+                if (document.visibilityState == 'hidden') { console.log('Bye bye!') }
+            }
+
+            // If user has interacted with the page, this acts as a
+            // `prevent-data-loss` tool, a pretty unrelieable `prevent-data-loss`
             handleBeforeunload(event) {
                 if (this.hasUserInteracted()) {
                     event.preventDefault();
                     event.returnValue = 'Are you sure you want to leave Ypsilon?';
-                } else {
-                    // User hasn't interacted, clean up silently
+                } else { // User hasn't interacted, clean up silently
                     this.destroy();
                 }
             }
