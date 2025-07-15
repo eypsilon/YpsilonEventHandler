@@ -14,12 +14,12 @@ And did unintentionally:
 
 ## ✨ Features
 
-- 🎯 **Native handleEvent Interface** - Uses the rare `element.addEventListener(type, this)` for elegant event handling
+- 🎯 **Native handleEvent Interface** - Based on rarely used `element.addEventListener(type, this)`
 - 🎖️ **Multi-Handler System** - Multiple handlers per event type with closest-match resolution
 - ⚡ **Auto Passive Listeners** - Automatically applies `{passive: true}` to scroll/touch events
 - 🔄 **Built-in Throttle/Debounce** - Performance optimization out of the box
 - 🧩 **Extension-First Design** - Built to be extended, not configured
-- 🧹 **Perfect Garbage Collection** - WeakMap + handleEvent = automatic cleanup when elements are removed
+- 🧹 **Perfect Garbage Collection** - WeakMap + handleEvent = automatic cleanup through GC
 - 📏 **Minimal Footprint** - Under 500 lines with comprehensive features
 - 🚀 **Convention-Based** - `click` → `handleClick`, `scroll` → `handleScroll`
 - ✨ **CSS-Like Syntax** - `'.btn-primary': [...]` - selectors as keys!
