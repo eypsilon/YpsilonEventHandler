@@ -14,7 +14,7 @@ And did unintentionally:
 
 ## ✨ Features
 
-- 🎯 **Native Performance** - Uses browser's built-in `handleEvent` interface
+- 🎯 **Native handleEvent Interface** - Uses the rare `element.addEventListener(type, this)` for elegant event handling
 - 🎖️ **Multi-Handler System** - Multiple handlers per event type with closest-match resolution
 - ⚡ **Auto Passive Listeners** - Automatically applies `{passive: true}` to scroll/touch events
 - 🔄 **Built-in Throttle/Debounce** - Performance optimization out of the box
