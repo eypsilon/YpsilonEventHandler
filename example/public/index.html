@@ -9,10 +9,14 @@
     <style>
         body {
             font-family: system-ui, sans-serif;
-            max-width: 600px;
+            background: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+        .container-wrapper {
+            max-width: 640px;
             margin: 50px auto;
             padding: 20px;
-            background: #f5f5f5;
         }
         .container {
             background: white;
@@ -78,128 +82,144 @@
         .footer {
             text-align: center;
         }
+        nav div {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px;
+        }
+        nav a {
+            margin: 0;
+            padding: 8px;
+            flex: 1 20%;
+            white-space: nowrap;
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>YpsilonEventHandler Example</h1>
+    <div class="container-wrapper">
+        <div class="container">
+            <h1>YpsilonEventHandler Example</h1>
 
-        <div class="passive-indicator" id="passive-status">
-            Passive Support: Checking...
+            <div class="passive-indicator" id="passive-status">
+                Passive Support: Checking...
+            </div>
+
+            <div style="background: #e3f2fd; padding: 10px; border-radius: 4px; margin: 10px 0; font-size: 12px;">
+                <strong>📏 Scroll Metrics:</strong><br>
+                Window: <span id="window-scroll">0</span>px / <span id="window-max-scroll">0</span>px max (total: <span id="window-height">0</span>px, visible: <span id="window-inner-height">0</span>px)<br>
+                Scroll Div: <span id="div-scroll">0</span>px / <span id="div-max-scroll">0</span>px max (total: <span id="div-height">0</span>px, visible: 300px)
+            </div>
+
+            <div style="margin: 15px 0;">
+                <button class="btn-primary" style="background: #007bff;">🔵 Primary Button</button>
+                <button class="btn-danger" style="background: #dc3545;">🔴 Danger Button</button>
+                <button class="btn-success" style="background: #28a745;">🟢 Success Button</button>
+            </div>
+
+            <input type="text" id="test-input" placeholder="Type here (debounced 300ms)">
+
+            <div style="margin: 15px 0;">
+                <button id="destroy-btn" style="background: #6c757d;">🗑️ Destroy Handler</button>
+                <button id="recreate-btn" style="background: #17a2b8;" disabled>🔄 Recreate Handler</button>
+                <span id="handler-state" style="margin-left: 10px; font-weight: bold; color: #28a745;">ACTIVE</span>
+            </div>
+
+            <div style="font-size: 12px; color: #666; margin: 10px 0 15px;">
+                🎯 <strong>Custom Handlers:</strong> Each button uses a different click handler function<br>
+                💡 Input is debounced (300ms) - handler only fires after you stop typing<br>
+                💡 Scroll events are throttled (100ms div, 250ms window) - smooth performance<br>
+                💡 All scroll events automatically use passive listeners<br>
+                🧪 <strong>Test destroy:</strong> Click "Destroy Handler" then try clicking/typing/scrolling!
+            </div>
+
+            <div class="output" id="output">Events will appear here...</div>
         </div>
 
-        <div style="background: #e3f2fd; padding: 10px; border-radius: 4px; margin: 10px 0; font-size: 12px;">
-            <strong>📏 Scroll Metrics:</strong><br>
-            Window: <span id="window-scroll">0</span>px / <span id="window-max-scroll">0</span>px max (total: <span id="window-height">0</span>px, visible: <span id="window-inner-height">0</span>px)<br>
-            Scroll Div: <span id="div-scroll">0</span>px / <span id="div-max-scroll">0</span>px max (total: <span id="div-height">0</span>px, visible: 300px)
-        </div>
+        <div class="container">
+            <h2>Scroll Test (Passive Listeners)</h2>
+            <p>Scroll in the area below to test passive scroll events:</p>
 
-        <div style="margin: 15px 0;">
-            <button class="btn-primary" style="background: #007bff;">🔵 Primary Button</button>
-            <button class="btn-danger" style="background: #dc3545;">🔴 Danger Button</button>
-            <button class="btn-success" style="background: #28a745;">🟢 Success Button</button>
-        </div>
+            <div class="scroll-area" id="scroll-area">
+                <div class="scroll-content">
+                    <h3>Scrollable Content</h3>
+                    <p>This scroll area demonstrates passive event listeners.</p>
+                    <p>When you scroll here, the event will be handled with passive:true automatically.</p>
+                    <p>This improves performance by telling the browser that preventDefault() won't be called.</p>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                    <p>Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                    <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.</p>
+                    <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore.</p>
+                    <p>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia.</p>
+                    <p>Keep scrolling to see more content...</p>
+                    <p>The scroll events are being logged to the output area above.</p>
+                    <p>Notice how smooth the scrolling is with passive listeners!</p>
+                    <p>This is the power of automatic passive listener detection.</p>
+                    <p>YpsilonEventHandler handles this optimization automatically.</p>
+                    <p>No manual configuration needed!</p>
+                    <p>You're near the bottom now.</p>
+                    <p>Final paragraph of scrollable content.</p>
+                </div>
+            </div>
 
-        <input type="text" id="test-input" placeholder="Type here (debounced 300ms)">
-
-        <div style="margin: 15px 0;">
-            <button id="destroy-btn" style="background: #6c757d;">🗑️ Destroy Handler</button>
-            <button id="recreate-btn" style="background: #17a2b8;" disabled>🔄 Recreate Handler</button>
-            <span id="handler-state" style="margin-left: 10px; font-weight: bold; color: #28a745;">ACTIVE</span>
-        </div>
-
-        <div style="font-size: 12px; color: #666; margin: 10px 0 15px;">
-            🎯 <strong>Custom Handlers:</strong> Each button uses a different click handler function<br>
-            💡 Input is debounced (300ms) - handler only fires after you stop typing<br>
-            💡 Scroll events are throttled (100ms div, 250ms window) - smooth performance<br>
-            💡 All scroll events automatically use passive listeners<br>
-            🧪 <strong>Test destroy:</strong> Click "Destroy Handler" then try clicking/typing/scrolling!
-        </div>
-
-        <hr />
-
-        <nav style="margin: 5px 0 0; display: flex; justify-content: space-between;">
-            <a href="./spa.html">SPA Example</a>
-            <a href="./reactive-y.html">Reactive Example</a>
-            <a href="./single-listener-multiple-actions.html">Single Listener Example</a>
-        </nav>
-
-        <div class="output" id="output">Events will appear here...</div>
-    </div>
-
-    <div class="container">
-        <h2>Scroll Test (Passive Listeners)</h2>
-        <p>Scroll in the area below to test passive scroll events:</p>
-
-        <div class="scroll-area" id="scroll-area">
-            <div class="scroll-content">
-                <h3>Scrollable Content</h3>
-                <p>This scroll area demonstrates passive event listeners.</p>
-                <p>When you scroll here, the event will be handled with passive:true automatically.</p>
-                <p>This improves performance by telling the browser that preventDefault() won't be called.</p>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                <p>Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.</p>
-                <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore.</p>
-                <p>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia.</p>
-                <p>Keep scrolling to see more content...</p>
-                <p>The scroll events are being logged to the output area above.</p>
-                <p>Notice how smooth the scrolling is with passive listeners!</p>
-                <p>This is the power of automatic passive listener detection.</p>
-                <p>YpsilonEventHandler handles this optimization automatically.</p>
-                <p>No manual configuration needed!</p>
-                <p>You're near the bottom now.</p>
-                <p>Final paragraph of scrollable content.</p>
+            <div>
+                <h2>Lorem ipsum dolor sit amet?</h2>
+                <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+                <p>Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</p>
+                <hr />
+                <p>Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi.</p>
+                <p>Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.</p>
+                <hr />
+                <p>Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.</p>
+                <p>Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.</p>
+                <p>Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.</p>
+                <p>Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.</p>
             </div>
         </div>
 
-        <div>
-            <h2>Lorem ipsum dolor sit amet?</h2>
-            <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
-            <p>Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</p>
-            <hr />
-            <p>Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi.</p>
-            <p>Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.</p>
-            <hr />
-            <p>Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.</p>
-            <p>Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.</p>
-            <p>Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.</p>
-            <p>Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.</p>
-        </div>
-    </div>
+        <div class="container">
+            <h2>Scroll Test (No Throttling)</h2>
+            <p>Scroll in the area below to test unthrottled scroll events:</p>
 
-    <div class="container">
-        <h2>Scroll Test (No Throttling)</h2>
-        <p>Scroll in the area below to test unthrottled scroll events:</p>
-
-        <div class="scroll-area" id="scroll-area-2">
-            <div class="scroll-content">
-                <h3>Unthrottled Scrollable Content</h3>
-                <p>This scroll area demonstrates scroll events without throttling.</p>
-                <p>When you scroll here, every scroll event will be handled immediately.</p>
-                <p>Compare this with the throttled scroll area above to see the difference.</p>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                <p>Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.</p>
-                <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore.</p>
-                <p>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia.</p>
-                <p>Keep scrolling to see more content...</p>
-                <p>The scroll events are being logged to the output area above.</p>
-                <p>Notice how many more events are fired without throttling!</p>
-                <p>This demonstrates the importance of throttling for performance.</p>
-                <p>YpsilonEventHandler handles both throttled and unthrottled events.</p>
-                <p>Choose the right approach based on your use case!</p>
-                <p>You're near the bottom now.</p>
-                <p>Final paragraph of unthrottled scrollable content.</p>
+            <div class="scroll-area" id="scroll-area-2">
+                <div class="scroll-content">
+                    <h3>Unthrottled Scrollable Content</h3>
+                    <p>This scroll area demonstrates scroll events without throttling.</p>
+                    <p>When you scroll here, every scroll event will be handled immediately.</p>
+                    <p>Compare this with the throttled scroll area above to see the difference.</p>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                    <p>Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                    <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.</p>
+                    <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore.</p>
+                    <p>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia.</p>
+                    <p>Keep scrolling to see more content...</p>
+                    <p>The scroll events are being logged to the output area above.</p>
+                    <p>Notice how many more events are fired without throttling!</p>
+                    <p>This demonstrates the importance of throttling for performance.</p>
+                    <p>YpsilonEventHandler handles both throttled and unthrottled events.</p>
+                    <p>Choose the right approach based on your use case!</p>
+                    <p>You're near the bottom now.</p>
+                    <p>Final paragraph of unthrottled scrollable content.</p>
+                </div>
             </div>
         </div>
+
+        <div style="padding: 12px; box-shadow: 0 0 10px #6b7894; background: #f7f7f7; ">
+            <!-- Navigation to other examples -->
+            <nav>
+                <div style="text-align: center; border-radius: 0; bottom: 0; left: 0;">
+                    <a href="./index.html" style="background: #2563eb; color: white; text-decoration: none; border-radius: 5px; font-size: 0.9rem;">Basic Examples</a>
+                    <a href="./spa.html" style="background: #16a34a; color: white; text-decoration: none; border-radius: 5px; font-size: 0.9rem;">SPA Demo</a>
+                    <a href="./reactive-y.html" style="background: #dc2626; color: white; text-decoration: none; border-radius: 5px; font-size: 0.9rem;">Reactive Demo</a>
+                    <a href="./single-listener-multiple-actions.html" style="background: #7c3aed; color: white; text-decoration: none; border-radius: 5px; font-size: 0.9rem;">Single Listener</a>
+                    <a href="./ai-reviews.html" style="background: #ea580c; color: white; text-decoration: none; border-radius: 5px; font-size: 0.9rem;">AI Reviews</a>
+                    <a href="https://github.com/eypsilon/YpsilonEventHandler" style="background: #374151; color: white; text-decoration: none; border-radius: 5px; font-size: 0.9rem;">GitHub</a>
+                </div>
+            </nav>
+        </div>
     </div>
 
-    <div class="container footer">
-        <p><a href="https://github.com/eypsilon/YpsilonEventHandler">github.com / YpsilonEventHandler</a></p>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/ypsilon-event-handler@1.3.0/ypsilon-event-handler.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/ypsilon-event-handler@1.3.2/ypsilon-event-handler.min.js"></script>
     <script>
         // Extend YpsilonEventHandler with custom handlers
         class MyEventHandler extends YpsilonEventHandler {

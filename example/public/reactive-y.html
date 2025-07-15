@@ -8,10 +8,15 @@
     <style>
         body {
             font-family: sans-serif;
-            padding: 2rem;
-            background: #f9f9f9;
+            background: #fff;
+            margin: 0;
+            padding: 0;
+        }
+        .demo-wrapper {
             max-width: 600px;
             margin: 0 auto;
+            padding: 2rem 2rem 1rem;
+            background: #f9f9f9;
         }
         h1, h2, h3 {
             margin-top: 0;
@@ -83,95 +88,98 @@
     </style>
 </head>
 <body>
-<header>
-    <h1>🔥 Reactive Inputs</h1>
-    <p>How reactive is Y? <strong>Y!</strong></p>
-    <hr />
-    <p style="margin-bottom:0">Type in any input and watch the target update instantly!</p>
-</header>
 
-<div class="demo-box">
-    <h2>Input 1 → Single Output</h2>
-    <input type="text" name="demo-1" placeholder="Type something..." data-target="#output1">
-    <div class="output" id="output1"></div>
+<div class="demo-wrapper">
+    <header>
+        <h1>🔥 Reactive Inputs</h1>
+        <p>How reactive is Y? <strong>Y!</strong></p>
+        <hr />
+        <p style="margin-bottom:0">Type in any input and watch the target update instantly!</p>
+    </header>
+
+    <div class="demo-box">
+        <h2>Input 1 → Single Output</h2>
+        <input type="text" name="demo-1" placeholder="Type something..." data-target="#output1">
+        <div class="output" id="output1"></div>
+    </div>
+
+    <div class="demo-box">
+        <h2>Input 2 → Multiple Outputs! 🤯</h2>
+        <input type="text" name="demo-2" placeholder="Watch multiple elements update..." data-target="#output2, .output2-class">
+        <div class="output" id="output2"></div>
+        <div class="output output2-class">Class-based target</div>
+        <div class="output output2-class">Another class target</div>
+    </div>
+
+    <div class="demo-box">
+        <h2>Input 3 → Complex Selectors!</h2>
+        <input type="text" name="demo-3" placeholder="Complex selector demo..." data-target=".output3, [data-reactive='advanced']">
+        <div class="output output3">Class selector target</div>
+        <div class="output output3">Another class target</div>
+        <div class="output" data-reactive="advanced">Data attribute target</div>
+        <div class="output" data-reactive="advanced">Another data target</div>
+    </div>
+
+    <div class="demo-box">
+        <h3>☑️ Reactive Checkboxes</h3>
+        <p>Toggle elements in and out of existence:</p>
+
+        <label>
+            <input type="checkbox" id="toggle1" data-toggle=".box1">
+            Show/Hide Yellow Box
+        </label>
+        <div class="toggle-target box1 hidden">🟡 This is Box 1! I can be toggled!</div>
+
+        <hr />
+
+        <label>
+            <input type="checkbox" id="toggle2" data-toggle=".box2, .box3">
+            Toggle Multiple Boxes
+        </label>
+        <div class="toggle-target box2 hidden">🟢 This is Box 2!</div>
+        <div class="toggle-target box3 hidden">🔵 This is Box 3!</div>
+
+        <hr />
+
+        <label>
+            <input type="checkbox" id="toggle-all" data-toggle-checkboxes="#toggle1, #toggle2">
+            Master Toggle (Controls Other Checkboxes)
+        </label>
+    </div>
+
+    <div class="demo-box">
+        <h3>🎯 The Magic</h3>
+        <p><strong>Two listeners</strong> handle all inputs/checkboxes and update ALL matching targets automatically!</p>
+        <p>✅ No individual listeners<br>
+        ✅ No manual binding<br>
+        ✅ Pure event delegation<br>
+        ✅ <strong>CSS selector support</strong><br>
+        ✅ <strong>Comma-separated multiple targets</strong><br>
+        ✅ <strong>Text inputs + checkbox toggles</strong></p>
+        <h4>Reactive Patterns:</h4>
+        <ul>
+            <li><code>data-target="#myId"</code> → Update text content</li>
+            <li><code>data-target=".myClass"</code> → Update multiple elements</li>
+            <li><code>data-toggle=".box"</code> → Show/hide elements</li>
+            <li><code>data-toggle=".box1, .box2"</code> → Toggle multiple elements</li>
+            <li><code>data-toggle-checkboxes="#cb1, #cb2"</code> → Control other checkboxes</li>
+        </ul>
+        <p><strong>Safe and explicit</strong> - only affects exactly what you specify!</p>
+    </div>
 </div>
 
-<div class="demo-box">
-    <h2>Input 2 → Multiple Outputs! 🤯</h2>
-    <input type="text" name="demo-2" placeholder="Watch multiple elements update..." data-target="#output2, .output2-class">
-    <div class="output" id="output2"></div>
-    <div class="output output2-class">Class-based target</div>
-    <div class="output output2-class">Another class target</div>
-</div>
-
-<div class="demo-box">
-    <h2>Input 3 → Complex Selectors!</h2>
-    <input type="text" name="demo-3" placeholder="Complex selector demo..." data-target=".output3, [data-reactive='advanced']">
-    <div class="output output3">Class selector target</div>
-    <div class="output output3">Another class target</div>
-    <div class="output" data-reactive="advanced">Data attribute target</div>
-    <div class="output" data-reactive="advanced">Another data target</div>
-</div>
-
-<div class="demo-box">
-    <h3>☑️ Reactive Checkboxes</h3>
-    <p>Toggle elements in and out of existence:</p>
-
-    <label>
-        <input type="checkbox" id="toggle1" data-toggle=".box1">
-        Show/Hide Yellow Box
-    </label>
-    <div class="toggle-target box1 hidden">🟡 This is Box 1! I can be toggled!</div>
-
-    <hr />
-
-    <label>
-        <input type="checkbox" id="toggle2" data-toggle=".box2, .box3">
-        Toggle Multiple Boxes
-    </label>
-    <div class="toggle-target box2 hidden">🟢 This is Box 2!</div>
-    <div class="toggle-target box3 hidden">🔵 This is Box 3!</div>
-
-    <hr />
-
-    <label>
-        <input type="checkbox" id="toggle-all" data-toggle-checkboxes="#toggle1, #toggle2">
-        Master Toggle (Controls Other Checkboxes)
-    </label>
-</div>
-
-<div class="demo-box">
-    <h3>🎯 The Magic</h3>
-    <p><strong>Two listeners</strong> handle all inputs/checkboxes and update ALL matching targets automatically!</p>
-    <p>✅ No individual listeners<br>
-       ✅ No manual binding<br>
-       ✅ Pure event delegation<br>
-       ✅ <strong>CSS selector support</strong><br>
-       ✅ <strong>Comma-separated multiple targets</strong><br>
-       ✅ <strong>Text inputs + checkbox toggles</strong></p>
-
-    <h4>Reactive Patterns:</h4>
-    <ul>
-        <li><code>data-target="#myId"</code> → Update text content</li>
-        <li><code>data-target=".myClass"</code> → Update multiple elements</li>
-        <li><code>data-toggle=".box"</code> → Show/hide elements</li>
-        <li><code>data-toggle=".box1, .box2"</code> → Toggle multiple elements</li>
-        <li><code>data-toggle-checkboxes="#cb1, #cb2"</code> → Control other checkboxes</li>
-    </ul>
-
-    <p><strong>Safe and explicit</strong> - only affects exactly what you specify!</p>
-
-    <hr />
-
-    <nav style="display: flex; justify-content: space-between;">
-        <a href="./index.html">Index</a>
-        <a href="./spa.html">SPA Example</a>
-        <a href="./single-listener-multiple-actions.html">Single Listener Example</a>
-    </nav>
-</div>
+<!-- Navigation to other examples -->
+<nav style="box-shadow: 0 0 10px #6a8cd7; width: 100%; text-align: center; margin: 0 0 1rem; padding: 1rem 0; background: #f7f7f7; border-radius: 0; display: flex; flex-wrap: wrap; width: 100%; justify-content: center; width: 100%; bottom: 0; left: 0;">
+    <a href="./index.html" style="margin: 0 0.5rem; padding: 0.5rem 1rem; background: #2563eb; color: white; text-decoration: none; border-radius: 5px; font-size: 0.9rem;">Basic Examples</a>
+    <a href="./spa.html" style="margin: 0 0.5rem; padding: 0.5rem 1rem; background: #16a34a; color: white; text-decoration: none; border-radius: 5px; font-size: 0.9rem;">SPA Demo</a>
+    <a href="./reactive-y.html" style="margin: 0 0.5rem; padding: 0.5rem 1rem; background: #dc2626; color: white; text-decoration: none; border-radius: 5px; font-size: 0.9rem;">Reactive Demo</a>
+    <a href="./single-listener-multiple-actions.html" style="margin: 0 0.5rem; padding: 0.5rem 1rem; background: #7c3aed; color: white; text-decoration: none; border-radius: 5px; font-size: 0.9rem;">Single Listener</a>
+    <a href="./ai-reviews.html" style="margin: 0 0.5rem; padding: 0.5rem 1rem; background: #ea580c; color: white; text-decoration: none; border-radius: 5px; font-size: 0.9rem;">AI Reviews</a>
+    <a href="https://github.com/eypsilon/YpsilonEventHandler" style="margin: 0 0.5rem; padding: 0.5rem 1rem; background: #374151; color: white; text-decoration: none; border-radius: 5px; font-size: 0.9rem;">GitHub</a>
+</nav>
 
 <!-- Include YpsilonEventHandler -->
-<script src="https://cdn.jsdelivr.net/npm/ypsilon-event-handler@1.3.0/ypsilon-event-handler.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/ypsilon-event-handler@1.3.2/ypsilon-event-handler.min.js"></script>
 
 <script>
 class SimpleReactiveHandler extends YpsilonEventHandler {
