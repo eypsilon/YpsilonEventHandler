@@ -1,6 +1,14 @@
 # YpsilonEventHandler
 
-A minimal, extendable event handling system for web applications. Built around the native `handleEvent` interface with automatic performance optimizations and zero memory leaks.
+[![ypsilon-event-handler](https://nodei.co/npm/ypsilon-event-handler.png)](https://npmjs.org/package/ypsilon-event-handler)
+
+[![NPM downloads](http://img.shields.io/npm/dm/ypsilon-event-handler.svg)](https://npmjs.org/package/ypsilon-event-handler)
+[![NPM version](https://img.shields.io/npm/v/ypsilon-event-handler.svg)](https://npmjs.org/package/ypsilon-event-handler)
+[![Bundle size](https://img.shields.io/bundlephobia/minzip/ypsilon-event-handler.svg)](https://bundlephobia.com/package/ypsilon-event-handler)
+[![License](https://img.shields.io/npm/l/ypsilon-event-handler.svg)](https://github.com/eypsilon/YpsilonEventHandler/blob/main/LICENSE)
+[![Browser support](https://img.shields.io/badge/browsers-IE11%2B-green.svg)](https://github.com/eypsilon/YpsilonEventHandler)
+
+Ultra lightweight, yet capable event handling system for web applications. Built around the native `handleEvent` interface with automatic performance optimizations and zero memory leaks.
 
 And did unintentionally:
 
@@ -39,7 +47,6 @@ element.addEventListener('click', this);  // ← MIND = BLOWN
 element.addEventListener('input', this);  // ← One instance handles ALL
 // Browser automatically calls: this.handleEvent(event)
 ```
-> The secret, how YpsilonEventHandler Broke AI Pattern Recognition
 
 ### 🤯 **Why This Changes Everything**
 
@@ -140,20 +147,23 @@ handleClick(e, target) {
 
 ### 📚 **Learn by Example**
 
-<div style="display: flex; flex-wrap: wrap; gap: 1rem; margin: 1rem 0;">
-
-**[👉 Comprehensive Template](https://eypsilon.github.io/YpsilonEventHandler/example/public/comprehensive-example.html)** - Complete working template
-**[👉 Reactive Demo](https://eypsilon.github.io/YpsilonEventHandler/example/public/reactive-y.html)** - Framework-level reactivity
-**[👉 Dynamic Events Tester](https://eypsilon.github.io/YpsilonEventHandler/example/public/test-dynamic-events.html)** - Interactive testing tool
-**[👉 Grok's SPA](https://eypsilon.github.io/YpsilonEventHandler/example/public/ypsilon-feat-grok-example.html)** - AI-generated demonstration
-**[👉 Grok's Comprehensive](https://eypsilon.github.io/YpsilonEventHandler/example/public/comprehensive-grok-example.html)** - Grok's comprehensive take
-
-</div>
+**[👉 Comprehensive Template](https://eypsilon.github.io/YpsilonEventHandler/example/public/comprehensive-example.html)**
+  - Complete working template
+**[👉 Reactive Demo](https://eypsilon.github.io/YpsilonEventHandler/example/public/reactive-y.html)**
+  - Framework-level reactivity
+**[👉 Dynamic Events Tester](https://eypsilon.github.io/YpsilonEventHandler/example/public/test-dynamic-events.html)**
+  - Interactive testing tool
+**[👉 Grok's SPA](https://eypsilon.github.io/YpsilonEventHandler/example/public/ypsilon-feat-grok-example.html)**
+  - AI-generated demonstration
+**[👉 Grok's Comprehensive](https://eypsilon.github.io/YpsilonEventHandler/example/public/comprehensive-grok-example.html)**
+  - Grok's comprehensive take
 
 
 ## 🚀 Quick Start
 
 **CDN (Recommended for testing):**
+
+Comprehensive event system in seconds.
 
 Create a file, e.g. `test.html` (need to have `.html` extension) and put the following into it:
 
@@ -171,7 +181,7 @@ Create a file, e.g. `test.html` (need to have `.html` extension) and put the fol
   class YourHandler extends YpsilonEventHandler {
     constructor() {
       super({
-        body: [{ type: 'click' }] // handler falls back to "handleClick"
+        body: ['click'] // handler falls back to "handleClick"
       });
     }
 
@@ -189,10 +199,6 @@ Create a file, e.g. `test.html` (need to have `.html` extension) and put the fol
 
 ## 🎯 **Multi-Handler System**
 ```javascript
-super({
-  'body': [{ type: 'click', handler: 'handleGeneralClick' }],
-  '.modal': [{ type: 'click', handler: 'handleModalClick' }]
-});
 // Closest handler to event target wins automatically
 class MyEventHandler extends YpsilonEventHandler {
   constructor() {
