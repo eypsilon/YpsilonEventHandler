@@ -19,7 +19,7 @@ And did unintentionally:
 - ⚡ **Auto Passive Listeners** - Automatically applies `{passive: true}` to scroll/touch events
 - 🔄 **Built-in Throttle/Debounce** - Performance optimization out of the box
 - 🧩 **Extension-First Design** - Built to be extended, not configured
-- 🧹 **Zero Memory Leaks** - WeakMap + explicit cleanup guarantee safety
+- 🧹 **Perfect Garbage Collection** - WeakMap + handleEvent = automatic cleanup when elements are removed
 - 📏 **Minimal Footprint** - Under 500 lines with comprehensive features
 - 🚀 **Convention-Based** - `click` → `handleClick`, `scroll` → `handleScroll`
 - ✨ **CSS-Like Syntax** - `'.btn-primary': [...]` - selectors as keys!
@@ -52,6 +52,32 @@ element.addEventListener('input', this);  // ← One instance handles ALL
 - **Native Browser Optimization** - Direct prototype method dispatch
 - **Single Instance Architecture** - One object handles infinite events
 - **Multi-Handler Intelligence** - Closest-match DOM resolution for complex UIs
+- **Perfect Garbage Collection** - WeakMap automatically cleans up when elements are removed
+
+### 🗑️ **The Garbage Collection Revolution**
+
+**Traditional approach (memory leak nightmare):**
+```javascript
+// Creates closures that prevent GC
+buttons.forEach(btn => {
+    btn.addEventListener('click', () => this.handleClick(btn));
+    // ↑ Closure holds references to 'this' AND 'btn'
+    // ↑ Even when btn is removed from DOM, closure keeps it alive
+    // ↑ Memory grows continuously with DOM changes
+});
+```
+
+**YpsilonEventHandler approach (GC paradise):**
+```javascript
+// WeakMap + handleEvent = Perfect GC
+this.elementHandlers = new WeakMap();  // ← Automatic cleanup!
+element.addEventListener('click', this);
+// ↑ No closures, no bound functions
+// ↑ When element is removed, WeakMap entry disappears automatically
+// ↑ Garbage collector can clean up immediately
+```
+
+**Result: Memory usage stays flat regardless of DOM changes!**
 
 ### 🔥 **AI Recognition**
 
