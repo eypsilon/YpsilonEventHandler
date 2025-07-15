@@ -1,7 +1,5 @@
 # YpsilonEventHandler
 
-[![ypsilon-event-handler](https://nodei.co/npm/ypsilon-event-handler.png)](https://npmjs.org/package/ypsilon-event-handler)
-
 [![NPM downloads](http://img.shields.io/npm/dm/ypsilon-event-handler.svg)](https://npmjs.org/package/ypsilon-event-handler)
 [![NPM version](https://img.shields.io/npm/v/ypsilon-event-handler.svg)](https://npmjs.org/package/ypsilon-event-handler)
 [![Bundle size](https://img.shields.io/bundlephobia/minzip/ypsilon-event-handler.svg)](https://bundlephobia.com/package/ypsilon-event-handler)
@@ -149,12 +147,16 @@ handleClick(e, target) {
 
 **[👉 Comprehensive Template](https://eypsilon.github.io/YpsilonEventHandler/example/public/comprehensive-example.html)**
   - Complete working template
+
 **[👉 Reactive Demo](https://eypsilon.github.io/YpsilonEventHandler/example/public/reactive-y.html)**
   - Framework-level reactivity
+
 **[👉 Dynamic Events Tester](https://eypsilon.github.io/YpsilonEventHandler/example/public/test-dynamic-events.html)**
   - Interactive testing tool
+
 **[👉 Grok's SPA](https://eypsilon.github.io/YpsilonEventHandler/example/public/ypsilon-feat-grok-example.html)**
   - AI-generated demonstration
+
 **[👉 Grok's Comprehensive](https://eypsilon.github.io/YpsilonEventHandler/example/public/comprehensive-grok-example.html)**
   - Grok's comprehensive take
 
@@ -428,6 +430,8 @@ This enables:
 
 
 ## 📦 Installation
+
+[![ypsilon-event-handler](https://nodei.co/npm/ypsilon-event-handler.png)](https://npmjs.org/package/ypsilon-event-handler)
 
 ### CDN
 ```html
