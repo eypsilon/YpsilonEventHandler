@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YpsilonEventHandler ~ SPA Demo (Single Page Application)</title>
+    <title>SPA Demo (Single Page Application) - YpsilonEventHandler</title>
     <meta name="description" content="YpsilonEventHandler - Single Page Application [SPA] Example Page">
     <link rel="icon" type="image/x-icon" href="./favicon.ico">
+    <link rel="stylesheet" type="text/css" href="./assets/main.css">
     <style>
         * {
             margin: 0;
@@ -115,20 +116,6 @@
         ins { font-weight: bold; }
 
         hr { margin: .5rem 0 .75rem; }
-
-        nav {
-            display: flex;
-
-            a {
-                margin: 0 .8rem 0 0;
-                padding: 0 .8rem 0 0;
-                display: inline-block;
-
-                &:not(:last-of-type) {
-                    border-right: 1px solid;
-                }
-            }
-        }
 
         .d-none { display: none; }
 
@@ -597,6 +584,13 @@
             }
         }
 
+        .nav-container {
+            padding: 0;
+            box-shadow: 0 0 0 #6b7894;
+            background: #f7f7f7;
+            margin: 20px 0 0;
+        }
+
         @media only screen and (min-width: 640px) {
             .ypsi-buttons {
                 display: flex;
@@ -817,16 +811,20 @@
             <p>No additional listeners will be created - all dynamic content uses these same <del>5</del> <ins>9</ins> listeners via event delegation.</p>
             <div></div>
             <hr />
-            <nav>
-                <a href="./index.html">Index</a>
-                <a href="./reactive-y.html">Reactive</a>
-                <a href="./single-listener-multiple-actions.html">Single Listener</a>
-                <a href="./comprehensive-example.html">Comprehensive</a>
-                <a href="./test-dynamic-events.html">Dynamic Test</a>
-                <a href="./ypsilon-feat-grok-example.html">Grok 3</a>
-                <a href="./comprehensive-grok-example.html">Grok 3 Comprehensive</a>
-                <a href="./ai-reviews.html">AI Reviews</a>
-            </nav>
+            <div class="nav-container">
+                <!-- Navigation to other examples -->
+                <nav class="main-nav">
+                    <div>
+                        <a href="./index.html" class="btn-primary">Start</a>
+                        <a href="./basic-example.html" class="btn-secondary">Basic Example</a>
+                        <a href="./reactive-y.html" class="btn-danger">Reactive Demo</a>
+                        <a href="./single-listener-multiple-actions.html" class="btn-purple">Single Listener</a>
+                        <a href="./spa.html" class="btn-disabled">SPA Demo</a>
+                        <a href="./ai-reviews.html" class="btn-warning">AI Reviews</a>
+                        <a href="https://github.com/eypsilon/YpsilonEventHandler" class="btn-dark">GitHub</a>
+                    </div>
+                </nav>
+            </div>
         </div>
 
         <!-- Staggeringly Performant -->
@@ -901,15 +899,9 @@
         <p>✨ This footer appeared thanks to scroll event delegation</p>
         <p>🚀 ONE body listener handled ALL scroll events on this page</p>
         <p>💫 YpsilonEventHandler - The power of native handleEvent interface</p>
-        <!-- <div class="flex-center-center src-nav">
-            <small>© Engin Ypsilon & Claude Van DOM</small> |
-            <a href="https://github.com/eypsilon/YpsilonEventHandler">github</a> |
-            <a href="https://www.npmjs.com/package/ypsilon-event-handler">npm</a> |
-            <a href="./spa.html">reload</a>
-        </div> -->
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/ypsilon-event-handler@1.3.2/ypsilon-event-handler.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/ypsilon-event-handler@1.4.0/ypsilon-event-handler.min.js"></script>
     <script>
         const config = {
             debounce: 300,
@@ -947,7 +939,7 @@
                     '#scroll-area': [
                         { type: 'scroll', handler: 'handleAreaScroll', throttle: config.throttleScrollArea }
                     ],
-                });
+                }, {}, { enableStats: true });
 
                 this.counters = {
                     clicks: 0,
@@ -1588,6 +1580,15 @@
                 console.group('🔍 YpsilonEventHandler Debug Info');
                 console.log('⚙️ Configuration:', config);
                 console.log('📊 Counters:', this.counters);
+
+                // NEW: Display comprehensive stats from getStats()
+                const stats = this.getStats();
+                if (stats) {
+                    console.log('📈 YpsilonEventHandler Stats:', stats);
+                } else {
+                    console.log('📈 Stats: Disabled (enable with { enableStats: true })');
+                }
+
                 console.log('🗺️ Event Handler Map (Multi-Handler System):', this.eventHandlerMap);
                 console.log('📋 Element Handlers:', this.elementHandlers);
                 console.log('⏱️ Throttle Timers:', this.throttleTimers);

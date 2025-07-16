@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="./../favicon.ico">
+    <title>QuerySelectorAll Test - YpsilonEventHandler</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 2rem auto; max-width: 800px; }
+        .test-button {
+            padding: 10px 20px;
+            margin: 5px;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .test-button:hover { background: #2563eb; }
+        .test-input {
+            padding: 8px;
+            margin: 5px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+        .output {
+            background: #f8f9fa;
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+            min-height: 100px;
+        }
+        .section { margin: 30px 0; padding: 20px; border: 1px solid #eee; }
+        h2 { color: #333; border-bottom: 2px solid #3b82f6; padding-bottom: 5px; }
+        .logs { padding: 0 20px; position: sticky; bottom: 0; background: #f2f2f2; }
+    </style>
+</head>
+<body>
+    <h1><a href="./index.html" title="Back to index" style="text-decoration: none;">«</a> QuerySelectorAll Test</h1>
+    <p>Testing that <code>'.test-button': ['click']</code> registers on ALL buttons, not just the first one.</p>
+
+    <div class="section">
+        <h2>🔘 Multiple Buttons Test</h2>
+        <p>Each button should respond to clicks:</p>
+        <button class="test-button">Button 1</button>
+        <button class="test-button">Button 2</button>
+        <button class="test-button">Button 3</button>
+        <button class="test-button">Button 4</button>
+        <button class="test-button">Button 5</button>
+        <div class="output" id="button-output">Click any button above...</div>
+    </div>
+
+    <div class="section">
+        <h2>📝 Multiple Inputs Test</h2>
+        <p>Each input should respond to typing:</p>
+        <input type="text" name="y-demo-1" class="test-input" placeholder="Type here...">
+        <input type="text" name="y-demo-2" class="test-input" placeholder="Or here...">
+        <input type="text" name="y-demo-3" class="test-input" placeholder="Or here...">
+        <div class="output" id="input-output">Type in any input above...</div>
+    </div>
+
+    <div class="section logs">
+        <h2>📊 Statistics</h2>
+        <div class="output" id="stats-output">
+            Button clicks: <span id="button-count">0</span><br>
+            Input changes: <span id="input-count">0</span><br>
+            Total registered elements: <span id="element-count">-</span>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/ypsilon-event-handler@1.4.0/ypsilon-event-handler.min.js"></script>
+    <script>
+        class QuerySelectorAllTest extends YpsilonEventHandler {
+            constructor() {
+                // This should register ALL .test-button and ALL .test-input elements
+                super({
+                    '.test-button': ['click'],
+                    '.test-input': ['input']
+                });
+
+                this.buttonClicks = 0;
+                this.inputChanges = 0;
+
+                this.updateStats();
+            }
+
+            handleClick(event, target) {
+                this.buttonClicks++;
+                const buttonIndex = Array.from(document.querySelectorAll('.test-button')).indexOf(target) + 1;
+
+                document.getElementById('button-output').innerHTML = `
+                    <strong>Button ${buttonIndex} clicked!</strong><br>
+                    Event target: ${target.textContent}<br>
+                    Total clicks: ${this.buttonClicks}<br>
+                    <small>Time: ${new Date().toLocaleTimeString()}</small>
+                `;
+
+                this.updateStats();
+            }
+
+            handleInput(event, target) {
+                this.inputChanges++;
+                const inputIndex = Array.from(document.querySelectorAll('.test-input')).indexOf(target) + 1;
+
+                document.getElementById('input-output').innerHTML = `
+                    <strong>Input ${inputIndex} changed!</strong><br>
+                    Value: "${target.value}"<br>
+                    Total changes: ${this.inputChanges}<br>
+                    <small>Time: ${new Date().toLocaleTimeString()}</small>
+                `;
+
+                this.updateStats();
+            }
+
+            updateStats() {
+                const buttonCount = document.querySelectorAll('.test-button').length;
+                const inputCount = document.querySelectorAll('.test-input').length;
+                const totalElements = buttonCount + inputCount;
+
+                document.getElementById('button-count').textContent = this.buttonClicks;
+                document.getElementById('input-count').textContent = this.inputChanges;
+                document.getElementById('element-count').textContent = `${totalElements} (${buttonCount} buttons + ${inputCount} inputs)`;
+            }
+        }
+
+        // Initialize test
+        const test = new QuerySelectorAllTest();
+
+        // Log registration info
+        console.log('Test initialized!');
+        console.log('Buttons found:', document.querySelectorAll('.test-button').length);
+        console.log('Inputs found:', document.querySelectorAll('.test-input').length);
+        console.log('Event listeners registered:', test.eventListeners.size);
+    </script>
+</body>
+</html>

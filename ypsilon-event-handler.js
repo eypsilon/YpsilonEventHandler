@@ -1,9 +1,12 @@
 /**
- * YpsilonEventHandler - Minimal, extendable event handling system
+ * YpsilonEventHandler - Ultra lightweight, extendable event handling system
  */
 class YpsilonEventHandler {
-    constructor(eventMapping = {}) {
+    constructor(eventMapping = {}, aliases = {}, config = {}) {
         this.eventMapping = eventMapping;
+        this.aliases = aliases;
+        this.config = { enableStats: false, ...config };
+        this.enableStats = this.config.enableStats;
         this.eventListeners = new Map();
         this.elementHandlers = new WeakMap();
         this.eventHandlerMap = new Map();
@@ -59,8 +62,11 @@ class YpsilonEventHandler {
             }
         }
 
-        if (closestHandler && typeof this[closestHandler.handler] === 'function') {
-            this[closestHandler.handler](event, event.target);
+        if (closestHandler) {
+            const resolvedHandler = this.resolveMethodName(closestHandler.handler, event.type);
+            if (typeof this[resolvedHandler] === 'function') {
+                this[resolvedHandler](event, event.target);
+            }
         }
     }
 
@@ -91,11 +97,56 @@ class YpsilonEventHandler {
         return this.userHasInteracted;
     }
 
+    /**
+     * Get comprehensive statistics about the event handler instance
+     * @returns {object|null} - Statistics object with various metrics, or null if stats disabled
+     */
+    getStats() {
+        if (!this.enableStats) {
+            return null;
+        }
+
+        const configs = Array.from(this.eventListeners.values());
+        const events = configs.flatMap(config => config.events);
+
+        // Count event types
+        const eventTypes = {};
+        events.forEach(event => {
+            eventTypes[event.type] = (eventTypes[event.type] || 0) + 1;
+        });
+
+        // Count unique elements
+        const uniqueElements = new Set(configs.map(config => config.element));
+
+        return {
+            totalListeners: this.eventListeners.size,
+            totalElements: uniqueElements.size,
+            totalEventTypes: Object.keys(eventTypes).length,
+            eventTypes,
+            userHasInteracted: this.userHasInteracted,
+            activeTimers: {
+                throttle: this.throttleTimers.size,
+                debounce: this.debounceTimers.size
+            }
+        };
+    }
+
     checkUserInteraction(event) {
         // Only count real user interactions, not passive events
         if (!this.userHasInteracted && !this.passiveEvents.includes(event.type)) {
             this.userHasInteracted = true;
         }
+    }
+
+    /**
+     * Resolve method name using event-type specific aliases
+     * @param {string} methodName - Original method name
+     * @param {string} eventType - Event type for scoped alias lookup
+     * @returns {string} - Resolved method name (or original if no alias)
+     */
+    resolveMethodName(methodName, eventType) {
+        const eventAliases = this.aliases[eventType];
+        return (eventAliases && eventAliases[methodName]) || methodName;
     }
 
     /**
@@ -106,8 +157,8 @@ class YpsilonEventHandler {
      */
     addEvent(target, eventConfig) {
         // Normalize the event config
-        const normalizedConfig = typeof eventConfig === 'string' 
-            ? { type: eventConfig } 
+        const normalizedConfig = typeof eventConfig === 'string'
+            ? { type: eventConfig }
             : eventConfig;
 
         // Check if event already exists to prevent duplicates
@@ -123,7 +174,7 @@ class YpsilonEventHandler {
 
         // Register the new event
         this.registerSingleEvent(target, normalizedConfig);
-        
+
         return true; // Successfully added
     }
 
@@ -158,7 +209,7 @@ class YpsilonEventHandler {
 
         // Remove from internal tracking
         this.unregisterSingleEvent(target, eventType);
-        
+
         return true; // Successfully removed
     }
 
@@ -185,11 +236,11 @@ class YpsilonEventHandler {
      */
     createWrappedHandler(eventConfig, key, eventType) {
         let handler = this;
-        
+
         // Apply throttle/debounce if specified
         if (typeof eventConfig === 'object') {
             const originalHandleEvent = this.handleEvent;
-            
+
             if (eventConfig.throttle) {
                 handler = {
                     handleEvent: this.throttle(originalHandleEvent, eventConfig.throttle, `${key}-${eventType}-throttle`)
@@ -200,7 +251,7 @@ class YpsilonEventHandler {
                 };
             }
         }
-        
+
         return handler;
     }
 
@@ -211,14 +262,14 @@ class YpsilonEventHandler {
     cleanupEventTimers(key, eventType) {
         const throttleKey = `${key}-${eventType}-throttle`;
         const debounceKey = `${key}-${eventType}-debounce`;
-        
+
         if (this.throttleTimers.has(throttleKey)) {
             const timerData = this.throttleTimers.get(throttleKey);
             if (timerData.timeout) clearTimeout(timerData.timeout);
             if (timerData.trailingTimeout) clearTimeout(timerData.trailingTimeout);
             this.throttleTimers.delete(throttleKey);
         }
-        
+
         if (this.debounceTimers.has(debounceKey)) {
             clearTimeout(this.debounceTimers.get(debounceKey));
             this.debounceTimers.delete(debounceKey);
@@ -233,7 +284,7 @@ class YpsilonEventHandler {
         const eventType = typeof eventConfig === 'string' ? eventConfig : eventConfig.type;
         const options = this.getEventOptions(eventConfig);
         const handler = this.createWrappedHandler(eventConfig, key, eventType);
-        
+
         // Add the event listener
         element.addEventListener(eventType, handler, options);
 
@@ -241,19 +292,21 @@ class YpsilonEventHandler {
         if (!this.eventListeners.has(key)) {
             this.eventListeners.set(key, { element, events: [] });
         }
-        
+
         if (!this.elementHandlers.has(element)) {
             this.elementHandlers.set(element, []);
         }
 
         // Get handler method name
-        const handlerMethod = typeof eventConfig === 'object' && eventConfig.handler 
-            ? eventConfig.handler 
+        const handlerMethod = typeof eventConfig === 'object' && eventConfig.handler
+            ? eventConfig.handler
             : `handle${eventType.charAt(0).toUpperCase() + eventType.slice(1)}`;
 
-        // Validate handler exists
-        if (typeof this[handlerMethod] !== 'function') {
-            console.warn(`YpsilonEventHandler: Handler method '${handlerMethod}' not found for event '${eventType}' on element '${selector}'`);
+        // Resolve alias and validate handler exists
+        const resolvedHandler = this.resolveMethodName(handlerMethod, eventType);
+        if (typeof this[resolvedHandler] !== 'function') {
+            const aliasMsg = resolvedHandler !== handlerMethod ? ` (resolved from alias '${handlerMethod}')` : '';
+            console.warn(`YpsilonEventHandler: Handler method '${resolvedHandler}'${aliasMsg} not found for event '${eventType}' on element '${selector}'`);
         }
 
         // Store tracking info
@@ -278,18 +331,20 @@ class YpsilonEventHandler {
      */
     registerSingleEvent(selector, eventConfig) {
         const eventType = typeof eventConfig === 'string' ? eventConfig : eventConfig.type;
-        const element = this.getElement(selector);
-        
-        if (!element) return;
+        const elements = this.getElements(selector);
 
-        const key = `${selector}_${eventType}`;
+        if (elements.length === 0) return;
 
-        // Check if this exact combination is already registered
-        if (this.eventListeners.has(key)) {
-            return; // Already registered
-        }
+        elements.forEach((element, index) => {
+            const key = `${selector}_${eventType}_${index}`;
 
-        this.registerEventListener(element, eventConfig, key, selector);
+            // Check if this exact combination is already registered
+            if (this.eventListeners.has(key)) {
+                return; // Already registered
+            }
+
+            this.registerEventListener(element, eventConfig, key, selector);
+        });
     }
 
     /**
@@ -297,20 +352,22 @@ class YpsilonEventHandler {
      * @private
      */
     unregisterSingleEvent(selector, eventType) {
-        const element = this.getElement(selector);
-        if (!element) return;
+        const elements = this.getElements(selector);
+        if (elements.length === 0) return;
 
-        const key = `${selector}_${eventType}`;
+        elements.forEach((element, index) => {
+            const key = `${selector}_${eventType}_${index}`;
 
-        // Remove from event listeners tracking
-        const listenerConfig = this.eventListeners.get(key);
-        if (listenerConfig) {
-            // Remove the actual event listener using the stored handler
-            const eventData = listenerConfig.events.find(e => e.type === eventType);
-            if (eventData) {
-                element.removeEventListener(eventType, eventData.handler, eventData.options);
+            // Remove from event listeners tracking
+            const listenerConfig = this.eventListeners.get(key);
+            if (listenerConfig) {
+                // Remove the actual event listener using the stored handler
+                const eventData = listenerConfig.events.find(e => e.type === eventType);
+                if (eventData) {
+                    element.removeEventListener(eventType, eventData.handler, eventData.options);
+                }
             }
-            
+
             // Clean up tracking
             this.eventListeners.delete(key);
 
@@ -327,18 +384,21 @@ class YpsilonEventHandler {
 
             // Clean up any timers for this event
             this.cleanupEventTimers(key, eventType);
-        }
+        });
 
-        // Remove from handler mapping
-        const handlers = this.eventHandlerMap.get(eventType);
-        if (handlers) {
-            const filteredHandlers = handlers.filter(h => h.element !== element);
-            if (filteredHandlers.length === 0) {
-                this.eventHandlerMap.delete(eventType);
-            } else {
-                this.eventHandlerMap.set(eventType, filteredHandlers);
+        // Remove from handler mapping - clean all elements for this selector/eventType
+        const elementsToClean = this.getElements(selector);
+        elementsToClean.forEach(element => {
+            const handlers = this.eventHandlerMap.get(eventType);
+            if (handlers) {
+                const filteredHandlers = handlers.filter(h => h.element !== element);
+                if (filteredHandlers.length === 0) {
+                    this.eventHandlerMap.delete(eventType);
+                } else {
+                    this.eventHandlerMap.set(eventType, filteredHandlers);
+                }
             }
-        }
+        });
     }
 
     getEventOptions(eventConfig) {
@@ -357,13 +417,13 @@ class YpsilonEventHandler {
         return Object.keys(options).length > 0 ? options : false;
     }
 
-    getElement(selector) {
+    getElements(selector) {
         if (typeof selector === 'string') {
-            if (selector === 'document') return document;
-            if (selector === 'window') return window;
-            return document.querySelector(selector);
+            if (selector === 'document') return [document];
+            if (selector === 'window') return [window];
+            return Array.from(document.querySelectorAll(selector));
         }
-        return selector instanceof Element ? selector : null;
+        return selector instanceof Element ? [selector] : [];
     }
 
     debounce(fn, delay, key) {
@@ -415,15 +475,17 @@ class YpsilonEventHandler {
             const elementSelector = isSimplified ? key : config.element;
             const events = isSimplified ? config : config.events;
 
-            const element = this.getElement(elementSelector);
-            if (!element) return;
+            const elements = this.getElements(elementSelector);
+            if (elements.length === 0) return;
 
-            events.forEach(eventConfig => {
-                const eventType = typeof eventConfig === 'string' ? eventConfig : eventConfig.type;
-                const eventKey = `${elementSelector}_${eventType}`;
-                
-                // Use the shared registration logic
-                this.registerEventListener(element, eventConfig, eventKey, elementSelector);
+            elements.forEach((element, index) => {
+                events.forEach(eventConfig => {
+                    const eventType = typeof eventConfig === 'string' ? eventConfig : eventConfig.type;
+                    const eventKey = `${elementSelector}_${eventType}_${index}`;
+
+                    // Use the shared registration logic
+                    this.registerEventListener(element, eventConfig, eventKey, elementSelector);
+                });
             });
         });
         return this;

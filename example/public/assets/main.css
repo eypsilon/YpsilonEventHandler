@@ -1,0 +1,79 @@
+
+/* Navigation Styles - Bootstrap-inspired */
+.nav-container {
+    padding: 12px;
+    box-shadow: 0 0 10px #6b7894;
+    background: #f7f7f7;
+    margin: 20px 0;
+}
+
+nav.main-nav div {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+}
+
+nav.main-nav a {
+    margin: 0;
+    padding: 8px 12px;
+    flex: 1 20%;
+    white-space: nowrap;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-align: center;
+    transition: all 0.2s ease;
+}
+
+/* Bootstrap-style Button Colors */
+.btn-primary { background: #0d6efd; color: white; }
+.btn-primary:hover { background: #0b5ed7; }
+
+.btn-secondary { background: #6c757d; color: white; }
+.btn-secondary:hover { background: #5c636a; }
+
+.btn-success { background: #198754; color: white; }
+.btn-success:hover { background: #157347; }
+
+.btn-danger { background: #dc3545; color: white; }
+.btn-danger:hover { background: #bb2d3b; }
+
+.btn-warning { background: #fd7e14; color: white; }
+.btn-warning:hover { background: #e85d04; }
+
+.btn-info { background: #0dcaf0; color: #000; }
+.btn-info:hover { background: #31d2f2; }
+
+.btn-dark { background: #212529; color: white; }
+.btn-dark:hover { background: #1c1f23; }
+
+.btn-purple { background: #6f42c1; color: white; }
+.btn-purple:hover { background: #5a32a3; }
+
+.btn-indigo { background: #6610f2; color: white; }
+.btn-indigo:hover { background: #520dc2; }
+
+.btn-teal { background: #20c997; color: white; }
+.btn-teal:hover { background: #1aa179; }
+
+/* Current/Disabled page state */
+.btn-disabled { 
+    background: #e9ecef !important; 
+    color: #6c757d !important; 
+    cursor: not-allowed !important;
+    pointer-events: none;
+}
+
+/* Responsive Navigation */
+@media (max-width: 768px) {
+    nav.main-nav div {
+        flex-direction: column;
+    }
+    
+    nav.main-nav a {
+        flex: 1 100%;
+        margin: 2px 0;
+    }
+}

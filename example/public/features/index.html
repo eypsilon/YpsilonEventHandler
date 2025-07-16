@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feature Demonstrations - YpsilonEventHandler</title>
+    <link rel="icon" type="image/x-icon" href="./../favicon.ico">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 2rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin: 0 0 1rem 0;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            color: #666;
+            margin: 0;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .feature-card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border: 1px solid #f0f0f0;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .feature-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #333;
+        }
+
+        .feature-description {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-link {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            text-decoration: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .feature-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .back-link {
+            display: inline-block;
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            margin-bottom: 2rem;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: background 0.3s ease;
+        }
+
+        .back-link:hover {
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .back-link::before {
+            content: "← ";
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 2rem 1.5rem;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="../index.html" class="back-link">Back to Main Examples</a>
+
+        <div class="header">
+            <h1>Feature Demonstrations</h1>
+            <p>Interactive examples showcasing specific YpsilonEventHandler features</p>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <span class="feature-icon">🎯</span>
+                <h3 class="feature-title">QuerySelectorAll Support</h3>
+                <p class="feature-description">
+                    Test how event listeners register on ALL matching elements, not just the first one.
+                    Essential for proper delegation patterns.
+                </p>
+                <a href="./queryselectorall-test.html" class="feature-link">Try QuerySelectorAll &rarr;</a>
+            </div>
+
+            <div class="feature-card">
+                <span class="feature-icon">🔀</span>
+                <h3 class="feature-title">Method Aliases</h3>
+                <p class="feature-description">
+                    Event-type scoped aliases for handler methods. Map semantic names like "save" to "handleFormSave"
+                    with no conflicts between event types.
+                </p>
+                <a href="./aliases-test.html" class="feature-link">Test Aliases &rarr;</a>
+            </div>
+
+            <div class="feature-card">
+                <span class="feature-icon">📋</span>
+                <h3 class="feature-title">Data-Action Aliases</h3>
+                <p class="feature-description">
+                    Ultimate delegation pattern using data-action attributes with aliases.
+                    Single listeners handle infinite elements with semantic HTML.
+                </p>
+                <a href="./data-action-aliases-test.html" class="feature-link">Explore Data-Actions &rarr;</a>
+            </div>
+
+            <div class="feature-card">
+                <span class="feature-icon">🎨</span>
+                <h3 class="feature-title">Custom Event Dispatch</h3>
+                <p class="feature-description">
+                    Comprehensive patterns for custom event dispatch including workflows,
+                    notifications, game events, and component communication.
+                </p>
+                <a href="./dispatch-patterns-example.html" class="feature-link">See Dispatch Patterns &rarr;</a>
+            </div>
+
+            <div class="feature-card">
+                <span class="feature-icon">⚡</span>
+                <h3 class="feature-title">Dynamic Event Management</h3>
+                <p class="feature-description">
+                    Interactive testing tool for dynamically adding, removing, and checking event listeners.
+                    Perfect for understanding runtime event management.
+                </p>
+                <a href="./test-dynamic-events.html" class="feature-link">Test Dynamic Events &rarr;</a>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 3rem; padding-top: 2rem; border-top: 1px solid #f0f0f0;">
+            <p style="color: #999; font-size: 0.9rem;">
+                These examples demonstrate specific features of YpsilonEventHandler.<br>
+                For comprehensive learning, check out the <a href="../spa.html" style="color: #667eea;">SPA Demo</a>
+                and <a href="../single-listener-multiple-actions.html" style="color: #667eea;">Core Patterns</a>.
+            </p>
+        </div>
+    </div>
+</body>
+</html>
