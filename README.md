@@ -66,7 +66,7 @@ element.addEventListener('click', this);  // ← One instance handles ALL
   <button data-action="save">Save</button>
   <button data-action="delete">Delete</button>
 
-  <script src="https://cdn.jsdelivr.net/npm/ypsilon-event-handler@1.4.0/ypsilon-event-handler.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/ypsilon-event-handler@1.4.1/ypsilon-event-handler.min.js"></script>
   <script>
     class MyHandler extends YpsilonEventHandler {
       constructor() {
@@ -187,7 +187,7 @@ new YpsilonEventHandler(eventMapping, aliases, config)
 
 ### CDN
 ```html
-<script src="https://cdn.jsdelivr.net/npm/ypsilon-event-handler@1.4.0/ypsilon-event-handler.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/ypsilon-event-handler@1.4.1/ypsilon-event-handler.min.js"></script>
 ```
 
 ### NPM
