@@ -5,8 +5,17 @@ class YpsilonEventHandler {
     constructor(eventMapping = {}, aliases = {}, config = {}) {
         this.eventMapping = eventMapping;
         this.aliases = aliases;
-        this.config = { enableStats: false, ...config };
+        this.config = { 
+            enableStats: false, 
+            methods: null,
+            enableGlobalFallback: false,
+            methodsFirst: false,
+            ...config 
+        };
         this.enableStats = this.config.enableStats;
+        this.methods = this.config.methods || {};
+        this.enableGlobalFallback = this.config.enableGlobalFallback;
+        this.methodsFirst = this.config.methodsFirst;
         this.eventListeners = new Map();
         this.elementHandlers = new WeakMap();
         this.eventHandlerMap = new Map();
@@ -63,9 +72,9 @@ class YpsilonEventHandler {
         }
 
         if (closestHandler) {
-            const resolvedHandler = this.resolveMethodName(closestHandler.handler, event.type);
-            if (typeof this[resolvedHandler] === 'function') {
-                this[resolvedHandler](event, event.target);
+            const handler = this.resolveHandler(closestHandler.handler, event.type);
+            if (handler) {
+                handler.call(this, event, event.target);
             }
         }
     }
@@ -147,6 +156,52 @@ class YpsilonEventHandler {
     resolveMethodName(methodName, eventType) {
         const eventAliases = this.aliases[eventType];
         return (eventAliases && eventAliases[methodName]) || methodName;
+    }
+
+    /**
+     * Enhanced handler resolution with methods object and global fallback support
+     * @param {string} handlerName - Handler method name to resolve
+     * @param {string} eventType - Event type for scoped alias lookup
+     * @returns {Function|null} - Resolved handler function or null if not found
+     */
+    resolveHandler(handlerName, eventType) {
+        // First resolve any aliases
+        const resolvedName = this.resolveMethodName(handlerName, eventType);
+        
+        // Define resolution order based on methodsFirst setting
+        const resolutionOrder = this.methodsFirst 
+            ? ['methods', 'class', 'global']
+            : ['class', 'methods', 'global'];
+        
+        for (const source of resolutionOrder) {
+            let handler = null;
+            
+            switch (source) {
+                case 'class':
+                    if (typeof this[resolvedName] === 'function') {
+                        handler = this[resolvedName];
+                    }
+                    break;
+                    
+                case 'methods':
+                    if (this.methods && typeof this.methods[resolvedName] === 'function') {
+                        handler = this.methods[resolvedName];
+                    }
+                    break;
+                    
+                case 'global':
+                    if (this.enableGlobalFallback && typeof window !== 'undefined' && typeof window[resolvedName] === 'function') {
+                        handler = window[resolvedName];
+                    }
+                    break;
+            }
+            
+            if (handler) {
+                return handler;
+            }
+        }
+        
+        return null;
     }
 
     /**
@@ -302,11 +357,12 @@ class YpsilonEventHandler {
             ? eventConfig.handler
             : `handle${eventType.charAt(0).toUpperCase() + eventType.slice(1)}`;
 
-        // Resolve alias and validate handler exists
-        const resolvedHandler = this.resolveMethodName(handlerMethod, eventType);
-        if (typeof this[resolvedHandler] !== 'function') {
-            const aliasMsg = resolvedHandler !== handlerMethod ? ` (resolved from alias '${handlerMethod}')` : '';
-            console.warn(`YpsilonEventHandler: Handler method '${resolvedHandler}'${aliasMsg} not found for event '${eventType}' on element '${selector}'`);
+        // Validate handler exists using enhanced resolution
+        const validatedHandler = this.resolveHandler(handlerMethod, eventType);
+        if (!validatedHandler) {
+            const resolvedName = this.resolveMethodName(handlerMethod, eventType);
+            const aliasMsg = resolvedName !== handlerMethod ? ` (resolved from alias '${handlerMethod}')` : '';
+            console.warn(`YpsilonEventHandler: Handler method '${resolvedName}'${aliasMsg} not found for event '${eventType}' on element '${selector}' (checked class, methods object, and global scope)`);
         }
 
         // Store tracking info

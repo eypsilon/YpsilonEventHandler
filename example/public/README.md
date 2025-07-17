@@ -17,7 +17,7 @@ From simple delegation patterns to full SPAs running on just 9 event listeners, 
 - **single-listener-multiple-actions.html** - Master the universal delegation pattern
 - **spa.html** - The showstopper: Full SPA with only 9 listeners
 
-### ⚙️ **Feature Demonstrations**  
+### ⚙️ **Feature Demonstrations**
 - **features/** folder - Interactive examples of specific capabilities
 - **reactive-y.html** - Framework-level reactivity built on event delegation
 - **comprehensive-example.html** - Complete template with all patterns
@@ -29,4 +29,10 @@ From simple delegation patterns to full SPAs running on just 9 event listeners, 
 
 **Each example exists because it reveals something that traditional approaches cannot achieve.** Together, they form a complete education in post-bind() JavaScript development.
 
+## 🚀 **See It In Action**
 
+**[🏠 Interactive Examples Hub](https://eypsilon.github.io/YpsilonEventHandler/example/public/)**
+Beautiful landing page with all examples organized by category
+
+**[👉 Feature Demonstrations](https://eypsilon.github.io/YpsilonEventHandler/example/public/features/)**
+Interactive examples showcasing specific YpsilonEventHandler features

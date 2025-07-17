@@ -43,17 +43,16 @@
     <div class="section">
         <h2>🔄 Alias Examples</h2>
 
-        <div class="code">
-<strong>Event-type scoped aliases:</strong><br>
-click: {<br>
-&nbsp;&nbsp;onClick: 'handleClick',<br>
-&nbsp;&nbsp;save: 'handleFormSave',<br>
-&nbsp;&nbsp;legacyMethod: 'handleModernClick'<br>
-}<br>
-input: {<br>
-&nbsp;&nbsp;search: 'handleSearchInput'<br>
+        <pre class="code">
+<strong>Event-type scoped aliases:</strong>
+<hr style="margin: .3remn;" />click: {
+  onClick: 'handleClick',
+  save: 'handleFormSave',
+  legacyMethod: 'handleModernClick'
 }
-        </div>
+input: {
+  earch: 'handleSearchInput'
+}</pre>
 
         <h3>Click Events (onClick alias → handleClick)</h3>
         <button class="test-button" id="btn1">Button with handleClick</button>
@@ -74,7 +73,7 @@ input: {<br>
         <div class="output" id="legacy-output">Legacy button result...</div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/ypsilon-event-handler@1.4.1/ypsilon-event-handler.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/ypsilon-event-handler@1.5.0/ypsilon-event-handler.min.js"></script>
     <script>
         class AliasTest extends YpsilonEventHandler {
             constructor() {
@@ -114,7 +113,7 @@ input: {<br>
                 const input = document.querySelector('.test-input');
                 document.getElementById('form-output').innerHTML = `
                     <strong>handleFormSave() called via 'save' alias</strong><br>
-                    Value: "${input.value}"<br>
+                    Value: "${this.escapeHtml(input.value)}"<br>
                     <small>Time: ${new Date().toLocaleTimeString()}</small>
                 `;
             }
@@ -123,7 +122,7 @@ input: {<br>
             handleSearchInput(event, target) {
                 document.getElementById('search-output').innerHTML = `
                     <strong>handleSearchInput() called via 'search' alias</strong><br>
-                    Search query: "${target.value}"<br>
+                    Search query: "${this.escapeHtml(target.value)}"<br>
                     <small>Time: ${new Date().toLocaleTimeString()}</small>
                 `;
             }
@@ -140,6 +139,12 @@ input: {<br>
             // Regular input handler
             handleInput(event, target) {
                 console.log('Regular input event:', target.value);
+            }
+
+            escapeHtml(text) {
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
             }
         }
 

@@ -649,7 +649,7 @@
         <div class="container">
             <h1>🚀 YpsilonEventHandler SPA Demo</h1>
             <p>Demonstrating the power of event delegation with dynamic content</p>
-            <p><strong>⚡ ONLY <del>5</del> <ins>9</ins> EVENT LISTENERS for this ENTIRE SPA! ⚡</strong></p>
+            <p><strong>⚡ ONLY 9 EVENT LISTENERS for this ENTIRE SPA! ⚡</strong></p>
             <p><strong>ONE handler on body handles ALL events - no matter when elements are created!</strong></p>
         </div>
     </div>
@@ -901,7 +901,7 @@
         <p>💫 YpsilonEventHandler - The power of native handleEvent interface</p>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/ypsilon-event-handler@1.4.1/ypsilon-event-handler.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/ypsilon-event-handler@1.5.0/ypsilon-event-handler.min.js"></script>
     <script>
         const config = {
             debounce: 300,
@@ -927,9 +927,6 @@
                         { type: 'change' },
                         { type: 'keydown' },
                         { type: 'testdispatch' }
-                    ],
-                    'document': [
-                        { type: 'visibilitychange', capture: true }
                     ],
                     'window': [
                         { type: 'scroll', throttle: config.throttle },

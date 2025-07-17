@@ -12,10 +12,10 @@
 
 ## 🚀 **See It In Action**
 
-**[🏠 Interactive Examples Hub](https://eypsilon.github.io/YpsilonEventHandler/example/public/)**  
+**[🏠 Interactive Examples Hub](https://eypsilon.github.io/YpsilonEventHandler/example/public/)**
 Beautiful landing page with all examples organized by category
 
-**[🎯 SPA Demo - The Showstopper](https://eypsilon.github.io/YpsilonEventHandler/example/public/spa.html)**  
+**[🎯 SPA Demo - The Showstopper](https://eypsilon.github.io/YpsilonEventHandler/example/public/spa.html)**
 Complete Single Page Application running on **only 9 event listeners**
 
 ### 🤯 **What 9 Listeners Can Handle**
@@ -25,7 +25,7 @@ Complete Single Page Application running on **only 9 event listeners**
 - ✅ Real-time metrics, debug tools, responsive interactions
 - ✅ **Unlimited scalability** - works with any number of elements
 
-**Traditional approach:** 50+ individual listeners, memory leaks, performance bottlenecks  
+**Traditional approach:** 50+ individual listeners, memory leaks, performance bottlenecks
 **YpsilonEventHandler:** 9 listeners total, zero memory leaks, perfect performance
 
 ## 🎯 **The Paradigm Shift**
@@ -63,25 +63,27 @@ element.addEventListener('click', this);  // ← One instance handles ALL
 <html>
 <head><title>YpsilonEventHandler Demo</title></head>
 <body>
-  <button data-action="save">Save</button>
-  <button data-action="delete">Delete</button>
+  <div id="app">
+    <button data-action="save">Save</button>
+    <button data-action="delete">Delete</button>
+  </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/ypsilon-event-handler@1.4.1/ypsilon-event-handler.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/ypsilon-event-handler@1.5.0/ypsilon-event-handler.min.js"></script>
   <script>
     class MyHandler extends YpsilonEventHandler {
       constructor() {
-        super({ body: ['click'] }); // One listener handles everything
+        super({ '#app': ['click'] }); // One listener handles everything
       }
-      
+
       handleClick(event, target) {
         const action = target.dataset.action;
         if (action && this[action]) this[action](target, event);
       }
-      
+
       save(target) { console.log('Saving...'); }
       delete(target) { console.log('Deleting...'); }
     }
-    
+
     new MyHandler(); // Done!
   </script>
 </body>
@@ -93,7 +95,7 @@ element.addEventListener('click', this);  // ← One instance handles ALL
 ## ✨ **What Makes It Revolutionary**
 
 - 🎯 **Native `handleEvent` Interface** - Uses browser APIs as designed since 2000
-- 🎖️ **Multi-Handler System** - Multiple handlers with closest-match DOM resolution  
+- 🎖️ **Multi-Handler System** - Multiple handlers with closest-match DOM resolution
 - 🧹 **Perfect Garbage Collection** - WeakMap + handleEvent = automatic cleanup
 - ⚡ **Auto Performance** - Passive listeners, throttling, debouncing built-in
 - 🚀 **Convention-Based** - `click` → `handleClick`, zero configuration
@@ -103,27 +105,27 @@ element.addEventListener('click', this);  // ← One instance handles ALL
 ## 📚 **Learning Path**
 
 ### 🎯 **Start Here**
-**[👉 Basic Introduction](https://eypsilon.github.io/YpsilonEventHandler/example/public/basic-example.html)**  
+**[👉 Basic Introduction](https://eypsilon.github.io/YpsilonEventHandler/example/public/basic-example.html)**
 Perfect starting point with clear explanations
 
-**[👉 Single Listener Pattern](https://eypsilon.github.io/YpsilonEventHandler/example/public/single-listener-multiple-actions.html)**  
+**[👉 Single Listener Pattern](https://eypsilon.github.io/YpsilonEventHandler/example/public/single-listener-multiple-actions.html)**
 Master the universal delegation pattern that scales infinitely
 
 ### ⚙️ **Advanced Examples**
-**[👉 Feature Demonstrations](https://eypsilon.github.io/YpsilonEventHandler/example/public/features/)**  
+**[👉 Feature Demonstrations](https://eypsilon.github.io/YpsilonEventHandler/example/public/features/)**
 Interactive examples of specific capabilities
 
-**[👉 Reactive Framework](https://eypsilon.github.io/YpsilonEventHandler/example/public/reactive-y.html)**  
+**[👉 Reactive Framework](https://eypsilon.github.io/YpsilonEventHandler/example/public/reactive-y.html)**
 Framework-level reactivity built on event delegation
 
-**[👉 Comprehensive Template](https://eypsilon.github.io/YpsilonEventHandler/example/public/comprehensive-example.html)**  
+**[👉 Comprehensive Template](https://eypsilon.github.io/YpsilonEventHandler/example/public/comprehensive-example.html)**
 Complete working template with all patterns
 
 ### 🤖 **AI Collaboration**
-**[👉 Grok's SPA](https://eypsilon.github.io/YpsilonEventHandler/example/public/ypsilon-feat-grok-example.html)**  
+**[👉 Grok's SPA](https://eypsilon.github.io/YpsilonEventHandler/example/public/ypsilon-feat-grok-example.html)**
 AI-generated demonstration
 
-**[👉 Grok's Analysis](https://eypsilon.github.io/YpsilonEventHandler/example/public/comprehensive-grok-example.html)**  
+**[👉 Grok's Analysis](https://eypsilon.github.io/YpsilonEventHandler/example/public/comprehensive-grok-example.html)**
 Comprehensive AI-driven breakdown
 
 ## 🎯 **Multi-Handler System**
@@ -136,13 +138,13 @@ class AdvancedHandler extends YpsilonEventHandler {
     super({
       // General handler (lowest priority)
       'body': [{ type: 'click', handler: 'handleGeneralClick' }],
-      
-      // Specific section (medium priority)  
+
+      // Specific section (medium priority)
       '.modal': [{ type: 'click', handler: 'handleModalClick' }],
-      
+
       // Individual button (highest priority)
       '#save-btn': [{ type: 'click', handler: 'handleSaveClick' }],
-      
+
       // Performance optimized
       'window': [{ type: 'scroll', throttle: 100 }],
       '.search': [{ type: 'input', debounce: 300 }]
@@ -187,7 +189,7 @@ new YpsilonEventHandler(eventMapping, aliases, config)
 
 ### CDN
 ```html
-<script src="https://cdn.jsdelivr.net/npm/ypsilon-event-handler@1.4.1/ypsilon-event-handler.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/ypsilon-event-handler@1.5.0/ypsilon-event-handler.min.js"></script>
 ```
 
 ### NPM
@@ -206,7 +208,7 @@ const { YpsilonEventHandler } = require('ypsilon-event-handler');
 **Modern Browsers (Native):**
 - Chrome 49+ (2016) | Firefox 45+ (2016) | Safari 9+ (2015) | Edge 13+ (2015)
 
-**Legacy Support (with build tools):**  
+**Legacy Support (with build tools):**
 - IE11+ (2013) via Webpack + Babel
 
 **Why this beats frameworks:** Modern ES6+ code with native browser optimization, zero dependencies, build-tool compatible for legacy support.
@@ -261,7 +263,7 @@ element.addEventListener('click', this); // 'this' has handleEvent method
 
 **Result:**
 - Single handler instance for all events
-- Automatic routing to handler methods  
+- Automatic routing to handler methods
 - Zero overhead for unused features
 - Perfect memory management
 

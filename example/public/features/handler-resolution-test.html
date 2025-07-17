@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Handler Resolution System - YpsilonEventHandler</title>
+    <meta name="description" content="Test the new flexible handler resolution system with methods object and global fallback">
+    <link rel="icon" type="image/x-icon" href="../favicon.ico">
+    <link rel="stylesheet" type="text/css" href="../assets/main.css">
+    <style>
+        body {
+            font-family: system-ui, sans-serif;
+            margin: 0 auto;
+            padding: 2rem;
+            max-width: 800px;
+            background: #f5f5f5;
+        }
+
+        .demo-section {
+            margin: 2rem 0;
+            padding: 1.5rem;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            background: #fafafa;
+        }
+
+        .demo-section h3 {
+            margin-top: 0;
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 0.5rem;
+        }
+
+        .test-button {
+            margin: 0.5rem;
+            padding: 0.7rem 1.2rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .class-handler { background: #3498db; color: white; }
+        .class-handler:hover { background: #2980b9; }
+
+        .methods-handler { background: #27ae60; color: white; }
+        .methods-handler:hover { background: #229954; }
+
+        .global-handler { background: #e74c3c; color: white; }
+        .global-handler:hover { background: #c0392b; }
+
+        .priority-handler { background: #9b59b6; color: white; }
+        .priority-handler:hover { background: #8e44ad; }
+
+        .output-log {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 1rem;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            max-height: 200px;
+            overflow-y: auto;
+            margin-top: 0;
+        }
+
+        .config-display {
+            background: #34495e;
+            color: #ecf0f1;
+            padding: 1rem;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            margin-top: 1rem;
+        }
+
+        .resolution-info {
+            background: #f8f9fa;
+            border-left: 4px solid #007bff;
+            padding: 1rem;
+            margin: 1rem 0;
+            font-size: 0.9rem;
+        }
+
+        .clear-btn {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            float: right;
+            margin-bottom: 1rem;
+        }
+
+        .clear-btn:hover {
+            background: #5a6268;
+        }
+
+        .logs {
+            padding: 0;
+            position: sticky;
+            bottom: 0;
+            box-shadow: 0 2px 10px rgba(69, 3, 175, 0.6);
+        }
+        .logs h3 {
+            margin: 0;
+            padding: .5rem;
+            border: 0 none;
+        }
+        .logs .clear-btn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1><a href="./index.html" title="Back to index" style="text-decoration: none;">«</a> Handler Resolution System</h1>
+        <p>Test the new flexible handler resolution with methods object and global fallback support!</p>
+
+        <div class="resolution-info">
+            <strong>🎯 Resolution Priority:</strong> The system checks handlers in this order:
+            <br>1. <strong>Class methods</strong> (default priority)
+            <br>2. <strong>Methods object</strong> (Vue.js-like pattern)
+            <br>3. <strong>Global fallback</strong> (window.handlerName)
+            <br><em>Note: Priority can be changed with <code>methodsFirst: true</code></em>
+        </div>
+    </header>
+
+    <!-- Class Handler Demo -->
+    <div class="demo-section">
+        <h3>🏛️ Class Handler (Traditional)</h3>
+        <p>Handler defined as class method - the original YpsilonEventHandler pattern.</p>
+        <button class="test-button class-handler" data-action="classHandler">Class Handler</button>
+        <button class="test-button class-handler" data-action="conventionHandler">Convention Handler</button>
+    </div>
+
+    <!-- Methods Object Demo -->
+    <div class="demo-section">
+        <h3>📦 Methods Object (Vue.js-like)</h3>
+        <p>Handlers defined in separate methods object - perfect for modular code organization.</p>
+        <button class="test-button methods-handler" data-action="methodsHandler">Methods Object</button>
+        <button class="test-button methods-handler" data-action="moduleHandler">Module Handler</button>
+    </div>
+
+    <!-- Global Fallback Demo -->
+    <div class="demo-section">
+        <h3>🌍 Global Fallback</h3>
+        <p>Handlers defined globally - useful for legacy integration and plugin systems.</p>
+        <button class="test-button global-handler" data-action="globalHandler">Global Handler</button>
+        <button class="test-button global-handler" data-action="legacyHandler">Legacy Handler</button>
+    </div>
+
+    <!-- Priority System Demo -->
+    <div class="demo-section">
+        <h3>🔄 Priority System</h3>
+        <p>Same handler name in multiple locations - shows resolution priority.</p>
+        <button class="test-button priority-handler" data-action="priorityTest">Priority Test</button>
+        <button class="test-button priority-handler" data-action="conflictTest">Conflict Test</button>
+    </div>
+
+    <!-- Event Log -->
+    <div class="demo-section logs">
+        <h3>📋 Event Log</h3>
+        <button class="clear-btn" onclick="clearLog()">Clear Log</button>
+        <div class="output-log" id="event-log">Handler events will appear here...</div>
+    </div>
+
+    <!-- Configuration Display -->
+    <div class="demo-section">
+        <h3>⚙️ Current Configuration</h3>
+        <pre class="config-display" id="config-display">Loading configuration...</pre>
+    </div>
+
+    <!-- Navigation -->
+    <div class="nav-container">
+        <nav class="main-nav">
+            <div>
+                <a href="../index.html" class="btn-primary">Start</a>
+                <a href="../basic-example.html" class="btn-secondary">Basic Example</a>
+                <a href="../reactive-y.html" class="btn-danger">Reactive Demo</a>
+                <a href="../single-listener-multiple-actions.html" class="btn-purple">Single Listener</a>
+                <a href="../spa.html" class="btn-success">SPA Demo</a>
+                <a href="../ai-reviews.html" class="btn-warning">AI Reviews</a>
+                <a href="https://github.com/eypsilon/YpsilonEventHandler" class="btn-dark">GitHub</a>
+            </div>
+        </nav>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/ypsilon-event-handler@1.5.0/ypsilon-event-handler.min.js"></script>
+    <script>
+        // Global handlers for fallback testing
+        window.globalHandler = (event, target) => {
+            logEvent('🌍 Global Handler', 'Handled by window.globalHandler');
+        };
+
+        window.legacyHandler = (event, target) => {
+            logEvent('🌍 Legacy Handler', 'Old system integration via global scope');
+        };
+
+        // Same name as class method to test priority
+        window.priorityTest = (event, target) => {
+            logEvent('🌍 Global Priority', 'Should NOT appear if class has priority');
+        };
+
+        window.conflictTest = (event, target) => {
+            logEvent('🌍 Global Conflict', 'Should NOT appear if methods object has priority');
+        };
+
+        // Methods object (Vue.js-like pattern)
+        const handlerMethods = {
+            methodsHandler: (event, target) => {
+                logEvent('📦 Methods Object', 'Clean separation of concerns');
+            },
+
+            moduleHandler: (event, target) => {
+                logEvent('📦 Module Handler', 'Perfect for modular architecture');
+            },
+
+            // Same name as global to test priority
+            conflictTest: (event, target) => {
+                logEvent('📦 Methods Priority', 'Methods object takes priority over global');
+            }
+        };
+
+        // Handler resolution test class
+        class HandlerResolutionTest extends YpsilonEventHandler {
+            constructor() {
+                super({
+                    body: ['click']
+                }, {}, {
+                    methods: handlerMethods,
+                    enableGlobalFallback: true,
+                    methodsFirst: false  // Class methods have priority
+                });
+
+                this.displayConfig();
+            }
+
+            // Class methods (traditional pattern)
+            handleClick(event, target) {
+                const action = target.dataset.action;
+                if (action && this.resolveHandler(action, 'click')) {
+                    const handler = this.resolveHandler(action, 'click');
+                    handler(event, target);
+                }
+            }
+
+            classHandler(event, target) {
+                logEvent('🏛️ Class Handler', 'Traditional class method approach');
+            }
+
+            conventionHandler(event, target) {
+                logEvent('🏛️ Convention Handler', 'handleClick → conventionHandler routing');
+            }
+
+            // Same name as global to test priority
+            priorityTest(event, target) {
+                logEvent('🏛️ Class Priority', 'Class method takes priority over global');
+            }
+
+            displayConfig() {
+                const config = {
+                    methods: !!this.methods && Object.keys(this.methods).length > 0,
+                    enableGlobalFallback: this.enableGlobalFallback,
+                    methodsFirst: this.methodsFirst,
+                    availableHandlers: {
+                        class: ['classHandler', 'conventionHandler', 'priorityTest'],
+                        methods: Object.keys(this.methods || {}),
+                        global: ['globalHandler', 'legacyHandler', 'priorityTest', 'conflictTest']
+                    }
+                };
+
+                document.getElementById('config-display').innerHTML = JSON.stringify(config, null, 2);
+            }
+        }
+
+        // Utility functions
+        function logEvent(source, message) {
+            const log = document.getElementById('event-log');
+            const timestamp = new Date().toLocaleTimeString();
+            const entry = `[${timestamp}] ${source}: ${message}`;
+
+            if (log.textContent === 'Handler events will appear here...') {
+                log.innerHTML = entry;
+            } else {
+                log.innerHTML += '<br>' + entry;
+            }
+
+            log.scrollTop = log.scrollHeight;
+        }
+
+        function clearLog() {
+            document.getElementById('event-log').textContent = 'Handler events will appear here...';
+        }
+
+        // Initialize the handler
+        const handler = new HandlerResolutionTest();
+
+        // Log initialization
+        logEvent('🚀 System', 'Handler Resolution System initialized');
+        logEvent('ℹ️ Info', 'Click buttons to test different resolution patterns');
+    </script>
+</body>
+</html>
