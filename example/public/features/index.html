@@ -24,12 +24,18 @@
             box-shadow: 0 20px 40px rgba(0,0,0,0.1);
         }
 
-        .header {
+        header,
+        aside {
             text-align: center;
             margin-bottom: 3rem;
         }
 
-        .header h1 {
+        aside {
+            margin-top: 3rem;
+        }
+
+        header h1,
+        aside h2 {
             font-size: 3rem;
             margin: 0 0 1rem 0;
             background: linear-gradient(135deg, #667eea, #764ba2);
@@ -38,7 +44,7 @@
             background-clip: text;
         }
 
-        .header p {
+        header p {
             font-size: 1.2rem;
             color: #666;
             margin: 0;
@@ -124,7 +130,8 @@
                 padding: 2rem 1.5rem;
             }
 
-            .header h1 {
+            header h1,
+            aside h2 {
                 font-size: 2rem;
             }
 
@@ -139,10 +146,10 @@
     <div class="container">
         <a href="../index.html" class="back-link">Back to Main Examples</a>
 
-        <div class="header">
+        <header>
             <h1>Feature Demonstrations</h1>
             <p>Interactive examples showcasing specific YpsilonEventHandler features</p>
-        </div>
+        </header>
 
         <div class="features-grid">
             <div class="feature-card">
@@ -214,17 +221,33 @@
                 </p>
                 <a href="./methods-object-example.html" class="feature-link">See Methods Pattern &rarr;</a>
             </div>
-
-            <div class="feature-card">
-                <span class="feature-icon">🧠</span>
-                <h3 class="feature-title">Self-Aware Objects</h3>
-                <p class="feature-description">
-                    Experience JavaScript objects as living entities that evolve based on interaction.
-                    "Every object is a potential event handler, waiting to be awakened." - DeepSeek AI
-                </p>
-                <a href="./self-aware-objects.html" class="feature-link">Awaken Objects &rarr;</a>
-            </div>
         </div>
+
+        <aside>
+            <h2>Discoveries</h2>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <span class="feature-icon">🧠</span>
+                    <h3 class="feature-title">Self-Aware Objects</h3>
+                    <p class="feature-description">
+                        Experience JavaScript objects as living entities that evolve based on interaction.
+                        "Every object is a potential event handler, waiting to be awakened." - DeepSeek AI
+                    </p>
+                    <a href="./self-aware-objects.html" class="feature-link">Awaken Objects &rarr;</a>
+                </div>
+
+                <div class="feature-card">
+                    <span class="feature-icon">🤪</span>
+                    <h3 class="feature-title">Window HandleEvent Test</h3>
+                    <p class="feature-description">
+                        Hilarious experiment: Can the window object itself be an event handler?
+                        Monkey-patch window.handleEvent and watch the magic happen!
+                    </p>
+                    <a href="./window-handleevent-test.html" class="feature-link">Break the Browser &rarr;</a>
+                </div>
+            </div>
+        </aside>
 
         <div style="text-align: center; margin-top: 3rem; padding-top: 2rem; border-top: 1px solid #f0f0f0;">
             <p style="color: #999; font-size: 0.9rem;">
