@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Window handleEvent Test - HILARIOUS!</title>
+    <style>
+        body {
+            font-family: system-ui, sans-serif;
+            padding: 2rem;
+            background: #f0f0f0;
+        }
+        
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .test-button {
+            padding: 1rem 2rem;
+            margin: 1rem;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            background: #3498db;
+            color: white;
+            transition: all 0.3s;
+        }
+        
+        .test-button:hover {
+            background: #2980b9;
+            transform: scale(1.05);
+        }
+        
+        .log {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 1rem;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            margin-top: 2rem;
+            min-height: 200px;
+            overflow-y: auto;
+        }
+        
+        .warning {
+            background: #f39c12;
+            color: white;
+            padding: 1rem;
+            border-radius: 4px;
+            margin: 1rem 0;
+            font-weight: bold;
+        }
+        
+        .success {
+            background: #27ae60;
+            color: white;
+            padding: 1rem;
+            border-radius: 4px;
+            margin: 1rem 0;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🤪 Window handleEvent Test</h1>
+        <p><strong>The Question:</strong> Can we make the entire <code>window</code> object handle events by doing <code>document.body.addEventListener('click', window)</code>?</p>
+        
+        <div class="warning">
+            ⚠️ <strong>Warning:</strong> This is experimental and potentially hilarious! We're about to see if the browser will let us use the window object as an event handler.
+        </div>
+        
+        <h2>🧪 Test Cases</h2>
+        
+        <h3>Test 1: Window as Event Handler</h3>
+        <button class="test-button" id="test1">Click me for Window handleEvent</button>
+        <p><em>Will try: <code>document.body.addEventListener('click', window)</code></em></p>
+        
+        <h3>Test 2: Custom Object with handleEvent</h3>
+        <button class="test-button" id="test2">Click me for Custom handleEvent</button>
+        <p><em>Will try: Custom object with handleEvent method</em></p>
+        
+        <h3>Test 3: Function vs Object</h3>
+        <button class="test-button" id="test3">Click me for Function Test</button>
+        <p><em>Will try: Regular function vs object with handleEvent</em></p>
+        
+        <div class="log" id="log">
+            Test results will appear here...<br>
+            Ready to break the browser? 😄
+        </div>
+        
+        <button onclick="clearLog()" style="margin-top: 1rem; padding: 0.5rem 1rem; background: #95a5a6; color: white; border: none; border-radius: 4px; cursor: pointer;">Clear Log</button>
+    </div>
+
+    <script>
+        function log(message) {
+            const logDiv = document.getElementById('log');
+            const timestamp = new Date().toLocaleTimeString();
+            logDiv.innerHTML += `<br>[${timestamp}] ${message}`;
+            logDiv.scrollTop = logDiv.scrollHeight;
+        }
+        
+        function clearLog() {
+            document.getElementById('log').innerHTML = 'Test results will appear here...<br>Ready to break the browser? 😄';
+        }
+        
+        // Test 1: Try to make window handle events
+        log('🚀 Starting window handleEvent experiment...');
+        
+        try {
+            // First, let's see if window has a handleEvent method
+            log(`📊 window.handleEvent exists: ${typeof window.handleEvent}`);
+            
+            // Let's add one!
+            window.handleEvent = function(event) {
+                log(`🤪 HOLY MOLY! Window.handleEvent called with: ${event.type} on ${event.target.tagName}#${event.target.id}`);
+                log(`🎯 Event currentTarget: ${event.currentTarget === window ? 'WINDOW!' : event.currentTarget}`);
+                log(`🌍 This context: ${this === window ? 'We are the window!' : this}`);
+            };
+            
+            log('✅ Added handleEvent method to window object');
+            
+            // Now try to register window as an event handler
+            document.body.addEventListener('click', window);
+            log('🎪 SUCCESS! Registered window as click handler on body!');
+            
+        } catch (error) {
+            log(`❌ Error setting up window handleEvent: ${error.message}`);
+        }
+        
+        // Test 2: Custom object
+        const customHandler = {
+            handleEvent: function(event) {
+                log(`📦 Custom object handleEvent called: ${event.type} on ${event.target.id}`);
+            }
+        };
+        
+        try {
+            document.getElementById('test2').addEventListener('click', customHandler);
+            log('✅ Custom object with handleEvent registered successfully');
+        } catch (error) {
+            log(`❌ Error with custom object: ${error.message}`);
+        }
+        
+        // Test 3: Function vs Object comparison
+        function regularFunction(event) {
+            log(`🔧 Regular function called: ${event.type} on ${event.target.id}`);
+        }
+        
+        const objectHandler = {
+            handleEvent: function(event) {
+                log(`🎭 Object handleEvent called: ${event.type} on ${event.target.id}`);
+            }
+        };
+        
+        try {
+            document.getElementById('test3').addEventListener('click', regularFunction);
+            document.getElementById('test3').addEventListener('click', objectHandler);
+            log('✅ Both function and object handlers registered on test3');
+        } catch (error) {
+            log(`❌ Error with mixed handlers: ${error.message}`);
+        }
+        
+        // Log initial state
+        log('🔍 Setup complete! Click the buttons to see what happens...');
+        log(`🌍 Window object properties: ${Object.getOwnPropertyNames(window).length} properties`);
+        log(`🎯 handleEvent in window: ${('handleEvent' in window)}`);
+    </script>
+</body>
+</html>

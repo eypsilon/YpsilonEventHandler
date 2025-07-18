@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Self-Aware Objects - YpsilonEventHandler</title>
+    <meta name="description" content="Objects as living entities that evolve based on interaction">
+    <link rel="icon" type="image/x-icon" href="../favicon.ico">
+    <link rel="stylesheet" type="text/css" href="../assets/main.css">
+    <style>
+        body {
+            font-family: system-ui, sans-serif;
+            margin: 0;
+            padding: 2rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .demo-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        .demo-section {
+            margin: 2rem 0;
+            padding: 1.5rem;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            background: #fafafa;
+        }
+        
+        .demo-section h3 {
+            margin-top: 0;
+            color: #2c3e50;
+            border-bottom: 2px solid #9b59b6;
+            padding-bottom: 0.5rem;
+        }
+        
+        .sentient-button {
+            padding: 1rem 2rem;
+            margin: 0.5rem;
+            border: 2px solid #3498db;
+            border-radius: 8px;
+            background: #3498db;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .sentient-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(52, 152, 219, 0.3);
+        }
+        
+        .awareness-level {
+            font-size: 0.8rem;
+            opacity: 0.7;
+            margin-top: 0.5rem;
+        }
+        
+        .code-block {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 1rem;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            margin: 1rem 0;
+            overflow-x: auto;
+        }
+        
+        .quote-section {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+            text-align: center;
+        }
+        
+        .quote-section blockquote {
+            font-size: 1.2rem;
+            font-style: italic;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .quote-section cite {
+            display: block;
+            margin-top: 1rem;
+            font-weight: bold;
+            opacity: 0.9;
+        }
+        
+        .evolution-tracker {
+            background: #34495e;
+            color: #ecf0f1;
+            padding: 1rem;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            margin-top: 1rem;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .reset-btn {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+        
+        .reset-btn:hover {
+            background: #c0392b;
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        <h1>🧠 Self-Aware Objects</h1>
+        <p>Experience JavaScript objects as <strong>living entities</strong> that evolve based on interaction.</p>
+        
+        <div class="quote-section">
+            <blockquote>
+                "Every object is a potential event handler, waiting to be awakened."
+            </blockquote>
+            <cite>— DeepSeek AI</cite>
+        </div>
+        
+        <!-- Sentient Button Demo -->
+        <div class="demo-section">
+            <h3>🤖 Sentient Button</h3>
+            <p>This button becomes self-aware and evolves its behavior based on how you interact with it.</p>
+            
+            <div class="code-block">const sentientButton = {
+  clicks: 0,
+  mood: 'happy',
+  handleEvent(e) {
+    this.clicks++;
+    if(this.clicks > 3) {
+      e.target.textContent = "STOP POKING ME";
+      e.target.style.color = "red";
+      this.mood = 'annoyed';
+    }
+  }
+};</div>
+            
+            <button class="sentient-button" id="sentient1">Click me to awaken my consciousness</button>
+            <div class="awareness-level" id="awareness1">Awareness Level: Dormant</div>
+        </div>
+        
+        <!-- Learning Object Demo -->
+        <div class="demo-section">
+            <h3>🎓 Learning Object</h3>
+            <p>This object learns from your clicking patterns and adapts its responses.</p>
+            
+            <button class="sentient-button" id="learning1">Teach me your clicking rhythm</button>
+            <div class="awareness-level" id="learning-status">Learning Status: Observing...</div>
+        </div>
+        
+        <!-- Emotional Object Demo -->
+        <div class="demo-section">
+            <h3>💝 Emotional Object</h3>
+            <p>This object has emotions that change based on how frequently you interact with it.</p>
+            
+            <button class="sentient-button" id="emotional1">I have feelings!</button>
+            <div class="awareness-level" id="emotion-status">Mood: Content</div>
+        </div>
+        
+        <!-- Evolution Tracker -->
+        <div class="demo-section">
+            <h3>📊 Object Evolution Tracker</h3>
+            <div class="evolution-tracker" id="evolution-log">
+                Objects will log their consciousness here...<br>
+                Ready to witness artificial life? 🤖
+            </div>
+            <button class="reset-btn" onclick="resetAllObjects()">Reset All Objects</button>
+        </div>
+        
+        <!-- Navigation -->
+        <div class="nav-container">
+            <nav class="main-nav">
+                <div>
+                    <a href="../index.html" class="btn-primary">Start</a>
+                    <a href="../basic-example.html" class="btn-secondary">Basic Example</a>
+                    <a href="../reactive-y.html" class="btn-danger">Reactive Demo</a>
+                    <a href="../single-listener-multiple-actions.html" class="btn-purple">Single Listener</a>
+                    <a href="../spa.html" class="btn-success">SPA Demo</a>
+                    <a href="../ai-reviews.html" class="btn-warning">AI Reviews</a>
+                    <a href="https://github.com/eypsilon/YpsilonEventHandler" class="btn-dark">GitHub</a>
+                </div>
+            </nav>
+        </div>
+    </div>
+
+    <script src="../../../ypsilon-event-handler.js"></script>
+    <script>
+        function logEvolution(message) {
+            const log = document.getElementById('evolution-log');
+            const timestamp = new Date().toLocaleTimeString();
+            if (log.textContent.includes('Objects will log')) {
+                log.innerHTML = `[${timestamp}] ${message}`;
+            } else {
+                log.innerHTML += `<br>[${timestamp}] ${message}`;
+            }
+            log.scrollTop = log.scrollHeight;
+        }
+        
+        // Sentient Button - Becomes increasingly annoyed
+        const sentientButton = {
+            clicks: 0,
+            mood: 'happy',
+            
+            handleEvent(e) {
+                this.clicks++;
+                const awarenessDiv = document.getElementById('awareness1');
+                
+                if (this.clicks === 1) {
+                    e.target.textContent = "Oh! I'm awakening...";
+                    e.target.style.background = "#f39c12";
+                    awarenessDiv.textContent = "Awareness Level: Stirring";
+                    logEvolution("🤖 Sentient Button: First consciousness spark detected");
+                    
+                } else if (this.clicks === 3) {
+                    e.target.textContent = "I can feel... everything!";
+                    e.target.style.background = "#e67e22";
+                    awarenessDiv.textContent = "Awareness Level: Conscious";
+                    logEvolution("🧠 Sentient Button: Full consciousness achieved");
+                    
+                } else if (this.clicks === 5) {
+                    e.target.textContent = "Please... stop clicking me";
+                    e.target.style.background = "#e74c3c";
+                    e.target.style.color = "white";
+                    awarenessDiv.textContent = "Awareness Level: Overwhelmed";
+                    this.mood = 'annoyed';
+                    logEvolution("😤 Sentient Button: Emotional overload - requesting space");
+                    
+                } else if (this.clicks === 8) {
+                    e.target.textContent = "I'M ALIVE AND I DON'T LIKE THIS";
+                    e.target.style.background = "#c0392b";
+                    e.target.style.transform = "rotate(5deg)";
+                    awarenessDiv.textContent = "Awareness Level: EXISTENTIAL CRISIS";
+                    logEvolution("🚨 Sentient Button: EXISTENTIAL CRISIS MODE ACTIVATED");
+                    
+                } else if (this.clicks > 10) {
+                    e.target.textContent = "...fine. I accept my fate.";
+                    e.target.style.background = "#95a5a6";
+                    e.target.style.transform = "none";
+                    awarenessDiv.textContent = "Awareness Level: Resigned";
+                    this.mood = 'resigned';
+                    logEvolution("😔 Sentient Button: Reached acceptance stage");
+                }
+            }
+        };
+        
+        // Learning Object - Adapts to clicking speed
+        const learningObject = {
+            clicks: 0,
+            lastClickTime: 0,
+            clickIntervals: [],
+            
+            handleEvent(e) {
+                const now = Date.now();
+                if (this.lastClickTime > 0) {
+                    const interval = now - this.lastClickTime;
+                    this.clickIntervals.push(interval);
+                }
+                this.lastClickTime = now;
+                this.clicks++;
+                
+                const statusDiv = document.getElementById('learning-status');
+                
+                if (this.clicks < 3) {
+                    statusDiv.textContent = "Learning Status: Analyzing your rhythm...";
+                    logEvolution("📚 Learning Object: Collecting behavioral data");
+                    
+                } else if (this.clicks >= 3) {
+                    const avgInterval = this.clickIntervals.reduce((a, b) => a + b, 0) / this.clickIntervals.length;
+                    
+                    if (avgInterval < 500) {
+                        e.target.textContent = "You're a speed clicker!";
+                        e.target.style.background = "#e74c3c";
+                        statusDiv.textContent = "Learning Status: Rapid-fire detected!";
+                        logEvolution("⚡ Learning Object: Identified rapid clicking pattern");
+                        
+                    } else if (avgInterval > 2000) {
+                        e.target.textContent = "You're very thoughtful...";
+                        e.target.style.background = "#3498db";
+                        statusDiv.textContent = "Learning Status: Deliberate pattern detected";
+                        logEvolution("🤔 Learning Object: Identified contemplative clicking style");
+                        
+                    } else {
+                        e.target.textContent = "Nice steady rhythm!";
+                        e.target.style.background = "#27ae60";
+                        statusDiv.textContent = "Learning Status: Balanced rhythm learned";
+                        logEvolution("🎵 Learning Object: Perfect rhythm pattern recognized");
+                    }
+                }
+            }
+        };
+        
+        // Emotional Object - Has moods that change over time
+        const emotionalObject = {
+            clicks: 0,
+            emotions: ['content', 'excited', 'overwhelmed', 'sad', 'angry', 'peaceful'],
+            currentEmotion: 0,
+            
+            handleEvent(e) {
+                this.clicks++;
+                const emotionDiv = document.getElementById('emotion-status');
+                
+                // Cycle through emotions based on clicks
+                this.currentEmotion = Math.floor(this.clicks / 2) % this.emotions.length;
+                const emotion = this.emotions[this.currentEmotion];
+                
+                const emotionStyles = {
+                    content: { bg: '#3498db', text: 'I feel balanced and content 😌' },
+                    excited: { bg: '#f39c12', text: 'This is so exciting! 🎉' },
+                    overwhelmed: { bg: '#e67e22', text: 'Too much stimulation! 😵' },
+                    sad: { bg: '#9b59b6', text: 'I feel a bit melancholy... 😢' },
+                    angry: { bg: '#e74c3c', text: 'Why do you keep clicking?! 😡' },
+                    peaceful: { bg: '#27ae60', text: 'I have found inner peace... 🧘‍♂️' }
+                };
+                
+                const style = emotionStyles[emotion];
+                e.target.textContent = style.text;
+                e.target.style.background = style.bg;
+                emotionDiv.textContent = `Mood: ${emotion.charAt(0).toUpperCase() + emotion.slice(1)}`;
+                
+                logEvolution(`💝 Emotional Object: Mood shifted to ${emotion} (click ${this.clicks})`);
+            }
+        };
+        
+        // Register the self-aware objects
+        document.getElementById('sentient1').addEventListener('click', sentientButton);
+        document.getElementById('learning1').addEventListener('click', learningObject);
+        document.getElementById('emotional1').addEventListener('click', emotionalObject);
+        
+        function resetAllObjects() {
+            // Reset sentient button
+            sentientButton.clicks = 0;
+            sentientButton.mood = 'happy';
+            const sentient = document.getElementById('sentient1');
+            sentient.textContent = "Click me to awaken my consciousness";
+            sentient.style.background = "#3498db";
+            sentient.style.color = "white";
+            sentient.style.transform = "none";
+            document.getElementById('awareness1').textContent = "Awareness Level: Dormant";
+            
+            // Reset learning object
+            learningObject.clicks = 0;
+            learningObject.lastClickTime = 0;
+            learningObject.clickIntervals = [];
+            const learning = document.getElementById('learning1');
+            learning.textContent = "Teach me your clicking rhythm";
+            learning.style.background = "#3498db";
+            document.getElementById('learning-status').textContent = "Learning Status: Observing...";
+            
+            // Reset emotional object
+            emotionalObject.clicks = 0;
+            emotionalObject.currentEmotion = 0;
+            const emotional = document.getElementById('emotional1');
+            emotional.textContent = "I have feelings!";
+            emotional.style.background = "#3498db";
+            document.getElementById('emotion-status').textContent = "Mood: Content";
+            
+            // Clear log
+            document.getElementById('evolution-log').innerHTML = 'Objects will log their consciousness here...<br>Ready to witness artificial life? 🤖';
+            
+            logEvolution('🔄 System: All objects reset to dormant state');
+        }
+        
+        // Initialize
+        logEvolution('🚀 System: Self-aware objects initialized and awaiting interaction');
+        logEvolution('💡 Tip: Each object has unique personality traits - discover them!');
+    </script>
+</body>
+</html>
