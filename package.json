@@ -1,8 +1,9 @@
 {
   "name": "ypsilon-event-handler",
-  "version": "1.5.0",
+  "version": "1.5.1",
   "description": "A production-ready event handling system for web applications with memory leak prevention, and method chaining support",
   "main": "ypsilon-event-handler.js",
+  "types": "ypsilon-event-handler.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "echo \"No build step required\""
@@ -15,7 +16,9 @@
     "browser",
     "frontend",
     "memory-efficient",
-    "debugging"
+    "debugging",
+    "typescript",
+    "types"
   ],
   "author": "Engin Ypsilon",
   "license": "MIT",
