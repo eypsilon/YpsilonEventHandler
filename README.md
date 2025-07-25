@@ -99,7 +99,7 @@ button.addEventListener('click', sentientButton);
     <button data-action="delete">Delete</button>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/ypsilon-event-handler@1.5.0/ypsilon-event-handler.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/ypsilon-event-handler@1.5.1/ypsilon-event-handler.min.js"></script>
   <script>
     class MyHandler extends YpsilonEventHandler {
       constructor() {
@@ -220,7 +220,7 @@ new YpsilonEventHandler(eventMapping, aliases, config)
 
 ### CDN
 ```html
-<script src="https://cdn.jsdelivr.net/npm/ypsilon-event-handler@1.5.0/ypsilon-event-handler.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/ypsilon-event-handler@1.5.1/ypsilon-event-handler.min.js"></script>
 ```
 
 ### NPM
@@ -233,6 +233,43 @@ import { YpsilonEventHandler } from 'ypsilon-event-handler';
 // or
 const { YpsilonEventHandler } = require('ypsilon-event-handler');
 ```
+
+## 🎯 **Enterprise TypeScript Support**
+
+**Full type safety with zero configuration!** v1.5.1 includes comprehensive TypeScript definitions that make enterprise development a breeze.
+
+### ⚡ **Instant IntelliSense**
+```typescript
+import { YpsilonEventHandler, EventMapping } from 'ypsilon-event-handler';
+
+class MyHandler extends YpsilonEventHandler {
+    constructor() {
+        super({
+            'body': ['click'],           // ← Full autocomplete
+            '.modal': ['keydown', 'scroll'], // ← Type-safe configuration
+            '#form': [{ type: 'submit', handler: 'handleFormSubmit' }]
+        });
+    }
+
+    // ← Perfect IntelliSense with proper event types
+    handleClick(event: MouseEvent, target: EventTarget | null) {
+        // TypeScript knows this is a MouseEvent!
+    }
+
+    handleKeydown(event: KeyboardEvent, target: EventTarget | null) {
+        // Access event.key, event.ctrlKey with full typing
+    }
+}
+```
+
+### 🏢 **Enterprise Features**
+- **✅ Full method signature typing** - `handleClick`, `handleInput`, `handleSubmit`, etc.
+- **✅ Type-safe event configurations** - Throttling, debouncing, custom handlers
+- **✅ IntelliSense for methods object** - Vue.js style external handlers
+- **✅ Rich JSDoc documentation** - Usage examples in tooltips
+- **✅ Zero breaking changes** - Works with existing JavaScript code
+
+**TypeScript developers get the professional development experience they deserve!**
 
 ## 🌍 **Browser Compatibility**
 
