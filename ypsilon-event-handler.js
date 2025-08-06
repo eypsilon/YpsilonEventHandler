@@ -559,32 +559,18 @@ class YpsilonEventHandler {
 
     throttle(fn, delay, key) {
         return (...args) => {
-            const timerData = this.throttleTimers.get(key);
-
-            if (!timerData) {
-                // Leading edge: execute immediately
-                fn.apply(this, args);
-                this.throttleTimers.set(key, {
-                    timeout: setTimeout(() => {
-                        this.throttleTimers.delete(key);
-                    }, delay),
-                    lastArgs: args
-                });
-            } else {
-                // Update arguments for trailing edge
-                timerData.lastArgs = args;
-
-                // Clear existing trailing timeout and set new one
-                if (timerData.trailingTimeout) {
-                    clearTimeout(timerData.trailingTimeout);
-                }
-
-                timerData.trailingTimeout = setTimeout(() => {
-                    // Trailing edge: execute with latest arguments
-                    fn.apply(this, timerData.lastArgs);
-                    this.throttleTimers.delete(key);
-                }, delay);
+            if (this.throttleTimers.has(key)) {
+                // Already throttled, ignore this call
+                return;
             }
+
+            // Execute immediately (leading edge only)
+            fn.apply(this, args);
+            
+            // Set throttle timer
+            this.throttleTimers.set(key, setTimeout(() => {
+                this.throttleTimers.delete(key);
+            }, delay));
         };
     }
 
