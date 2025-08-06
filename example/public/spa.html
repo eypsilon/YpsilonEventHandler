@@ -13,13 +13,14 @@
             padding: 0;
             box-sizing: border-box;
         }
-
+        html {
+            scroll-behavior: smooth;
+        }
         body {
-            padding-bottom: 208px;
+            padding-bottom: 210px;
             line-height: 1.6;
             background: #f5f5f5;
             font-family: system-ui, sans-serif;
-            scroll-behavior: smooth;
 
             .scroll-to-top {
                 padding: 6px 12px;
@@ -129,7 +130,7 @@
             }
 
             &.src-nav {
-                margin: 0 1.5rem 1.5rem;
+                margin: 2.5rem 1.5rem;
             }
         }
 
@@ -154,6 +155,9 @@
             background: white;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 
+            &:last-of-type {
+                margin: 30px 0 0;
+            }
             h2 {
                 margin-bottom: 20px;
                 padding-bottom: 10px;
@@ -196,6 +200,54 @@
 
                 &:hover { background: #e0a800; }
             }
+
+            &.svg-btn {
+                padding: 0;
+
+                svg {
+                    padding: 8px;
+                    height: 40px;
+                    width: 40px;
+                    display: block;
+                }
+            }
+        }
+
+        label {
+            position: relative;
+
+            span {
+                transition: all .3s ease-in-out;
+            }
+        }
+
+        code {
+            font-weight: bold;
+        }
+
+        #auto-target-toggle {
+            position: absolute;
+            left: 18px;
+            opacity: .1;
+            transform: scale(1.5);
+
+            + span {
+                padding: 12px 18px 12px 46px;
+                width: 100%;
+                display: block;
+                box-shadow: 0 0 2px 2px #17a2b855;
+            }
+            &:checked {
+                opacity: .6;
+
+                + span {
+                    box-shadow: 0 0 4px 2px #2c9444ee;
+
+                    span {
+                        color: #2c9444;
+                    }
+                }
+            }
         }
 
         .dynamic-grid {
@@ -236,6 +288,13 @@
                 text-decoration: line-through;
                 opacity: 0.7;
                 background: #d4edda;
+            }
+
+            .todo-content {
+                width: 100%;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
             }
         }
 
@@ -385,22 +444,6 @@
             font-size: 11px;
             color: white;
             background: #6c757d;
-        }
-
-        .progress-bar {
-            margin: 10px 0;
-            width: 100%;
-            height: 6px;
-            border-radius: 3px;
-            background: #e9ecef;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            height: 100%;
-            width: 0%;
-            background: linear-gradient(90deg, #667eea, #764ba2);
-            transition: width .3s ease;
         }
 
         .notification {
@@ -649,7 +692,7 @@
         <div class="container">
             <h1>🚀 YpsilonEventHandler SPA Demo</h1>
             <p>Demonstrating the power of event delegation with dynamic content</p>
-            <p><strong>⚡ ONLY 9 EVENT LISTENERS for this ENTIRE SPA! ⚡</strong></p>
+            <p><strong>⚡ ONLY 10 EVENT LISTENERS for this ENTIRE SPA! ⚡</strong></p>
             <p><strong>ONE handler on body handles ALL events - no matter when elements are created!</strong></p>
         </div>
     </div>
@@ -702,6 +745,39 @@
             </div>
 
             <div class="dynamic-grid" id="dynamic-container"><!-- Dynamic elements --></div>
+        </div>
+
+        <!-- Smart Target Resolution Demo -->
+        <div class="section">
+            <h2>🛸 Smart Target Resolution Demo</h2>
+            <p>Try this live demo to see how we solve the common "SVG-in-button" event handling issue. Toggle the feature below to see the difference in action!</p>
+
+            <div style="margin: 20px 0; border-radius: 8px; background: #f8f9fa;">
+                <label style="display: flex; flex-wrap: wrap; align-items: center; cursor: pointer; font-weight: bold;">
+                    <input type="checkbox" id="auto-target-toggle" style="margin-right: 10px;">
+                    <span>
+                        <span>🧠 Enable Smart Target Resolution (autoTargetResolution)</span>
+                        <br />
+                        <small>When enabled, clicks on nested elements like SVGs will resolve to their intended parent buttons</small>
+                    </span>
+                </label>
+            </div>
+
+            <div style="margin: 20px 0 0;">
+                <div style="display:flex">
+                    <button class="btn btn-info svg-btn y-btn" data-action="showAlert">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="vertical-align: -3px;">
+                            <path d="M24 12c0 6.6274-5.3726 12-12 12S0 18.6274 0 12 5.3726 0 12 0s12 5.3726 12 12zM12 2C6.4772 2 2 6.4772 2 12s4.4772 10 10 10 10-4.4772 10-10S17.5228 2 12 2zm0 13c.5523 0 1 .4477 1 1s-.4477 1-1 1-1-.4477-1-1 .4477-1 1-1zm-1-7c0-.5523.4477-1 1-1s1 .4477 1 1v5c0 .5523-.4477 1-1 1s-1-.4477-1-1V8z" fill="white" fill-rule="evenodd" />
+                        </svg>
+                    </button>
+                    <button class="btn btn-warning y-btn" data-action="showAlert">Working Test</button>
+                </div>
+            </div>
+
+            <div style="margin:18px 0 0;padding:8px 12px;font-size:14px;color:#444;background:#edf3f477;box-shadow: 0 0 2px 2px #3a4c4e33;">
+                <p>One frequent problem when using event delegation is that <code>event.target</code> can refer to a nested child element rather than the actual clickable element you are targeting.
+                <br />A typical example: clicking an <code>SVG</code> inside a button triggers the SVG as the event target—*not* the button—due to DOM hierarchy and event bubbling.</p>
+            </div>
         </div>
 
         <!-- Todo List Manager -->
@@ -808,7 +884,7 @@
         <div class="section" id="ypsilon-assigned">
             <h2>📡 Assigned Event Listeners</h2>
             <p><strong>These are the event listeners assigned to this entire SPA!</strong></p>
-            <p>No additional listeners will be created - all dynamic content uses these same <del>5</del> <ins>9</ins> listeners via event delegation.</p>
+            <p>No additional listeners will be created - all dynamic content uses these same <del>5</del> <ins>10</ins> listeners via event delegation.</p>
             <div></div>
             <hr />
             <div class="nav-container">
@@ -856,6 +932,12 @@
                     <div class="log y-fade-in" id="event-log">
                         <div class="log-entry">Event log will appear here...</div>
                     </div>
+                    <div class="helper-btn">
+                        <label class="btn" title="Show Event Log Always"
+                            style="padding:10px;position:absolute;bottom:100%;z-index:1;background:#dad3d3;border:1px solid #bbb;">
+                            <input type="checkbox" name="show-logs-always" value="true" data-action="showLogsAlways" checked>
+                        </label>
+                    </div>
                 </div>
             </div>
             <div class="ypsi-buttons">
@@ -863,8 +945,8 @@
                     <button class="btn btn-warning y-btn" data-action="clearLog">🗑️ Clear Log</button>
                     <button class="btn y-btn" data-action="debugHandler" style="background: #6f42c1;">🔍 Debug Handler</button>
                     <button class="btn y-btn" data-action="testDispatch" style="background: #fd7e14;">🔥 Test Dispatch</button>
-                    <label class="btn" title="Show Event Log Always" style="font-size: 11px;">
-                        <input type="checkbox" name="show-logs-always" value="true" data-action="showLogsAlways">
+                    <label class="btn main-toggle" title="Show Event Log Always" style="font-size: 11px;">
+                        <input type="checkbox" name="show-logs-always" value="true" data-action="showLogsAlways" checked>
                         📌 Always
                     </label>
                 </div>
@@ -874,8 +956,8 @@
                     <button class="btn" style="background: #dc3545;" id="destroy-btn">💀 Destroy Handler</button>
                 </div>
             </div>
-
         </div>
+
     </div>
 
     <!-- Notification -->
@@ -901,10 +983,14 @@
         <p>💫 YpsilonEventHandler - The power of native handleEvent interface</p>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/ypsilon-event-handler@1.5.0/ypsilon-event-handler.min.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/ypsilon-event-handler@1.6.0/ypsilon-event-handler.min.js"></script> -->
+    <script src="../../ypsilon-event-handler.js"></script>
     <script>
+        "use strict";
+
         const config = {
             debounce: 300,
+            debounceChange: 1500,
             throttle: 150,
             throttleResize: 500,
             throttleScrollArea: 400,
@@ -919,35 +1005,68 @@
         }
         // SPA Event Handler - ONE handler for the entire application!
         class SPAEventHandler extends YpsilonEventHandler {
-            constructor() {
-                super({
+            constructor(eventMapping, aliases, config = {}) {
+                // Merge default config with passed config
+                const mergedConfig = { ...{
+                    enableStats: true,
+                    autoTargetResolution: false,
+                }, ...config };
+
+                super(eventMapping || {
                     'body': [
+                        /**
+                         * Following handler will be called automatically
+                         *
+                         * click::handleClick(event, target)
+                         * keydown::handleKeydown(e, t)
+                         * testdispatch::handleTestdispatch(e, t)
+                         * change::handleChange(e, t)
+                         * input::handleInput(e, t)
+                         */
                         { type: 'click' },
-                        { type: 'input', debounce: config.debounce },
-                        { type: 'change' },
                         { type: 'keydown' },
-                        { type: 'testdispatch' }
+                        { type: 'testdispatch' },
+                        { type: 'change', debounce: config.debounceChange, options: { passive: true } },
+                        { type: 'input',  debounce: config.debounce,       options: { passive: true } },
                     ],
                     'window': [
-                        { type: 'scroll', throttle: config.throttle },
-                        { type: 'resize', throttle: config.throttleResize },
-                        { type: 'beforeunload', capture: true }
+                        { type: 'load',         handler:  'handleWindowLoad', options: { once: true } },
+                        { type: 'scroll',       throttle: config.throttle },
+                        { type: 'resize',       throttle: config.throttleResize },
+                        { type: 'beforeunload', capture:  true }
                     ],
                     '#scroll-area': [
                         { type: 'scroll', handler: 'handleAreaScroll', throttle: config.throttleScrollArea }
                     ],
-                }, {}, { enableStats: true });
+                }, {}, mergedConfig);
 
+                // Initialize counters based on existing DOM elements (for recreate scenarios)
                 this.counters = {
                     clicks: 0,
-                    elements: 0,
-                    todos: 0,
+                    elements: document.querySelectorAll('.dynamic-grid > *').length,
+                    todos: document.querySelectorAll('.todo-item').length,
                     events: 0
                 };
 
                 this.tabCounter = 3;
                 this.updateStats();
                 this.initializePlaceholder();
+
+                // Load todos from localStorage only if DOM is empty (avoid doubling on recreate)
+                if (this.counters.todos === 0) {
+                    this.loadTodos();
+                }
+            }
+
+            handleWindowLoad(event) {
+                this.log(`👋 Window is loaded, these listener will be removed (once: true)`);
+
+                // Initialize log visibility with proper height calculation (no click event)
+                const showLogsCheckbox = document.querySelector('input[data-action="showLogsAlways"]');
+                if (showLogsCheckbox && showLogsCheckbox.checked) {
+                    // Call the full showLogsAlways logic to handle height calculation and layout
+                    this.showLogsAlways(showLogsCheckbox);
+                }
             }
 
             handleVisibilitychange(event) {
@@ -1064,6 +1183,11 @@
 
                     logs.parentNode.classList[exec]('show-logs-always');
                     document.body.classList[exec]('show-logs-always');
+
+                    // 🔧 Sync both checkboxes to the same state
+                    document.querySelectorAll('input[data-action="showLogsAlways"]').forEach(checkbox => {
+                        checkbox.checked = target.checked;
+                    });
                 }
             }
 
@@ -1124,6 +1248,15 @@
                 this.log(`🗑️ Cleared ${elementsToRemove} dynamic elements from content creator`);
             }
 
+            showAlert(event, target) {
+                // Simple notification for SVG button test
+                const message = this.autoTargetResolution
+                    ? '🎯 Smart Target Resolution: Active (click worked!)'
+                    : '🔘 Smart Target Resolution: Disabled';
+
+                this.showNotification(message);
+            }
+
             addTodo() {
                 const input = document.getElementById('todo-input');
                 const text = input.value.trim();
@@ -1136,16 +1269,19 @@
                 todo.className = 'todo-item y-fade-in';
                 todo.id = todoId;
                 todo.innerHTML = `
-                    <span>${this.escapeHtml(text)}</span>
-                    <div>
-                        <button class="btn btn-success y-btn" data-action="completeTodo" data-target="${todoId}">✅ Complete</button>
-                        <button class="btn btn-danger y-btn" data-action="deleteTodo" data-target="${todoId}">🗑️ Delete</button>
+                    <div class="todo-content">
+                        <span class="todo-text">${this.escapeHtml(text)}</span>
+                        <div class="todo-actions">
+                            <button class="btn btn-success y-btn" data-action="completeTodo" data-target="${todoId}">✅ Complete</button>
+                            <button class="btn btn-danger y-btn" data-action="deleteTodo" data-target="${todoId}">🗑️ Delete</button>
+                        </div>
                     </div>
                 `;
 
                 input.value = '';
                 container.appendChild(todo);
                 this._updateStats('todos');
+                this.saveTodos(); // Save after adding
 
                 this.log(`➕ Added todo: ${text}`);
             }
@@ -1156,6 +1292,7 @@
 
                 if (todo) {
                     todo.classList.toggle('completed');
+                    this.saveTodos(); // Save after completing
 
                     this.log(`✅ Toggled todo: ${todoId}`);
                 }
@@ -1169,8 +1306,51 @@
                     todo.remove();
                     this.counters.todos--;
                     this.updateStats();
+                    this.saveTodos(); // Save after deletion
 
                     this.log(`🗑️ Deleted todo: ${todoId}`);
+                }
+            }
+
+            // 💾 localStorage methods for todo persistence
+            saveTodos() {
+                const todos = [];
+                document.querySelectorAll('.todo-item').forEach(todo => {
+                    const text = todo.querySelector('.todo-text')?.textContent;
+                    const completed = todo.classList.contains('completed');
+                    if (text) {
+                        todos.push({ text, completed, id: todo.id });
+                    }
+                });
+                localStorage.setItem('ypsilon-todos', JSON.stringify(todos));
+            }
+
+            loadTodos() {
+                const saved = localStorage.getItem('ypsilon-todos');
+                if (saved) {
+                    const todos = JSON.parse(saved);
+                    const container = document.getElementById('todo-container');
+
+                    todos.forEach(todo => {
+                        const todoHtml = `
+                            <div class="todo-item ${todo.completed ? 'completed' : ''}" id="${todo.id}">
+                                <div class="todo-content">
+                                    <span class="todo-text">${this.escapeHtml(todo.text)}</span>
+                                    <div class="todo-actions">
+                                        <button class="btn btn-success y-btn" data-action="completeTodo" data-target="${todo.id}">✅ Complete</button>
+                                        <button class="btn btn-danger y-btn" data-action="deleteTodo" data-target="${todo.id}">🗑️ Delete</button>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                        container.insertAdjacentHTML('beforeend', todoHtml);
+                        this.counters.todos++;
+                    });
+
+                    if (todos.length > 0) {
+                        this.updateStats();
+                        this.log(`💾 Loaded ${todos.length} todos from localStorage`);
+                    }
                 }
             }
 
@@ -1640,6 +1820,36 @@
         const recreateBtn = document.getElementById('recreate-btn');
         const handlerStatus = document.getElementById('handler-status');
 
+        // Persistent handler for smart target resolution toggle (survives destroy/recreate)
+        const autoTargetToggle = document.getElementById('auto-target-toggle');
+
+        autoTargetToggle.addEventListener('change', (event) => {
+            const enabled = event.target.checked;
+
+            // Get current counters to preserve them
+            const currentCounters = { ...spa.counters };
+
+            // Destroy current handler
+            spa.destroy();
+
+            // Create new instance with toggled setting
+            const config = {
+                enableStats: true,
+                autoTargetResolution: enabled
+            };
+
+            spa = new SPAEventHandler(undefined, undefined, config);
+            window.spa = spa;
+
+            // Preserve the counters from the old instance
+            spa.counters = currentCounters;
+            spa.updateStats();
+
+            const status = enabled ? 'ENABLED ✅' : 'DISABLED ❌';
+
+            spa.showNotification(`🎯 Smart Target Resolution ${status}`);
+        });
+
         destroyBtn.addEventListener('click', () => {
             if (spa.getMainStatsEl()) spa.getMainStatsEl().classList.remove('sticky');
 
@@ -1675,6 +1885,7 @@
         spa.log('🚀 SPA initialized with ONE body listener handling ALL events!');
         spa.log('✨ Try creating, deleting, and interacting with dynamic elements');
         spa.log('🎯 Notice how everything works without adding new listeners!');
+        spa.log('🧠 NEW: Toggle Smart Target Resolution to see SVG-in-button handling!');
     </script>
 </body>
 </html>

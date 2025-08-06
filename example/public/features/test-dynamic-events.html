@@ -5,6 +5,7 @@
     <title>Dynamic Event Management Test ~ YpsilonEventHandler</title>
     <meta name="description" content="YpsilonEventHandler - Dynamic Event Management Test Page">
     <link rel="icon" type="image/x-icon" href="./../favicon.ico">
+    <link rel="stylesheet" type="text/css" href="../assets/main.css">
     <style>
         body { font-family: sans-serif; padding: 2rem; margin: 0 auto; max-width: 800px; }
         button, input { margin: 0.5rem; padding: 0.5rem 1rem; }
@@ -31,12 +32,9 @@
 
     <input type="text" name="y-demo-1" placeholder="Type here to test input events..." />
 
-    <div class="output" id="output">
-        <p>Press keys or type to test events...</p>
-        <p>Event status will appear here...</p>
-    </div>
+    <pre class="output" id="output">Press keys or type to test events...</pre>
 
-    <script src="https://cdn.jsdelivr.net/npm/ypsilon-event-handler@1.5.0/ypsilon-event-handler.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/ypsilon-event-handler@1.6.0/ypsilon-event-handler.min.js"></script>
     <script>
         class TestHandler extends YpsilonEventHandler {
             constructor() {

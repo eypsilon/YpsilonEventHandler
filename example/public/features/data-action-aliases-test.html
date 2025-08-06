@@ -7,6 +7,7 @@
     <link rel="icon" type="image/x-icon" href="./../favicon.ico">
     <style>
         body { background: #f8f8f8; font-family: Arial, sans-serif; margin: 2rem auto; max-width: 800px; }
+        h2 { color: #333; border-bottom: 2px solid #3b82f6; padding-bottom: 5px; }
         .btn {
             padding: 10px 20px;
             margin: 5px;
@@ -34,11 +35,16 @@
             padding: 15px;
             margin: 20px 0;
             border-radius: 5px;
-            min-height: 50px;
+            min-height: 94px;
+
+            &.logs {
+                padding: 4px;
+                min-height: unset;
+            }
         }
         .section { margin: 30px 0; padding: 20px; background: #fff; border: 1px solid #eee; }
-        h2 { color: #333; border-bottom: 2px solid #3b82f6; padding-bottom: 5px; }
         .code { background: #f5f5f5; padding: 10px; border-radius: 3px; font-family: monospace; }
+        .logs-container { padding: 0; border: 0; position: sticky; bottom: 0; background: transparent; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
         .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; }
     </style>
 </head>
@@ -100,13 +106,12 @@ super({ 'body': ['click', 'input'] }, {<br>
         <div class="output" id="mixed-output">Same action, different events...</div>
     </div>
 
-    <div class="section">
-        <h2>📈 Action Log</h2>
-        <button class="btn" data-action="clearLog">Clear Log</button>
-        <div class="output" id="action-log" style="max-height: 200px; overflow-y: auto;">Action history will appear here...</div>
+    <div class="section logs-container" title="Action Log">
+        <button class="btn" data-action="clearLog" style="position: absolute; bottom: 5px; right: 5px; padding: 6px 10px;">Clear Log</button>
+        <div class="output logs" id="action-log" style="max-height: 200px; overflow-y: auto;"></div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/ypsilon-event-handler@1.5.0/ypsilon-event-handler.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/ypsilon-event-handler@1.6.0/ypsilon-event-handler.min.js"></script>
     <script>
         class DataActionAliasTest extends YpsilonEventHandler {
             constructor() {
@@ -292,7 +297,7 @@ super({ 'body': ['click', 'input'] }, {<br>
                 this.actionCount++;
                 const logDiv = document.getElementById('action-log');
                 const entry = document.createElement('div');
-                entry.style.cssText = 'margin: 5px 0; padding: 5px; background: #f0f0f0; border-radius: 3px;';
+                entry.style.cssText = 'margin: 1px 0; padding: 8px; background: #f0f0f0; border-radius: 3px;';
                 entry.innerHTML = `
                     <strong>#${this.actionCount}</strong>
                     <code>data-action="${action}"</code> →

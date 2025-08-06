@@ -46,6 +46,12 @@ export interface HandlerConfig {
     enableGlobalFallback?: boolean;
     /** Prioritize methods object over class methods (default: false) */
     methodsFirst?: boolean;
+    /** Custom passive events list (overrides defaults) */
+    passiveEvents?: string[] | null;
+    /** Enable AbortController for efficient event listener cancellation (default: false) */
+    abortController?: boolean;
+    /** Enable smart target resolution for nested elements (solves SVG-in-button issues) (default: false) */
+    autoTargetResolution?: boolean;
 }
 
 /**
@@ -116,6 +122,12 @@ export declare class YpsilonEventHandler implements Partial<EventHandlerMethods>
      * Called automatically in constructor
      */
     registerEvents(): void;
+
+    /**
+     * Abort all event listeners using AbortController (if enabled)
+     * More efficient than individual removal when available
+     */
+    abort(): this;
 
     /**
      * Clean up ALL event listeners and prevent memory leaks

@@ -1,17 +1,23 @@
+"use strict";
+
 /**
- * YpsilonEventHandler - Ultra lightweight, extendable event handling system
+ * YpsilonEventHandler - Revolutionary multi-handler event system with closest-match DOM resolution
+ * The most advanced event delegation architecture available - features no other library offers out of the box
  */
 class YpsilonEventHandler {
     constructor(eventMapping = {}, aliases = {}, config = {}) {
-        this.eventMapping = eventMapping;
-        this.aliases = aliases;
-        this.config = { 
-            enableStats: false, 
+        this.config = {
+            enableStats: false,
             methods: null,
             enableGlobalFallback: false,
             methodsFirst: false,
-            ...config 
+            passiveEvents: null,
+            abortController: false,
+            autoTargetResolution: false, // Smart target resolution for nested elements
+            ...config
         };
+        this.eventMapping = eventMapping;
+        this.aliases = aliases;
         this.enableStats = this.config.enableStats;
         this.methods = this.config.methods || {};
         this.enableGlobalFallback = this.config.enableGlobalFallback;
@@ -19,15 +25,20 @@ class YpsilonEventHandler {
         this.eventListeners = new Map();
         this.elementHandlers = new WeakMap();
         this.eventHandlerMap = new Map();
-        this.passiveSupported = false;
         this.throttleTimers = new Map();
         this.debounceTimers = new Map();
         this.userHasInteracted = false;
-        this.passiveEvents = [
+        this.passiveSupported = false;
+        this.passiveEvents = this.config.passiveEvents || [
             'scroll', 'touchstart', 'touchmove', 'touchend', 'touchcancel',
             'wheel', 'mousewheel', 'pointermove', 'pointerenter', 'pointerleave',
             'resize', 'orientationchange', 'load', 'beforeunload', 'unload'
         ];
+
+        this.abortController = this.config.abortController ? new AbortController() : null;
+        this.autoTargetResolution = this.config.autoTargetResolution;
+        this.targetResolutionEvents = ['click', 'touchstart', 'touchend', 'mousedown', 'mouseup'];
+
         this.init();
     }
 
@@ -74,7 +85,12 @@ class YpsilonEventHandler {
         if (closestHandler) {
             const handler = this.resolveHandler(closestHandler.handler, event.type);
             if (handler) {
-                handler.call(this, event, event.target);
+                // Use smart target resolution for problematic events if enabled
+                let resolvedTarget = event.target;
+                if (this.autoTargetResolution && this.targetResolutionEvents.includes(event.type)) {
+                    resolvedTarget = this.findActionableTarget(event.target, closestHandler.element) || event.target;
+                }
+                handler.call(this, event, resolvedTarget);
             }
         }
     }
@@ -85,6 +101,43 @@ class YpsilonEventHandler {
             detail
         }));
         return this;
+    }
+
+    /**
+     * Find the actionable target by walking up the DOM tree
+     * Solves the SVG-in-button and nested element problems
+     */
+    findActionableTarget(target, boundary) {
+        let current = target;
+
+        // Walk up the DOM tree until we hit the boundary element
+        while (current && current !== boundary && current !== document) {
+            // Check for data-action attribute (most common pattern)
+            if (current.dataset?.action) {
+                return current;
+            }
+
+            // Check for other actionable attributes/classes
+            if (current.hasAttribute('data-action') ||
+                current.classList?.contains('actionable') ||
+                current.tagName === 'BUTTON' ||
+                current.tagName === 'A') {
+                return current;
+            }
+
+            current = current.parentElement;
+        }
+
+        // If we reached the boundary and it's actionable, return it
+        if (current === boundary && (
+            boundary.dataset?.action ||
+            boundary.hasAttribute('data-action') ||
+            boundary.classList?.contains('actionable')
+        )) {
+            return boundary;
+        }
+
+        return null;
     }
 
     detectPassiveSupport() {
@@ -167,40 +220,40 @@ class YpsilonEventHandler {
     resolveHandler(handlerName, eventType) {
         // First resolve any aliases
         const resolvedName = this.resolveMethodName(handlerName, eventType);
-        
+
         // Define resolution order based on methodsFirst setting
-        const resolutionOrder = this.methodsFirst 
+        const resolutionOrder = this.methodsFirst
             ? ['methods', 'class', 'global']
             : ['class', 'methods', 'global'];
-        
+
         for (const source of resolutionOrder) {
             let handler = null;
-            
+
             switch (source) {
                 case 'class':
                     if (typeof this[resolvedName] === 'function') {
                         handler = this[resolvedName];
                     }
                     break;
-                    
+
                 case 'methods':
                     if (this.methods && typeof this.methods[resolvedName] === 'function') {
                         handler = this.methods[resolvedName];
                     }
                     break;
-                    
+
                 case 'global':
                     if (this.enableGlobalFallback && typeof window !== 'undefined' && typeof window[resolvedName] === 'function') {
                         handler = window[resolvedName];
                     }
                     break;
             }
-            
+
             if (handler) {
                 return handler;
             }
         }
-        
+
         return null;
     }
 
@@ -461,13 +514,23 @@ class YpsilonEventHandler {
         const shouldBePassive = this.passiveSupported && this.passiveEvents.includes(eventConfig.type || eventConfig);
 
         if (typeof eventConfig === 'string') {
-            return shouldBePassive ? { passive: true } : false;
+            const options = shouldBePassive ? { passive: true } : {};
+            // Add signal if AbortController is enabled
+            if (this.abortController) {
+                options.signal = this.abortController.signal;
+            }
+            return Object.keys(options).length > 0 ? options : false;
         }
 
         const options = eventConfig.options || {};
         // Apply passive if event type supports it, unless explicitly disabled with passive: false
         if (shouldBePassive && options.passive !== false) {
             options.passive = true;
+        }
+
+        // Add signal if AbortController is enabled and not explicitly disabled
+        if (this.abortController && options.signal !== false) {
+            options.signal = this.abortController.signal;
         }
 
         return Object.keys(options).length > 0 ? options : false;
@@ -547,12 +610,27 @@ class YpsilonEventHandler {
         return this;
     }
 
+    abort() {
+        if (this.abortController) {
+            this.abortController.abort();
+            this.abortController = null;
+        }
+        return this;
+    }
+
     destroy() {
-        this.eventListeners.forEach((config) => {
-            config.events.forEach(({ type, handler, options }) => {
-                config.element.removeEventListener(type, handler, options);
+        // Use AbortController for efficient cleanup if available
+        if (this.abortController) {
+            this.abort(); // This automatically removes ALL DOM listeners with the signal
+        } else {
+            // Only do manual removal when AbortController is NOT enabled
+            this.eventListeners.forEach((config) => {
+                config.events.forEach(({ type, handler, options }) => {
+                    config.element.removeEventListener(type, handler, options);
+                });
             });
-        });
+        }
+
         this.eventListeners.clear();
         this.eventHandlerMap.clear();
 
