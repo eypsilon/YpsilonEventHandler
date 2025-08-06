@@ -67,7 +67,7 @@ element.addEventListener('click', this);
     <button data-action="delete">Delete</button>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/ypsilon-event-handler@1.6.4/ypsilon-event-handler-event-handler.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/ypsilon-event-handler@1.6.4/ypsilon-event-handler.min.js"></script>
   <script>
     class MyHandler extends YpsilonEventHandler {
       constructor() {
@@ -177,7 +177,7 @@ class AdvancedHandler extends YpsilonEventHandler {
 
 ### CDN
 ```html
-<script src="https://cdn.jsdelivr.net/ypsilon-event-handler@1.6.4/ypsilon-event-handler-event-handler.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/ypsilon-event-handler@1.6.4/ypsilon-event-handler.min.js"></script>
 ```
 
 ### NPM
