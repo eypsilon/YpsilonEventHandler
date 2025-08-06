@@ -983,8 +983,7 @@
         <p>💫 YpsilonEventHandler - The power of native handleEvent interface</p>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/ypsilon-event-handler@1.5.0/ypsilon-event-handler.min.js"></script>
-    <!-- <script src="../../ypsilon-event-handler.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/ypsilon-event-handler@1.6.2/ypsilon-event-handler.min.js"></script>
     <script>
         "use strict";
 
@@ -1005,12 +1004,12 @@
         }
         // SPA Event Handler - ONE handler for the entire application!
         class SPAEventHandler extends YpsilonEventHandler {
-            constructor(eventMapping, aliases, config = {}) {
-                // Merge default config with passed config
-                const mergedConfig = { ...{
+            constructor(eventMapping, aliases, userConfig = {}) {
+                // Merge outer config with default config and user config
+                const mergedConfig = { ...config, ...{
                     enableStats: true,
                     autoTargetResolution: false,
-                }, ...config };
+                }, ...userConfig };
 
                 super(eventMapping || {
                     'body': [
@@ -1846,12 +1845,12 @@
             spa.destroy();
 
             // Create new instance with toggled setting
-            const config = {
+            const toggleConfig = {
                 enableStats: true,
                 autoTargetResolution: enabled
             };
 
-            spa = new SPAEventHandler(undefined, undefined, config);
+            spa = new SPAEventHandler(undefined, undefined, { ...config, ...toggleConfig });
             window.spa = spa;
 
             // Preserve the counters from the old instance
