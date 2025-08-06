@@ -347,7 +347,7 @@ class YpsilonEventHandler {
 
         // Apply throttle/debounce if specified
         if (typeof eventConfig === 'object') {
-            const originalHandleEvent = this.handleEvent;
+            const originalHandleEvent = this.handleEvent.bind(this);
 
             if (eventConfig.throttle) {
                 handler = {
