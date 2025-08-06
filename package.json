@@ -1,6 +1,6 @@
 {
   "name": "ypsilon-event-handler",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "description": "A production-ready event handling system for web applications with memory leak prevention, and method chaining support",
   "main": "ypsilon-event-handler.js",
   "types": "ypsilon-event-handler.d.ts",
