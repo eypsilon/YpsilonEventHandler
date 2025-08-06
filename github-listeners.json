@@ -1,0 +1,1314 @@
+{
+    "visibilitychange": [
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "visibilitychange"
+        },
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "visibilitychange"
+        },
+        {
+            "useCapture": true,
+            "passive": false,
+            "once": false,
+            "type": "visibilitychange"
+        },
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "visibilitychange"
+        },
+        {
+            "useCapture": true,
+            "passive": false,
+            "once": false,
+            "type": "visibilitychange"
+        }
+    ],
+    "DOMContentLoaded": [
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "DOMContentLoaded"
+        }
+    ],
+    "pagehide": [
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "pagehide"
+        },
+        {
+            "useCapture": true,
+            "passive": false,
+            "once": false,
+            "type": "pagehide"
+        }
+    ],
+    "mousedown": [
+        {
+            "useCapture": false,
+            "passive": true,
+            "once": true,
+            "type": "mousedown"
+        },
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "mousedown"
+        },
+        {
+            "useCapture": true,
+            "passive": false,
+            "once": false,
+            "type": "mousedown"
+        },
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "mousedown"
+        },
+        {
+            "useCapture": true,
+            "passive": false,
+            "once": false,
+            "type": "mousedown"
+        },
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "mousedown"
+        },
+        {
+            "useCapture": true,
+            "passive": false,
+            "once": false,
+            "type": "mousedown"
+        }
+    ],
+    "touchstart": [
+        {
+            "useCapture": false,
+            "passive": true,
+            "once": true,
+            "type": "touchstart"
+        },
+        {
+            "useCapture": true,
+            "passive": true,
+            "once": false,
+            "type": "touchstart"
+        },
+        {
+            "useCapture": false,
+            "passive": true,
+            "once": false,
+            "type": "touchstart"
+        }
+    ],
+    "keydown": [
+        {
+            "useCapture": false,
+            "passive": true,
+            "once": true,
+            "type": "keydown"
+        },
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "keydown"
+        },
+        {
+            "listener": {},
+            "useCapture": true,
+            "passive": false,
+            "once": false,
+            "type": "keydown"
+        },
+        {
+            "listener": {},
+            "useCapture": true,
+            "passive": false,
+            "once": false,
+            "type": "keydown"
+        },
+        {
+            "listener": {},
+            "useCapture": true,
+            "passive": false,
+            "once": false,
+            "type": "keydown"
+        },
+        {
+            "listener": {},
+            "useCapture": true,
+            "passive": false,
+            "once": false,
+            "type": "keydown"
+        },
+        {
+            "listener": {},
+            "useCapture": true,
+            "passive": false,
+            "once": false,
+            "type": "keydown"
+        },
+        {
+            "listener": {},
+            "useCapture": true,
+            "passive": false,
+            "once": false,
+            "type": "keydown"
+        },
+        {
+            "listener": {},
+            "useCapture": true,
+            "passive": false,
+            "once": false,
+            "type": "keydown"
+        },
+        {
+            "listener": {},
+            "useCapture": true,
+            "passive": false,
+            "once": false,
+            "type": "keydown"
+        },
+        {
+            "listener": {},
+            "useCapture": true,
+            "passive": false,
+            "once": false,
+            "type": "keydown"
+        },
+        {
+            "listener": {},
+            "useCapture": true,
+            "passive": false,
+            "once": false,
+            "type": "keydown"
+        },
+        {
+            "listener": {},
+            "useCapture": true,
+            "passive": false,
+            "once": false,
+            "type": "keydown"
+        },
+        {
+            "listener": {},
+            "useCapture": true,
+            "passive": false,
+            "once": false,
+            "type": "keydown"
+        },
+        {
+            "listener": {},
+            "useCapture": true,
+            "passive": false,
+            "once": false,
+            "type": "keydown"
+        },
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "keydown"
+        },
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "keydown"
+        },
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "keydown"
+        },
+        {
+            "listener": {},
+            "useCapture": true,
+            "passive": false,
+            "once": false,
+            "type": "keydown"
+        },
+        {
+            "listener": {},
+            "useCapture": true,
+            "passive": false,
+            "once": false,
+            "type": "keydown"
+        },
+        {
+            "useCapture": true,
+            "passive": false,
+            "once": false,
+            "type": "keydown"
+        },
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "keydown"
+        },
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "keydown"
+        },
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "keydown"
+        }
+    ],
+    "pointerdown": [
+        {
+            "useCapture": false,
+            "passive": true,
+            "once": true,
+            "type": "pointerdown"
+        },
+        {
+            "useCapture": true,
+            "passive": false,
+            "once": false,
+            "type": "pointerdown"
+        },
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "pointerdown"
+        }
+    ],
+    "click": [
+        {
+            "useCapture": true,
+            "passive": false,
+            "once": false,
+            "type": "click"
+        },
+        {
+            "listener": {},
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "click"
+        },
+        {
+            "listener": {},
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "click"
+        },
+        {
+            "listener": {},
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "click"
+        },
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "click"
+        },
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "click"
+        },
+        {
+            "useCapture": true,
+            "passive": false,
+            "once": false,
+            "type": "click"
+        },
+        {
+            "useCapture": true,
+            "passive": false,
+            "once": false,
+            "type": "click"
+        },
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "click"
+        },
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "click"
+        }
+    ],
+    "focusout": [
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "focusout"
+        },
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "focusout"
+        }
+    ],
+    "focusin": [
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "focusin"
+        },
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "focusin"
+        }
+    ],
+    "clipboard-copy": [
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "clipboard-copy"
+        },
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "clipboard-copy"
+        }
+    ],
+    "focus": [
+        {
+            "useCapture": true,
+            "passive": false,
+            "once": false,
+            "type": "focus"
+        },
+        {
+            "useCapture": true,
+            "passive": false,
+            "once": false,
+            "type": "focus"
+        },
+        {
+            "useCapture": true,
+            "passive": false,
+            "once": false,
+            "type": "focus"
+        }
+    ],
+    "change": [
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "change"
+        }
+    ],
+    "reset": [
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "reset"
+        },
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "reset"
+        }
+    ],
+    "deprecatedAjaxError": [
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "deprecatedAjaxError"
+        }
+    ],
+    "deprecatedAjaxSend": [
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "deprecatedAjaxSend"
+        }
+    ],
+    "deprecatedAjaxComplete": [
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "deprecatedAjaxComplete"
+        }
+    ],
+    "submit": [
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "submit"
+        },
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "submit"
+        },
+        {
+            "useCapture": true,
+            "passive": false,
+            "once": false,
+            "type": "submit"
+        },
+        {
+            "useCapture": true,
+            "passive": false,
+            "once": false,
+            "type": "submit"
+        }
+    ],
+    "auto-complete-change": [
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "auto-complete-change"
+        }
+    ],
+    "turbo:click": [
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "turbo:click"
+        },
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "turbo:click"
+        },
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "turbo:click"
+        }
+    ],
+    "turbo:before-visit": [
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "turbo:before-visit"
+        },
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "turbo:before-visit"
+        }
+    ],
+    "readystatechange": [
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "readystatechange"
+        }
+    ],
+    "details-menu-selected": [
+        {
+            "useCapture": true,
+            "passive": false,
+            "once": false,
+            "type": "details-menu-selected"
+        }
+    ],
+    "bulk-actions:update": [
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "bulk-actions:update"
+        }
+    ],
+    "mouseup": [
+        {
+            "useCapture": true,
+            "passive": false,
+            "once": false,
+            "type": "mouseup"
+        },
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "mouseup"
+        }
+    ],
+    "contextmenu": [
+        {
+            "useCapture": true,
+            "passive": false,
+            "once": false,
+            "type": "contextmenu"
+        }
+    ],
+    "dragend": [
+        {
+            "useCapture": true,
+            "passive": false,
+            "once": false,
+            "type": "dragend"
+        }
+    ],
+    "details-menu-select": [
+        {
+            "useCapture": true,
+            "passive": false,
+            "once": false,
+            "type": "details-menu-select"
+        }
+    ],
+    "codeEditor:ready": [
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "codeEditor:ready"
+        }
+    ],
+    "upload:setup": [
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "upload:setup"
+        }
+    ],
+    "upload:complete": [
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "upload:complete"
+        }
+    ],
+    "upload:error": [
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "upload:error"
+        }
+    ],
+    "dragenter": [
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "dragenter"
+        }
+    ],
+    "dragover": [
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "dragover"
+        }
+    ],
+    "upload:invalid": [
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "upload:invalid"
+        }
+    ],
+    "tab-container-change": [
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "tab-container-change"
+        }
+    ],
+    "preview:render": [
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "preview:render"
+        }
+    ],
+    "navigation:keydown": [
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "navigation:keydown"
+        }
+    ],
+    "soft-nav:start": [
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "soft-nav:start"
+        },
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "soft-nav:start"
+        },
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "soft-nav:start"
+        }
+    ],
+    "soft-nav:success": [
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "soft-nav:success"
+        },
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "soft-nav:success"
+        },
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "soft-nav:success"
+        },
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "soft-nav:success"
+        },
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "soft-nav:success"
+        },
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "soft-nav:success"
+        },
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "soft-nav:success"
+        }
+    ],
+    "itemActivated": [
+        {
+            "useCapture": true,
+            "passive": false,
+            "once": false,
+            "type": "itemActivated"
+        }
+    ],
+    "file-attachment-accept": [
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "file-attachment-accept"
+        }
+    ],
+    "file-attachment-accepted": [
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "file-attachment-accepted"
+        }
+    ],
+    "filter-input-updated": [
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "filter-input-updated"
+        }
+    ],
+    "toggle": [
+        {
+            "useCapture": true,
+            "passive": false,
+            "once": false,
+            "type": "toggle"
+        },
+        {
+            "useCapture": true,
+            "passive": false,
+            "once": false,
+            "type": "toggle"
+        }
+    ],
+    "tab-container-changed": [
+        {
+            "useCapture": true,
+            "passive": false,
+            "once": false,
+            "type": "tab-container-changed"
+        },
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "tab-container-changed"
+        }
+    ],
+    "filterable:change": [
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "filterable:change"
+        }
+    ],
+    "context-region-label:update": [
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "context-region-label:update"
+        }
+    ],
+    "turbo:before-cache": [
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "turbo:before-cache"
+        }
+    ],
+    "blur": [
+        {
+            "useCapture": true,
+            "passive": false,
+            "once": false,
+            "type": "blur"
+        },
+        {
+            "useCapture": true,
+            "passive": false,
+            "once": false,
+            "type": "blur"
+        }
+    ],
+    "menu:activated": [
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "menu:activated"
+        }
+    ],
+    "soft-nav:frame-update": [
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "soft-nav:frame-update"
+        }
+    ],
+    "turbo:before-fetch-request": [
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "turbo:before-fetch-request"
+        },
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "turbo:before-fetch-request"
+        },
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "turbo:before-fetch-request"
+        },
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "turbo:before-fetch-request"
+        }
+    ],
+    "turbo:render": [
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "turbo:render"
+        }
+    ],
+    "selectionchange": [
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "selectionchange"
+        },
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "selectionchange"
+        }
+    ],
+    "preview:toggle:off": [
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "preview:toggle:off"
+        }
+    ],
+    "preview:rendered": [
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "preview:rendered"
+        }
+    ],
+    "turbo:load": [
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "turbo:load"
+        },
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "turbo:load"
+        },
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "turbo:load"
+        }
+    ],
+    "task-lists-move": [
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "task-lists-move"
+        }
+    ],
+    "task-lists-check": [
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "task-lists-check"
+        }
+    ],
+    "turbo:fetch-error": [
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "turbo:fetch-error"
+        }
+    ],
+    "turbo:before-fetch-response": [
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "turbo:before-fetch-response"
+        },
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "turbo:before-fetch-response"
+        }
+    ],
+    "turbo:frame-render": [
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "turbo:frame-render"
+        }
+    ],
+    "turbo:before-render": [
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "turbo:before-render"
+        }
+    ],
+    "turbo:frame-click": [
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "turbo:frame-click"
+        }
+    ],
+    "turbo:before-frame-render": [
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "turbo:before-frame-render"
+        }
+    ],
+    "turbo:frame-load": [
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "turbo:frame-load"
+        }
+    ],
+    "beforeunload": [
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "beforeunload"
+        }
+    ],
+    "turbo:reload": [
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "turbo:reload"
+        }
+    ],
+    "soft-nav:end": [
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "soft-nav:end"
+        },
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "soft-nav:end"
+        }
+    ],
+    "soft-nav:progress-bar:start": [
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "soft-nav:progress-bar:start"
+        }
+    ],
+    "soft-nav:progress-bar:end": [
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "soft-nav:progress-bar:end"
+        }
+    ],
+    "dialog:remove": [
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "dialog:remove"
+        }
+    ],
+    "user-list-form:success": [
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "user-list-form:success"
+        }
+    ],
+    "auto-check-error": [
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "auto-check-error"
+        }
+    ],
+    "suggester:complete": [
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "suggester:complete"
+        }
+    ],
+    "soft-nav:external:initial": [
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "soft-nav:external:initial"
+        }
+    ],
+    "soft-nav:external:start": [
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "soft-nav:external:start"
+        }
+    ],
+    "soft-nav:external:success": [
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "soft-nav:external:success"
+        }
+    ],
+    "soft-nav:external:error": [
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "soft-nav:external:error"
+        }
+    ],
+    "soft-nav:external:render": [
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "soft-nav:external:render"
+        }
+    ],
+    "soft-nav:render": [
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "soft-nav:render"
+        },
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "soft-nav:render"
+        }
+    ],
+    "soft-nav:replace-mechanism": [
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "soft-nav:replace-mechanism"
+        }
+    ],
+    "qbsearch-input:expand": [
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "qbsearch-input:expand"
+        }
+    ],
+    "qbsearch-input:close": [
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "qbsearch-input:close"
+        }
+    ],
+    "remote-input-error": [
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "remote-input-error"
+        }
+    ],
+    "release:saved": [
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "release:saved"
+        }
+    ],
+    "auto-check-message-updated": [
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "auto-check-message-updated"
+        }
+    ],
+    "document:drop": [
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "document:drop"
+        }
+    ],
+    "upload:start": [
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "upload:start"
+        }
+    ],
+    "upload:progress": [
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "upload:progress"
+        }
+    ],
+    "query-builder:ready-to-request-provider": [
+        {
+            "useCapture": true,
+            "passive": false,
+            "once": false,
+            "type": "query-builder:ready-to-request-provider"
+        }
+    ],
+    "mousemove": [
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "mousemove"
+        }
+    ],
+    "pointermove": [
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "pointermove"
+        }
+    ],
+    "pointerup": [
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "pointerup"
+        }
+    ],
+    "touchmove": [
+        {
+            "useCapture": false,
+            "passive": true,
+            "once": false,
+            "type": "touchmove"
+        }
+    ],
+    "touchend": [
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "touchend"
+        }
+    ],
+    "ui-command-trigger": [
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "ui-command-trigger"
+        },
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "ui-command-trigger"
+        }
+    ],
+    "lt-execute-link-properties": [
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "lt-execute-link-properties"
+        }
+    ],
+    "lt-execute-code": [
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "lt-execute-code"
+        }
+    ],
+    "lt-execute-destroy": [
+        {
+            "useCapture": false,
+            "passive": false,
+            "once": false,
+            "type": "lt-execute-destroy"
+        }
+    ]
+}
