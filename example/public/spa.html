@@ -983,7 +983,8 @@
         <p>💫 YpsilonEventHandler - The power of native handleEvent interface</p>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/ypsilon-event-handler@1.6.1/ypsilon-event-handler.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/ypsilon-event-handler@1.5.1/ypsilon-event-handler.min.js"></script>
+    <!-- <script src="../../ypsilon-event-handler.js"></script> -->
     <script>
         "use strict";
 
@@ -1681,15 +1682,24 @@
                     const innerUl = document.createElement("ul");
 
                     for (const event of events) {
-                        let { type, handler, ...rest } = event;
                         const li = document.createElement("li");
-                        const restStr = Object.keys(rest).length > 0 ? `, ${JSON.stringify(rest)}` : '';
+                        
+                        // Handle both string events and object events
+                        if (typeof event === 'string') {
+                            const handler = `handle${event.charAt(0).toUpperCase() + event.slice(1)}`;
+                            li.innerHTML = `<span class="config">${event}, ${handler}</span>`;
+                        } else {
+                            // Object event with full configuration
+                            let { type, handler, ...rest } = event;
+                            
+                            if (!handler) {
+                                handler = `handle${type.charAt(0).toUpperCase() + type.slice(1)}`;
+                            }
 
-                        if (!handler) {
-                            handler = `handle${type.charAt(0).toUpperCase() + type.slice(1)}`;
+                            // Show ALL configuration options
+                            const restStr = Object.keys(rest).length > 0 ? `, ${JSON.stringify(rest)}` : '';
+                            li.innerHTML = `<span class="config">${type}, ${handler}${restStr}</span>`;
                         }
-
-                        li.innerHTML = `<span class="config">${type}, ${handler}${restStr}</span>`;
 
                         innerUl.appendChild(li);
                     }
