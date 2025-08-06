@@ -351,7 +351,7 @@ class YpsilonEventHandler {
                 // Create a throttled wrapper that preserves the original context
                 const originalHandleEvent = this.handleEvent.bind(this);
                 const throttledHandler = this.throttle(originalHandleEvent, eventConfig.throttle, `${key}-${eventType}-throttle`);
-                
+
                 handler = {
                     handleEvent: throttledHandler
                 };
@@ -359,7 +359,7 @@ class YpsilonEventHandler {
                 // Create a debounced wrapper that preserves the original context
                 const originalHandleEvent = this.handleEvent.bind(this);
                 const debouncedHandler = this.debounce(originalHandleEvent, eventConfig.debounce, `${key}-${eventType}-debounce`);
-                
+
                 handler = {
                     handleEvent: debouncedHandler
                 };
@@ -436,6 +436,7 @@ class YpsilonEventHandler {
         this.eventHandlerMap.get(eventType).push({
             element: element,
             handler: handlerMethod,
+            selector: selector,
             config: eventConfig
         });
     }
@@ -572,7 +573,7 @@ class YpsilonEventHandler {
 
             // Execute immediately (leading edge only)
             fn.apply(this, args);
-            
+
             // Set throttle timer
             this.throttleTimers.set(key, setTimeout(() => {
                 this.throttleTimers.delete(key);
