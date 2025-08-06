@@ -11,7 +11,7 @@
 **YpsilonEventHandler implements browser APIs how they were meant to be used.**
 Built around the native `handleEvent` interface, it eliminates memory leaks, enables infinite scalability, and redefines what's possible with event delegation.
 
-This library doesn't use or rely on fancy nextLevel tech, or hidden browser magic, but a Browser API, that exists and works for decades. It just works, like nested SCSS is working in the same way in regular CSS files, without npm, webpack or grunt. It just works. To find browser, where said stuff might not work, you really have to use software from before 2015 or use intently broken Software.
+This library doesn't rely on fancy frameworks or hidden browser magic—just a native Browser API that has existed and worked for decades. It just works, like how nested SCSS works in regular CSS files without npm, webpack, or build tools. To find a browser where this doesn't work, you'd have to use software from before 2015 or intentionally broken implementations.
 
 ## 🚀 **See It In Action**
 
