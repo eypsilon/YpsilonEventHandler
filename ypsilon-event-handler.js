@@ -347,15 +347,21 @@ class YpsilonEventHandler {
 
         // Apply throttle/debounce if specified
         if (typeof eventConfig === 'object') {
-            const originalHandleEvent = this.handleEvent.bind(this);
-
             if (eventConfig.throttle) {
+                // Create a throttled wrapper that preserves the original context
+                const originalHandleEvent = this.handleEvent.bind(this);
+                const throttledHandler = this.throttle(originalHandleEvent, eventConfig.throttle, `${key}-${eventType}-throttle`);
+                
                 handler = {
-                    handleEvent: this.throttle(originalHandleEvent, eventConfig.throttle, `${key}-${eventType}-throttle`)
+                    handleEvent: throttledHandler
                 };
             } else if (eventConfig.debounce) {
+                // Create a debounced wrapper that preserves the original context
+                const originalHandleEvent = this.handleEvent.bind(this);
+                const debouncedHandler = this.debounce(originalHandleEvent, eventConfig.debounce, `${key}-${eventType}-debounce`);
+                
                 handler = {
-                    handleEvent: this.debounce(originalHandleEvent, eventConfig.debounce, `${key}-${eventType}-debounce`)
+                    handleEvent: debouncedHandler
                 };
             }
         }
