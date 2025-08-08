@@ -13,7 +13,7 @@ class YpsilonEventHandler {
             methodsFirst: false,
             passiveEvents: null,
             abortController: false,
-            autoTargetResolution: false, // Smart target resolution for nested elements
+            autoTargetResolution: false,
             ...config
         };
         this.eventMapping = eventMapping;
@@ -39,44 +39,41 @@ class YpsilonEventHandler {
         this.autoTargetResolution = this.config.autoTargetResolution;
         this.targetResolutionEvents = ['click', 'touchstart', 'touchend', 'mousedown', 'mouseup'];
 
+        // DOM Distance Cache for performance optimization
+        this.distanceCache = new Map();
+        this.enableDistanceCache = this.config.enableDistanceCache !== false; // Default: enabled
+
+        // Configurable actionable target patterns
+        this.actionableConfig = {
+            attributes: this.config.actionableAttributes || ['data-action'],
+            classes: this.config.actionableClasses || ['actionable'],
+            tags: this.config.actionableTags || ['BUTTON', 'A'],
+            enabled: this.config.enableActionableTargets !== false // Default: enabled
+        };
+
         this.init();
     }
 
     init() {
+        this.validateConfiguration();
         this.detectPassiveSupport();
         this.registerEvents();
     }
 
     handleEvent(event) {
-        this.checkUserInteraction(event);
-
         const handlers = this.eventHandlerMap.get(event.type);
         if (!handlers || handlers.length === 0) return;
+
+        this.checkUserInteraction(event);
 
         // Find the closest handler by checking which element is closest to event.target
         let closestHandler = null;
         let closestDistance = Infinity;
 
         for (const handlerInfo of handlers) {
-            let isContained = false;
-            let distance = 0;
+            const distance = this.calculateDistanceWithCache(event.target, handlerInfo.element);
 
-            if (handlerInfo.element === document || handlerInfo.element === window) {
-                // Document and window always "contain" any target
-                isContained = true;
-                distance = 1000; // Give them low priority (high distance)
-            } else if (handlerInfo.element.contains && handlerInfo.element.contains(event.target)) {
-                // Regular DOM element containment
-                isContained = true;
-                let current = event.target;
-
-                while (current && current !== handlerInfo.element) {
-                    distance++;
-                    current = current.parentElement;
-                }
-            }
-
-            if (isContained && distance < closestDistance) {
+            if (distance !== Infinity && distance < closestDistance) {
                 closestDistance = distance;
                 closestHandler = handlerInfo;
             }
@@ -91,6 +88,8 @@ class YpsilonEventHandler {
                     resolvedTarget = this.findActionableTarget(event.target, closestHandler.element) || event.target;
                 }
                 handler.call(this, event, resolvedTarget);
+                event.stopPropagation();
+                return;
             }
         }
     }
@@ -103,41 +102,229 @@ class YpsilonEventHandler {
         return this;
     }
 
+    hasUserInteracted() {
+        return this.userHasInteracted;
+    }
+
+    resetUserInteracted() {
+        this.userHasInteracted = false;
+    }
+
     /**
-     * Find the actionable target by walking up the DOM tree
-     * Solves the SVG-in-button and nested element problems
+     * Calculate DOM distance with caching for performance optimization
+     * @private
      */
-    findActionableTarget(target, boundary) {
+    calculateDistanceWithCache(target, container) {
+        if (!this.enableDistanceCache) {
+            return this.calculateDOMDistance(target, container);
+        }
+
+        // Create cache key based on both elements
+        const cacheKey = `${this.getElementKey(target)}-${this.getElementKey(container)}`;
+
+        if (this.distanceCache.has(cacheKey)) {
+            return this.distanceCache.get(cacheKey);
+        }
+
+        const distance = this.calculateDOMDistance(target, container);
+
+        // Cache the result for future lookups
+        this.distanceCache.set(cacheKey, distance);
+
+        return distance;
+    }
+
+    /**
+     * Calculate actual DOM distance between elements
+     * @private
+     */
+    calculateDOMDistance(target, container) {
+        if (container === document || container === window) {
+            return 1000; // Low priority for document/window
+        }
+
+        if (!container.contains || !container.contains(target)) {
+            return Infinity; // Not contained
+        }
+
+        let distance = 0;
         let current = target;
 
-        // Walk up the DOM tree until we hit the boundary element
-        while (current && current !== boundary && current !== document) {
-            // Check for data-action attribute (most common pattern)
-            if (current.dataset?.action) {
-                return current;
-            }
-
-            // Check for other actionable attributes/classes
-            if (current.hasAttribute('data-action') ||
-                current.classList?.contains('actionable') ||
-                current.tagName === 'BUTTON' ||
-                current.tagName === 'A') {
-                return current;
-            }
-
-            current = current.parentElement;
+        while (current && current !== container) {
+            current = current.parentNode;
+            distance++;
         }
 
-        // If we reached the boundary and it's actionable, return it
-        if (current === boundary && (
-            boundary.dataset?.action ||
-            boundary.hasAttribute('data-action') ||
-            boundary.classList?.contains('actionable')
-        )) {
-            return boundary;
+        return distance;
+    }
+
+    /**
+     * Generate unique key for DOM element (for caching)
+     * @private
+     */
+    getElementKey(element) {
+        if (element === document) return 'document';
+        if (element === window) return 'window';
+        if (!element || !element.tagName) return 'unknown';
+
+        // Use tagName + id + class for uniqueness
+        const tagName = element.tagName.toLowerCase();
+        const id = element.id ? `#${element.id}` : '';
+
+        // Handle SVG elements where className is an SVGAnimatedString object
+        let className = '';
+        if (element.className) {
+            if (typeof element.className === 'string') {
+                className = `.${element.className.split(' ').join('.')}`;
+            } else if (element.className.baseVal) {
+                // SVG elements have className.baseVal
+                className = element.className.baseVal ? `.${element.className.baseVal.split(' ').join('.')}` : '';
+            }
         }
 
-        return null;
+        const index = element.parentNode ? Array.from(element.parentNode.children).indexOf(element) : 0;
+
+        return `${tagName}${id}${className}[${index}]`;
+    }
+
+    /**
+     * Clear distance cache (useful for dynamic DOM changes)
+     */
+    clearDistanceCache() {
+        this.distanceCache.clear();
+    }
+
+    /**
+     * Validate configuration and provide helpful error messages
+     * @private
+     */
+    validateConfiguration() {
+        if (!this.eventMapping || typeof this.eventMapping !== 'object') {
+            throw new Error('YpsilonEventHandler: eventMapping must be a non-null object');
+        }
+
+        for (const [selector, config] of Object.entries(this.eventMapping)) {
+            this.validateSelectorConfig(selector, config);
+        }
+
+        // Validate actionable configuration
+        this.validateActionableConfig();
+    }
+
+    /**
+     * Validate individual selector configuration
+     * @private
+     */
+    validateSelectorConfig(selector, config) {
+        if (!selector || typeof selector !== 'string') {
+            throw new Error(`YpsilonEventHandler: Selector must be a non-empty string, got: ${typeof selector}`);
+        }
+
+        if (!Array.isArray(config)) {
+            throw new Error(`YpsilonEventHandler: Config for selector "${selector}" must be an array, got: ${typeof config}`);
+        }
+
+        if (config.length === 0) {
+            throw new Error(`YpsilonEventHandler: Config for selector "${selector}" cannot be empty`);
+        }
+
+        config.forEach((eventConfig, index) => {
+            this.validateEventConfig(selector, eventConfig, index);
+        });
+    }
+
+    /**
+     * Validate individual event configuration
+     * @private
+     */
+    validateEventConfig(selector, eventConfig, index) {
+        if (typeof eventConfig === 'string') {
+            if (!eventConfig.trim()) {
+                throw new Error(`YpsilonEventHandler: Event type for selector "${selector}" at index ${index} cannot be empty`);
+            }
+            return; // Simple string config is valid
+        }
+
+        if (!eventConfig || typeof eventConfig !== 'object') {
+            throw new Error(`YpsilonEventHandler: Event config for selector "${selector}" at index ${index} must be string or object, got: ${typeof eventConfig}`);
+        }
+
+        if (!eventConfig.type || typeof eventConfig.type !== 'string') {
+            throw new Error(`YpsilonEventHandler: Event config for selector "${selector}" at index ${index} must have a valid "type" property`);
+        }
+
+        // Validate throttle/debounce values
+        if (eventConfig.throttle !== undefined) {
+            if (typeof eventConfig.throttle !== 'number' || eventConfig.throttle <= 0) {
+                throw new Error(`YpsilonEventHandler: Throttle value for selector "${selector}" at index ${index} must be a positive number, got: ${eventConfig.throttle}`);
+            }
+        }
+
+        if (eventConfig.debounce !== undefined) {
+            if (typeof eventConfig.debounce !== 'number' || eventConfig.debounce <= 0) {
+                throw new Error(`YpsilonEventHandler: Debounce value for selector "${selector}" at index ${index} must be a positive number, got: ${eventConfig.debounce}`);
+            }
+        }
+
+        // Can't have both throttle and debounce
+        if (eventConfig.throttle && eventConfig.debounce) {
+            throw new Error(`YpsilonEventHandler: Event config for selector "${selector}" at index ${index} cannot have both throttle and debounce`);
+        }
+
+        // Validate handler name if provided
+        if (eventConfig.handler !== undefined && typeof eventConfig.handler !== 'string') {
+            throw new Error(`YpsilonEventHandler: Handler for selector "${selector}" at index ${index} must be a string, got: ${typeof eventConfig.handler}`);
+        }
+    }
+
+    /**
+     * Validate actionable target configuration
+     * @private
+     */
+    validateActionableConfig() {
+        if (this.config.actionableAttributes !== undefined) {
+            if (!Array.isArray(this.config.actionableAttributes)) {
+                throw new Error('YpsilonEventHandler: actionableAttributes must be an array of strings');
+            }
+            for (const attr of this.config.actionableAttributes) {
+                if (typeof attr !== 'string' || !attr.trim()) {
+                    throw new Error('YpsilonEventHandler: actionableAttributes must contain non-empty strings');
+                }
+            }
+        }
+
+        if (this.config.actionableClasses !== undefined) {
+            if (!Array.isArray(this.config.actionableClasses)) {
+                throw new Error('YpsilonEventHandler: actionableClasses must be an array of strings');
+            }
+            for (const className of this.config.actionableClasses) {
+                if (typeof className !== 'string' || !className.trim()) {
+                    throw new Error('YpsilonEventHandler: actionableClasses must contain non-empty strings');
+                }
+            }
+        }
+
+        if (this.config.actionableTags !== undefined) {
+            if (!Array.isArray(this.config.actionableTags)) {
+                throw new Error('YpsilonEventHandler: actionableTags must be an array of strings');
+            }
+            for (const tagName of this.config.actionableTags) {
+                if (typeof tagName !== 'string' || !tagName.trim()) {
+                    throw new Error('YpsilonEventHandler: actionableTags must contain non-empty strings');
+                }
+            }
+        }
+
+        if (this.config.enableActionableTargets !== undefined && typeof this.config.enableActionableTargets !== 'boolean') {
+            throw new Error('YpsilonEventHandler: enableActionableTargets must be a boolean');
+        }
+    }
+
+    checkUserInteraction(event) {
+        // Only count real user interactions, not passive events
+        if (!this.userHasInteracted && !this.passiveEvents.includes(event.type)) {
+            this.userHasInteracted = true;
+        }
     }
 
     detectPassiveSupport() {
@@ -155,49 +342,119 @@ class YpsilonEventHandler {
         }
     }
 
-    hasUserInteracted() {
-        return this.userHasInteracted;
+    getElements(selector) {
+        if (typeof selector === 'string') {
+            if (selector === 'document') return [document];
+            if (selector === 'window') return [window];
+            return Array.from(document.querySelectorAll(selector));
+        }
+        return selector instanceof Element ? [selector] : [];
     }
 
-    /**
-     * Get comprehensive statistics about the event handler instance
-     * @returns {object|null} - Statistics object with various metrics, or null if stats disabled
-     */
-    getStats() {
-        if (!this.enableStats) {
-            return null;
-        }
-
-        const configs = Array.from(this.eventListeners.values());
-        const events = configs.flatMap(config => config.events);
-
-        // Count event types
-        const eventTypes = {};
-        events.forEach(event => {
-            eventTypes[event.type] = (eventTypes[event.type] || 0) + 1;
-        });
-
-        // Count unique elements
-        const uniqueElements = new Set(configs.map(config => config.element));
-
-        return {
-            totalListeners: this.eventListeners.size,
-            totalElements: uniqueElements.size,
-            totalEventTypes: Object.keys(eventTypes).length,
-            eventTypes,
-            userHasInteracted: this.userHasInteracted,
-            activeTimers: {
-                throttle: this.throttleTimers.size,
-                debounce: this.debounceTimers.size
+    debounce(fn, delay, key) {
+        return (...args) => {
+            if (this.debounceTimers.has(key)) {
+                clearTimeout(this.debounceTimers.get(key));
             }
+            this.debounceTimers.set(key, setTimeout(() => {
+                fn.apply(this, args);
+                this.debounceTimers.delete(key);
+            }, delay));
         };
     }
 
-    checkUserInteraction(event) {
-        // Only count real user interactions, not passive events
-        if (!this.userHasInteracted && !this.passiveEvents.includes(event.type)) {
-            this.userHasInteracted = true;
+    throttle(fn, delay, key) {
+        // Use static implementation with instance-specific timer map
+        return YpsilonEventHandler._throttleImplementation(fn, delay, key, this.throttleTimers);
+    }
+
+    /**
+     * Create a wrapped handler with throttle/debounce if needed
+     * @private
+     */
+    createWrappedHandler(eventConfig, key, eventType) {
+        let handler = this;
+
+        // Apply throttle/debounce if specified
+        if (typeof eventConfig === 'object') {
+            if (eventConfig.throttle) {
+                // Create a throttled wrapper that preserves the original context
+                const throttledHandler = this.throttle((event) => this.handleEvent(event), eventConfig.throttle, `${key}-${eventType}-throttle`);
+
+                handler = {
+                    handleEvent: throttledHandler
+                };
+            } else if (eventConfig.debounce) {
+                // Create a debounced wrapper that preserves the original context
+                const debouncedHandler = this.debounce((event) => this.handleEvent(event), eventConfig.debounce, `${key}-${eventType}-debounce`);
+
+                handler = {
+                    handleEvent: debouncedHandler
+                };
+            }
         }
+
+        return handler;
+    }
+
+    /**
+     * Find the actionable target by walking up the DOM tree
+     * Solves the SVG-in-button and nested element problems
+     * Uses configurable actionable patterns for maximum flexibility
+     */
+    findActionableTarget(target, boundary) {
+        if (!this.actionableConfig.enabled) {
+            return target; // Return original target if actionable resolution is disabled
+        }
+
+        let current = target;
+
+        // Walk up the DOM tree until we hit the boundary element
+        while (current && current !== boundary && current !== document) {
+            // Check for configured actionable attributes
+            for (const attr of this.actionableConfig.attributes) {
+                if (current.hasAttribute(attr)) {
+                    return current;
+                }
+            }
+
+            // Check for configured actionable classes
+            if (current.classList) {
+                for (const className of this.actionableConfig.classes) {
+                    if (current.classList.contains(className)) {
+                        return current;
+                    }
+                }
+            }
+
+            // Check for configured actionable tags
+            if (this.actionableConfig.tags.includes(current.tagName)) {
+                return current;
+            }
+
+            current = current.parentElement;
+        }
+
+        // If we reached the boundary and it's actionable, return it
+        if (current === boundary) {
+            // Check configured actionable attributes on boundary
+            for (const attr of this.actionableConfig.attributes) {
+                if (boundary.hasAttribute(attr)) {
+                    return boundary;
+                }
+            }
+
+            // Check configured actionable classes on boundary
+            if (boundary.classList) {
+                for (const className of this.actionableConfig.classes) {
+                    if (boundary.classList.contains(className)) {
+                        return boundary;
+                    }
+                }
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -227,30 +484,18 @@ class YpsilonEventHandler {
             : ['class', 'methods', 'global'];
 
         for (const source of resolutionOrder) {
-            let handler = null;
-
-            switch (source) {
-                case 'class':
-                    if (typeof this[resolvedName] === 'function') {
-                        handler = this[resolvedName];
-                    }
-                    break;
-
-                case 'methods':
-                    if (this.methods && typeof this.methods[resolvedName] === 'function') {
-                        handler = this.methods[resolvedName];
-                    }
-                    break;
-
-                case 'global':
-                    if (this.enableGlobalFallback && typeof window !== 'undefined' && typeof window[resolvedName] === 'function') {
-                        handler = window[resolvedName];
-                    }
-                    break;
-            }
-
-            if (handler) {
-                return handler;
+            if (source === 'class') {
+                if (typeof this[resolvedName] === 'function') {
+                    return this[resolvedName];
+                }
+            } else if (source === 'methods') {
+                if (this.methods && typeof this.methods[resolvedName] === 'function') {
+                    return this.methods[resolvedName];
+                }
+            } else if (source === 'global') {
+                if (this.enableGlobalFallback && typeof window !== 'undefined' && typeof window[resolvedName] === 'function') {
+                    return window[resolvedName];
+                }
             }
         }
 
@@ -336,56 +581,6 @@ class YpsilonEventHandler {
             const configType = typeof config === 'string' ? config : config.type;
             return configType === eventType;
         });
-    }
-
-    /**
-     * Create a wrapped handler with throttle/debounce if needed
-     * @private
-     */
-    createWrappedHandler(eventConfig, key, eventType) {
-        let handler = this;
-
-        // Apply throttle/debounce if specified
-        if (typeof eventConfig === 'object') {
-            if (eventConfig.throttle) {
-                // Create a throttled wrapper that preserves the original context
-                const throttledHandler = this.throttle((event) => this.handleEvent(event), eventConfig.throttle, `${key}-${eventType}-throttle`);
-
-                handler = {
-                    handleEvent: throttledHandler
-                };
-            } else if (eventConfig.debounce) {
-                // Create a debounced wrapper that preserves the original context
-                const debouncedHandler = this.debounce((event) => this.handleEvent(event), eventConfig.debounce, `${key}-${eventType}-debounce`);
-
-                handler = {
-                    handleEvent: debouncedHandler
-                };
-            }
-        }
-
-        return handler;
-    }
-
-    /**
-     * Clean up throttle/debounce timers for a specific event
-     * @private
-     */
-    cleanupEventTimers(key, eventType) {
-        const throttleKey = `${key}-${eventType}-throttle`;
-        const debounceKey = `${key}-${eventType}-debounce`;
-
-        if (this.throttleTimers.has(throttleKey)) {
-            const timerData = this.throttleTimers.get(throttleKey);
-            if (timerData.timeout) clearTimeout(timerData.timeout);
-            if (timerData.trailingTimeout) clearTimeout(timerData.trailingTimeout);
-            this.throttleTimers.delete(throttleKey);
-        }
-
-        if (this.debounceTimers.has(debounceKey)) {
-            clearTimeout(this.debounceTimers.get(debounceKey));
-            this.debounceTimers.delete(debounceKey);
-        }
     }
 
     /**
@@ -541,58 +736,6 @@ class YpsilonEventHandler {
         return Object.keys(options).length > 0 ? options : false;
     }
 
-    getElements(selector) {
-        if (typeof selector === 'string') {
-            if (selector === 'document') return [document];
-            if (selector === 'window') return [window];
-            return Array.from(document.querySelectorAll(selector));
-        }
-        return selector instanceof Element ? [selector] : [];
-    }
-
-    debounce(fn, delay, key) {
-        return (...args) => {
-            if (this.debounceTimers.has(key)) {
-                clearTimeout(this.debounceTimers.get(key));
-            }
-            this.debounceTimers.set(key, setTimeout(() => {
-                fn.apply(this, args);
-                this.debounceTimers.delete(key);
-            }, delay));
-        };
-    }
-
-    throttle(fn, delay, key) {
-        return (...args) => {
-            const timerData = this.throttleTimers.get(key);
-
-            if (!timerData) {
-                // Leading edge: execute immediately
-                fn.apply(this, args);
-                this.throttleTimers.set(key, {
-                    timeout: setTimeout(() => {
-                        this.throttleTimers.delete(key);
-                    }, delay),
-                    lastArgs: args
-                });
-            } else {
-                // Update arguments for trailing edge
-                timerData.lastArgs = args;
-
-                // Clear existing trailing timeout and set new one
-                if (timerData.trailingTimeout) {
-                    clearTimeout(timerData.trailingTimeout);
-                }
-
-                timerData.trailingTimeout = setTimeout(() => {
-                    // Trailing edge: execute with latest arguments
-                    fn.apply(this, timerData.lastArgs);
-                    this.throttleTimers.delete(key);
-                }, delay);
-            }
-        };
-    }
-
     registerEvents() {
         Object.entries(this.eventMapping).forEach(([key, config]) => {
             const isSimplified = Array.isArray(config);
@@ -605,14 +748,34 @@ class YpsilonEventHandler {
             elements.forEach((element, index) => {
                 events.forEach(eventConfig => {
                     const eventType = typeof eventConfig === 'string' ? eventConfig : eventConfig.type;
-                    const eventKey = `${elementSelector}_${eventType}_${index}`;
 
                     // Use the shared registration logic
-                    this.registerEventListener(element, eventConfig, eventKey, elementSelector);
+                    this.registerEventListener(element, eventConfig, `${elementSelector}_${eventType}_${index}`, elementSelector);
                 });
             });
         });
         return this;
+    }
+
+    /**
+     * Clean up throttle/debounce timers for a specific event
+     * @private
+     */
+    cleanupEventTimers(key, eventType) {
+        const throttleKey = `${key}-${eventType}-throttle`;
+        const debounceKey = `${key}-${eventType}-debounce`;
+
+        if (this.throttleTimers.has(throttleKey)) {
+            const timerData = this.throttleTimers.get(throttleKey);
+            if (timerData.timeout) clearTimeout(timerData.timeout);
+            if (timerData.trailingTimeout) clearTimeout(timerData.trailingTimeout);
+            this.throttleTimers.delete(throttleKey);
+        }
+
+        if (this.debounceTimers.has(debounceKey)) {
+            clearTimeout(this.debounceTimers.get(debounceKey));
+            this.debounceTimers.delete(debounceKey);
+        }
     }
 
     abort() {
@@ -638,6 +801,7 @@ class YpsilonEventHandler {
 
         this.eventListeners.clear();
         this.eventHandlerMap.clear();
+        this.distanceCache.clear();
 
         // Clean up throttle timers
         this.throttleTimers.forEach((timerData) => {
@@ -651,6 +815,90 @@ class YpsilonEventHandler {
         this.debounceTimers.clear();
 
         return this;
+    }
+
+    /**
+     * Get comprehensive statistics about the event handler instance
+     * @returns {object|null} - Statistics object with various metrics, or null if stats disabled
+     */
+    getStats() {
+        if (!this.enableStats) {
+            return null;
+        }
+
+        const configs = Array.from(this.eventListeners.values());
+        const events = configs.flatMap(config => config.events);
+
+        // Count event types
+        const eventTypes = {};
+        events.forEach(event => {
+            eventTypes[event.type] = (eventTypes[event.type] || 0) + 1;
+        });
+
+        // Count unique elements
+        const uniqueElements = new Set(configs.map(config => config.element));
+
+        return {
+            totalListeners: this.eventListeners.size,
+            totalElements: uniqueElements.size,
+            totalEventTypes: Object.keys(eventTypes).length,
+            eventTypes,
+            userHasInteracted: this.userHasInteracted,
+            activeTimers: {
+                throttle: this.throttleTimers.size,
+                debounce: this.debounceTimers.size
+            },
+            distanceCache: {
+                size: this.distanceCache.size,
+                enabled: this.enableDistanceCache,
+                hitRate: this.distanceCache.size > 0 ? 'Available after multiple events' : 'No entries yet'
+            }
+        };
+    }
+
+    // Static utility methods
+    /**
+     * Shared throttle implementation used by both instance and static methods
+     * @private
+     * @static
+     */
+    static _throttleImplementation(fn, delay, key, timers) {
+        return function(...args) {
+            const timerData = timers.get(key);
+
+            if (!timerData || !timerData.timeout) {
+                // Leading edge: execute immediately
+                fn.apply(this, args);
+                timers.set(key, {
+                    timeout: setTimeout(() => {
+                        timers.delete(key);
+                    }, delay),
+                    lastArgs: args
+                });
+            } else {
+                // Update arguments for trailing edge
+                timerData.lastArgs = args;
+
+                // Clear existing trailing timeout and set new one
+                if (timerData.trailingTimeout) {
+                    clearTimeout(timerData.trailingTimeout);
+                }
+
+                timerData.trailingTimeout = setTimeout(() => {
+                    // Trailing edge: execute with latest arguments
+                    fn.apply(this, timerData.lastArgs);
+                    timers.delete(key);
+                }, delay);
+            }
+        };
+    }
+
+    static throttle(fn, delay, key = 'default') {
+        if (!YpsilonEventHandler._staticThrottleTimers) {
+            YpsilonEventHandler._staticThrottleTimers = new Map();
+        }
+
+        return YpsilonEventHandler._throttleImplementation(fn, delay, key, YpsilonEventHandler._staticThrottleTimers);
     }
 }
 

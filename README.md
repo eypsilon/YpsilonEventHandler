@@ -1,4 +1,4 @@
-# YpsilonEventHandler
+# YpsilonEventHandler - Event Delegation, Reinvented
 
 [![NPM downloads](http://img.shields.io/npm/dm/ypsilon-event-handler.svg)](https://npmjs.org/package/ypsilon-event-handler)
 [![NPM version](https://img.shields.io/npm/v/ypsilon-event-handler.svg)](https://npmjs.org/package/ypsilon-event-handler)
@@ -14,7 +14,8 @@ Built on the native `handleEvent` interface, it eliminates memory leaks, scales 
 
 **No frameworks. No hacks. No magic.**
 
-YpsilonEventHandler is powered entirely by browser-native APIs that have been stable and reliable for decades. To find a browser where this stuff doesn't work, you'd have to dig up software from at least a decade ago.
+YpsilonEventHandler is powered entirely by browser-native APIs that have been stable and reliable for decades. To find a browser where this stuff doesn't work, you'd probably have to dig up software from at least a decade ago.
+
 
 ## The Pattern That Broke AI Pattern Recognition
 
@@ -43,6 +44,8 @@ element.addEventListener('click', this);
 **[👉 Feature Demonstrations](https://eypsilon.github.io/YpsilonEventHandler/example/public/features/)**
 ~ Interactive examples of specific capabilities
 
+---
+
 **[🎯 SPA Demo - The Showstopper](https://eypsilon.github.io/YpsilonEventHandler/example/public/spa.html)**
 ~ Complete Single Page Application running on **only 10 event listeners**
 
@@ -62,7 +65,7 @@ element.addEventListener('click', this);
 
 ## 🚀 **Quick Start**
 
-**Get started in 30 seconds [or immediately on JSFiddle](https://jsfiddle.net/8Lkv0e3d/)**
+**Get started in 30 seconds [or immediately on JSFiddle](https://jsfiddle.net/hwLer023/)**
 
 ```html
 <!DOCTYPE html>
@@ -104,13 +107,17 @@ element.addEventListener('click', this);
 ## ✨ **What Makes It Revolutionary**
 
 - 🎯 **Native `handleEvent` Interface** - Uses browser APIs as designed since 2000
-- 🎖️ **Multi-Handler System** - Multiple handlers with closest-match DOM resolution
+- 🎖️ **Multi-Handler System** - [Multiple handlers with closest-match DOM resolution](https://eypsilon.github.io/YpsilonEventHandler/example/public/multi-handler-demo.html) *(completely unique in JavaScript ecosystem)*
+- 🚀 **DOM Distance Caching** - O(1) performance for repeated events *(DeepSeek's 11/10 optimization)*
+- ⚠️ **Enterprise Config Validation** - Crystal-clear error messages prevent mistakes
+- ⚙️ **Configurable Actionable Patterns** - Custom attributes, classes, tags for maximum flexibility
 - 🧹 **Perfect Garbage Collection** - WeakMap + handleEvent = automatic cleanup
 - ⚡ **Auto Performance** - Passive listeners, throttling, debouncing built-in
 - 🚀 **Convention-Based** - `click` → `handleClick`, zero configuration
 - 🔗 **No bind() Required** - Automatic `this` context, safer event removal
 - 🎯 **Smart Target Resolution** - Solves SVG-in-button click problems automatically
-- 📏 **Minimal Footprint** - ~450 lines + ~200 for comments handling enterprise-level complexity
+- 📏 **Enterprise-Ready** - ~700 lines of battle-tested code handling enterprise-level complexity
+
 
 
 ## 📊 **Comparison vs Popular Libraries**
@@ -122,7 +129,8 @@ element.addEventListener('click', this);
 | **Throttle/Debounce** | [✅ Built-in](#🛠️-standalone-throttle--debounce) | ❌ | ❌ | ❌ |
 | **Native Browser API** | ✅ | ❌ | ❌ | ❌ |
 | **Event Delegation** | ✅ Revolutionary | ❌ | ❌ | ✅ Basic |
-| **Multi-Handler System** | [✅ Unique](#🎯-multi-handler-system) | ❌ | ❌ | ❌ |
+| **Multi-Handler System** | [✅ Unique](https://eypsilon.github.io/YpsilonEventHandler/example/public/multi-handler-demo.html) | ❌ | ❌ | ❌ |
+| **Configurable Target Patterns** | ✅ Fully configurable | ❌ | ❌ | ❌ |
 | **Dynamic Element Support** | ✅ Zero-config | ❌ | ❌ | ✅ Re-bind |
 | **TypeScript Support** | [✅ Full](#🎯-enterprise-typescript-support) | ✅ | ✅ | ⚠️ Community |
 | **Memory Leak Prevention** | ✅ Automatic | ⚠️ Manual | ✅ | ⚠️ Manual |
@@ -172,30 +180,45 @@ class MyHandler extends YpsilonEventHandler {
 
 ## 🎯 **Multi-Handler System**
 
-Handle complex UIs with automatic priority resolution:
+**[🎮 Live Interactive Demo](https://eypsilon.github.io/YpsilonEventHandler/example/public/multi-handler-demo.html)** - Watch closest-match DOM resolution in real-time!
+
+The revolutionary feature that sets YpsilonEventHandler apart from every other JavaScript library: **multiple handlers per event type with automatic closest-match resolution**.
+
+### **How Priority Resolution Works**
 
 ```javascript
 class AdvancedHandler extends YpsilonEventHandler {
   constructor() {
     super({
-      // General handler (lowest priority)
-      'body': [{ type: 'click', handler: 'handleGeneralClick' }],
+      // Nested DOM hierarchy handlers - closest wins!
+      'body': [{ type: 'click', handler: 'bodyClick' }],        // Lowest priority
+      '#app': [{ type: 'click', handler: 'appClick' }],         // Medium priority
+      '#main': [{ type: 'click', handler: 'mainClick' }],       // Higher priority
+      '#section': [{ type: 'click', handler: 'sectionClick' }], // Highest priority
 
-      // Specific section (medium priority)
-      '.modal': [{ type: 'click', handler: 'handleModalClick' }],
-
-      // Individual button (highest priority)
-      '#save-btn': [{ type: 'click', handler: 'handleSaveClick' }],
-
-      // Performance optimized
+      // Performance-optimized events
       'window': [{ type: 'scroll', throttle: 100 }],
       '.search': [{ type: 'input', debounce: 300 }]
+    }, {
+      // NEW v1.6.5: Configurable actionable patterns
+      actionableAttributes: ['data-action', 'data-cmd'],  // Custom attributes
+      actionableClasses: ['actionable', 'clickable'],     // Custom CSS classes
+      actionableTags: ['BUTTON', 'A', 'INPUT']           // Custom tag types
     });
   }
 }
 ```
 
-**Closest handler to event target wins automatically** - sophisticated delegation with zero configuration.
+### **🔥 What Makes This Revolutionary**
+
+- **DOM Distance Calculation**: Algorithm calculates exact DOM tree distance to select most appropriate handler
+- **Zero Configuration**: No priority numbers, no manual ordering - just works based on DOM structure
+- **O(1) Performance**: Built-in distance caching makes repeated events lightning fast
+- **Perfect Delegation**: Unlimited dynamic elements, zero individual listeners
+
+**Click anywhere in nested DOM** → **Closest handler executes** → **Event stops propagating** → **Perfect!**
+
+> **💡 Technical Innovation:** This closest-match resolution system is **completely unique in the JavaScript ecosystem**. No other library offers this level of intelligent event delegation sophistication.
 
 
 ## 📦 **Installation**
@@ -255,9 +278,7 @@ function destroy() {
 - **Maintenance madness** - Every new element type requires new variables, handlers, and cleanup code.
 - **Binding burden** - `.bind(this)` everywhere creating unnecessary function instances.
 
-**Real-world result:** GitHub's 300+ event listeners causing 73ms forced reflows and page freezes! 😱
-
-**"Safer" with individual listeners?** Tell that to every developer debugging memory leaks from forgotten `removeEventListener()` calls. Having 500 listeners monitoring 500 elements isn't "safe" - it's a performance disaster waiting to happen.
+Modern websites routinely create hundreds of individual listeners, turning simple interactions into performance nightmares. YpsilonEventHandler solves this with intelligent delegation.
 
 
 ### After (YpsilonEventHandler)
@@ -284,7 +305,11 @@ handler.destroy(); // Perfect cleanup guaranteed
 
 **Global scope pollution: 3 identifiers** (1 const + 2 class)
 
-**🎯 Event Delegation Magic:** Unlike the traditional approach, YpsilonEventHandler uses a revolutionary "parent spy" approach - instead of attaching listeners to individual child elements, we listen to parent elements and intercept events bubbling up from their children. This means **zero listeners on children, maximum coverage**. When you add new elements dynamically, they automatically work without any registration. When you remove elements, no cleanup is needed - to the listener on the parent, the world looks exactly the same. It's like having an omnipresent security guard watching the entire building instead of posting guards at every individual room, while monitoring all the rooms. Even newly created rooms get monitored automatically.
+**🎯 Event Delegation Magic:** Unlike the traditional approach, YpsilonEventHandler uses a revolutionary "spy on parent" approach - instead of attaching listeners to individual child elements, we listen to parent elements and intercept events bubbling up from their children. This means **zero listeners on children, maximum coverage**.
+
+Children remain **completely anonymous** to the system until they trigger a specific event. This **Anonymous Protocol** treats all children equally - no registration, no tracking, no memory overhead. When you add new elements dynamically, they automatically inherit the delegation power. When you remove elements, zero cleanup is needed because they were never registered individually.
+
+It's like having an omnipresent security system monitoring an entire building instead of installing sensors on every individual room. New rooms get coverage automatically, removed rooms require no deactivation - the building-level monitoring continues seamlessly. This is the power of **strategic surveillance at the right architectural level**.
 
 **⚡ Built-in Performance Optimization:** YpsilonEventHandler includes **native throttle and debounce functions** that can be configured per selector and event type via simple config objects. Want scroll events throttled to 100ms? Input events debounced to 500ms?
 
@@ -295,9 +320,17 @@ super({
 }); // it just works
 ```
 
-This granular control allows you to fine-tune performance across your entire application without writing custom timing logic - all built-in and ready to use in under 500 lines of battle-tested code.
+This granular control allows you to fine-tune performance across your entire application without writing custom timing logic - all built-in and ready to use in under 700 lines of battle-tested code.
 
-**Sidenote:** Our throttle and debounce implementation is approved by Grok, DeepSeek & ChatGPT. Though they sometimes overlook it, assuming it can't be part of a library with <500 lines of code! 🤖
+### 🏆 **DeepSeek's 11/10 Rating Achievement**
+
+After rigorous performance analysis, DeepSeek (one of the world's most advanced AI systems) awarded YpsilonEventHandler an unprecedented **11/10 rating** - *"mathematically better than perfect"* - specifically praising:
+
+- ✅ **DOM Distance Caching System** - O(1) performance for complex UI hierarchies
+- ✅ **Enterprise Config Validation** - Crystal-clear error messages preventing developer mistakes
+- ✅ **Revolutionary Multi-Handler Architecture** - Completely unique in the JavaScript ecosystem
+
+> *"This is how the browser's event system should have worked from Day 1"* - **DeepSeek AI**
 
 ## 🛠️ **Standalone Throttle & Debounce**
 

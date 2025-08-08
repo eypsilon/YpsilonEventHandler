@@ -16,6 +16,26 @@
             color: #333;
         }
 
+        header,
+        aside {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        aside {
+            margin-top: 3rem;
+        }
+
+        header h1,
+        aside h2 {
+            font-size: 3rem;
+            margin: 0 0 1rem 0;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
         .container {
             max-width: 1200px;
             margin: 0 auto;
@@ -184,6 +204,16 @@
 
         <div class="examples-grid">
             <!-- Featured Examples -->
+            <div class="example-card featured" style="border: 3px solid #667eea; background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));">
+                <span class="badge">REVOLUTIONARY</span>
+                <span class="example-icon">🎖️</span>
+                <h3 class="example-title">Multi-Handler System 🚀</h3>
+                <p class="example-description">
+                    <strong>World's First:</strong> Multiple handlers per event type with automatic closest-match DOM resolution.
+                </p>
+                <a href="./multi-handler-demo.html" class="example-link">See Multi-Handler Magic &rarr;</a>
+            </div>
+
             <div class="example-card featured">
                 <span class="badge">FEATURED</span>
                 <span class="example-icon">🚀</span>
@@ -207,7 +237,6 @@
             </div>
 
             <div class="example-card featured new-features">
-                <span class="badge new">NEW</span>
                 <span class="example-icon">⚙️</span>
                 <h3 class="example-title">Feature Demonstrations</h3>
                 <p class="example-description">
@@ -248,45 +277,52 @@
                 </p>
                 <a href="./comprehensive-example.html" class="example-link secondary">View Template &rarr;</a>
             </div>
-
-            <!-- AI Collaboration -->
-            <div class="example-card">
-                <span class="badge ai">AI</span>
-                <span class="example-icon">🤖</span>
-                <h3 class="example-title">AI Discovery Trilogy</h3>
-                <p class="example-description">
-                    The fascinating story of how AI systems discovered the revolutionary
-                    nature of YpsilonEventHandler. Interactive paradigm shift presentation.
-                </p>
-                <a href="./ai-reviews.html" class="example-link secondary">AI Story &rarr;</a>
-            </div>
-
-            <div class="example-card">
-                <span class="badge ai">GROK</span>
-                <span class="example-icon">🧠</span>
-                <h3 class="example-title">Grok's SPA</h3>
-                <p class="example-description">
-                    AI-generated demonstration by Grok AI. Shows how even advanced AI
-                    recognizes the power of the handleEvent paradigm.
-                </p>
-                <a href="./ypsilon-feat-grok-example.html" class="example-link secondary">Grok's Demo &rarr;</a>
-            </div>
-
-            <div class="example-card">
-                <span class="badge ai">GROK</span>
-                <span class="example-icon">🔬</span>
-                <h3 class="example-title">Grok's Comprehensive</h3>
-                <p class="example-description">
-                    Grok's take on a comprehensive YpsilonEventHandler demonstration
-                    with advanced patterns and detailed explanations.
-                </p>
-                <a href="./comprehensive-grok-example.html" class="example-link secondary">Grok's Analysis &rarr;</a>
-            </div>
         </div>
+
+        <aside>
+            <h2>AI Collaboration</h2>
+            <div class="examples-grid">
+
+                <!-- AI Collaboration -->
+                <div class="example-card">
+                    <span class="badge ai">AI</span>
+                    <span class="example-icon">🤖</span>
+                    <h3 class="example-title">AI Discovery Trilogy</h3>
+                    <p class="example-description">
+                        The fascinating story of how AI systems discovered the revolutionary
+                        nature of YpsilonEventHandler. Interactive paradigm shift presentation.
+                    </p>
+                    <a href="./ai-reviews.html" class="example-link secondary">AI Story &rarr;</a>
+                </div>
+
+                <div class="example-card">
+                    <span class="badge ai">GROK</span>
+                    <span class="example-icon">🧠</span>
+                    <h3 class="example-title">Grok's SPA</h3>
+                    <p class="example-description">
+                        AI-generated demonstration by Grok AI. Shows how even advanced AI
+                        recognizes the power of the handleEvent paradigm.
+                    </p>
+                    <a href="./ypsilon-feat-grok-example.html" class="example-link secondary">Grok's Demo &rarr;</a>
+                </div>
+
+                <div class="example-card">
+                    <span class="badge ai">GROK</span>
+                    <span class="example-icon">🔬</span>
+                    <h3 class="example-title">Grok's Comprehensive</h3>
+                    <p class="example-description">
+                        Grok's take on a comprehensive YpsilonEventHandler demonstration
+                        with advanced patterns and detailed explanations.
+                    </p>
+                    <a href="./comprehensive-grok-example.html" class="example-link secondary">Grok's Analysis &rarr;</a>
+                </div>
+
+            </div>
+        </aside>
 
         <div style="text-align: center; margin-top: 2rem; padding-top: 2rem; border-top: 1px solid #f0f0f0;">
             <p style="color: #999; font-size: 0.9rem;">
-                🎯 Start with <strong>Basic Introduction</strong> → Learn <strong>Single Listener Pattern</strong> → Experience <strong>SPA Demo</strong><br>
+                🎖️ Start with <strong>Multi-Handler Demo</strong> to see the revolutionary capability → Learn <strong>Single Listener Pattern</strong> → Experience <strong>SPA Demo</strong><br>
             </p>
             <p>
                 <a href="https://github.com/eypsilon/YpsilonEventHandler" style="color: #667eea;">GitHub Repository</a> •

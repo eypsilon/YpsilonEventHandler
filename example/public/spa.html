@@ -8,6 +8,9 @@
     <link rel="icon" type="image/x-icon" href="./favicon.ico">
     <link rel="stylesheet" type="text/css" href="./assets/main.css">
     <style>
+        /* Note: This demo uses modern CSS nesting syntax.
+           If your browser doesn't support it, some styling may not work,
+           but the JavaScript functionality will work perfectly. */
         * {
             margin: 0;
             padding: 0;
@@ -31,16 +34,18 @@
                 opacity: 0;
                 font-size: 22px;
 
-                &:hover { transform: translateY(0); }
             }
 
-            &.y-scrolled {
-                .scroll-to-top {
-                    bottom: 4px;
-                    right: 4px;
-                    opacity: 1;
-                }
+            .scroll-to-top:hover {
+                transform: translateY(0);
             }
+
+        }
+
+        .scroll-to-top-container.y-scrolled .scroll-to-top {
+            bottom: 4px;
+            right: 4px;
+            opacity: 1;
         }
 
         ul {
@@ -983,25 +988,55 @@
         <p>💫 YpsilonEventHandler - The power of native handleEvent interface</p>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/ypsilon-event-handler@1.6.4/ypsilon-event-handler.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/ypsilon-event-handler@1.6.6/ypsilon-event-handler.min.js"></script>
     <script>
         "use strict";
 
         const config = {
-            debounce: 300,
-            debounceChange: 1500,
-            throttle: 150,
+            debounce: 500,
+            debounceChange: 500,
+            throttle: 200,
             throttleResize: 500,
             throttleScrollArea: 400,
             threshold: {
                 top: 100,
-                bottom: 20,
-                showFooter: 20,
+                bottom: 40,
+                showFooter: 40,
             },
             notification: {
                 timeout: 3000
-            }
+            },
         }
+
+        /**
+         * Convention Protocol
+         * Gets applied, when types are missing a handler
+         *
+         * click         handleClick(event, target)
+         * keydown       handleKeydown(event, target)
+         * testdispatch  handleTestdispatch(event, target)
+         * change        handleChange(event, target)
+         * input         handleInput(event, target)
+         */
+        const customEventMap = {
+            'body': [
+                'click',
+                'keydown',
+                'testdispatch',
+                { type: 'input',  debounce: config.debounce,       options: { passive: true } },
+                { type: 'change', debounce: config.debounceChange, options: { passive: true } },
+            ],
+            'window': [
+                { type: 'load',         handler: 'handleWindowLoad', options: { once: true } },
+                { type: 'resize',       throttle: config.throttleResize },
+                { type: 'scroll',       throttle: config.throttle },
+                { type: 'beforeunload', capture: true },
+            ],
+            '#scroll-area': [
+                { type: 'scroll', handler: 'handleAreaScroll', throttle: config.throttleScrollArea }
+            ],
+        }
+
         // SPA Event Handler - ONE handler for the entire application!
         class SPAEventHandler extends YpsilonEventHandler {
             constructor(eventMapping, aliases, userConfig = {}) {
@@ -1011,33 +1046,7 @@
                     autoTargetResolution: false,
                 }, ...userConfig };
 
-                super(eventMapping || {
-                    'body': [
-                        /**
-                         * Following handler will be called automatically
-                         *
-                         * click::handleClick(event, target)
-                         * keydown::handleKeydown(e, t)
-                         * testdispatch::handleTestdispatch(e, t)
-                         * change::handleChange(e, t)
-                         * input::handleInput(e, t)
-                         */
-                        { type: 'click' },
-                        { type: 'keydown' },
-                        { type: 'testdispatch' },
-                        { type: 'change', debounce: config.debounceChange, options: { passive: true } },
-                        { type: 'input',  debounce: config.debounce,       options: { passive: true } },
-                    ],
-                    'window': [
-                        { type: 'load',         handler:  'handleWindowLoad', options: { once: true } },
-                        { type: 'scroll',       throttle: config.throttle },
-                        { type: 'resize',       throttle: config.throttleResize },
-                        { type: 'beforeunload', capture:  true }
-                    ],
-                    '#scroll-area': [
-                        { type: 'scroll', handler: 'handleAreaScroll', throttle: config.throttleScrollArea }
-                    ],
-                }, {}, mergedConfig);
+                super(customEventMap, {}, mergedConfig);
 
                 // Initialize counters based on existing DOM elements (for recreate scenarios)
                 this.counters = {
@@ -1058,7 +1067,7 @@
             }
 
             handleWindowLoad(event) {
-                this.log(`👋 Window is loaded, these listener will be removed (once: true)`);
+                this.log(`👋 Window load, remove (once: true)`);
 
                 // Initialize log visibility with proper height calculation (no click event)
                 const showLogsCheckbox = document.querySelector('input[data-action="showLogsAlways"]');
@@ -1824,7 +1833,7 @@
         }
 
         // Initialize the SPA with ONE handler for everything!
-        let spa = new SPAEventHandler();
+        let spa = new SPAEventHandler(customEventMap);
         window.spa = spa; // Make globally accessible for debugging
 
         // Separate listeners for destroy/recreate buttons (these need to survive destruction)
@@ -1897,7 +1906,6 @@
         spa.log('🚀 SPA initialized with ONE body listener handling ALL events!');
         spa.log('✨ Try creating, deleting, and interacting with dynamic elements');
         spa.log('🎯 Notice how everything works without adding new listeners!');
-        spa.log('🧠 NEW: Toggle Smart Target Resolution to see SVG-in-button handling!');
     </script>
 </body>
 </html>

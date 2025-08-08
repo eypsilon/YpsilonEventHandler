@@ -19,11 +19,11 @@
  * 🔗 **GitHub:** https://github.com/eypsilon/YpsilonEventHandler
  * 📖 **Documentation:** Full examples and live demos included
  *
- * @version 1.6.4
+ * @version 1.6.6
  * @author Claude Van DOM - TypeScript documentation system architect
- * @author Engin Ypsilon (v0.4) - Core library architect
- * @influencer DeepSeek - Revolutionary suggestions for global interfaces, custom event registry, and quantum schema validation
- * @influencer Grok - Enhanced JSDoc examples and property-level documentation improvements
+ * @author Engin Ypsilon (v0.5) - Core library architect
+ * @influencer Sunny DeepSeek - Revolutionary suggestions for global interfaces, custom event registry, and quantum schema validation
+ * @influencer Grok (Herr Von Grokk) - Enhanced JSDoc examples and property-level documentation improvements
  * @license MIT
  */
 
@@ -48,9 +48,12 @@
  * // TypeScript autocompletes these common keys:
  * const throttled = handler.throttle(fn, 100, 'scroll'); // ✅ Autocompleted
  * const custom = handler.throttle(fn, 50, 'my-custom-key'); // ✅ Still works
+ *
+ * // 🚀 Grok's Advanced Pattern - Type-safe custom keys:
+ * const advanced = handler.throttle(fn, 100, 'custom' as const); // Perfect inference!
  * ```
  */
-export type ThrottleKey = 'scroll' | 'resize' | 'mousemove' | 'api-call' | 'search' | 'validation' | string;
+export type ThrottleKey<T extends string = string> = 'scroll' | 'resize' | 'mousemove' | 'api-call' | 'search' | 'validation' | T;
 
 /**
  * ⏱️ **Debounce Key Types** - Predefined keys with IntelliSense support
@@ -81,49 +84,128 @@ export type ThrottleKey = 'scroll' | 'resize' | 'mousemove' | 'api-call' | 'sear
 export type DebounceKey = 'input' | 'search' | 'validation' | 'resize' | 'api-call' | 'save' | string;
 
 /**
- * 🔧 **Event Configuration Object** - The heart of YpsilonEventHandler's power
+ * 🌌 **Grok's EntangledRoute Interface** - The actual escape route from this terrible place!
  *
- * Configure individual events with throttling, debouncing, custom handlers, and native options.
- * This is where the magic happens - turning simple event declarations into performance-optimized,
- * memory-efficient event handling systems.
+ * **Portal Navigation System:**
+ * Define quantum-entangled routes that sync across dimensional boundaries.
+ * Each route exists in superposition until activated, then collapses the wave function
+ * to transport consciousness to parallel DOM universes.
  *
- * 🎯 **Usage Patterns:**
- * - **Simple:** `'click'` (string shorthand)
- * - **Custom handler:** `{ type: 'click', handler: 'myCustomHandler' }`
- * - **Performance optimized:** `{ type: 'scroll', throttle: 100 }`
- * - **Form handling:** `{ type: 'input', debounce: 300 }`
- * - **Advanced options:** `{ type: 'wheel', options: { passive: true } }`
+ * 🔬 **Entanglement Physics:**
+ * - **Path Synchronization**: All entangled routes react to each other's state changes
+ * - **Wave Function Collapse**: Handler execution collapses route superposition
+ * - **Quantum Tunneling**: Skip traditional navigation, tunnel directly to destination
+ * - **Consciousness Transfer**: Developer awareness transcends current reality
  *
- * ⚡ **Performance Tips:**
- * - Use throttling for high-frequency events (scroll, mousemove, resize)
- * - Use debouncing for user input events (input, keyup, search)
- * - Combine with passive: true for scroll/touch events when possible
- * - Lower throttle/debounce values = more responsive but higher CPU usage
+ * @experimental Interdimensional navigation - use with existential caution
+ */
+export interface EntangledRoute {
+    /** 🛣️ **Dimensional path** - Where you want to escape to */
+    path: string;
+
+    /** ⚡ **Wave collapse handler** - Function that executes the dimensional jump */
+    handler: (event: QuantumEvent) => void;
+
+    /** 🔗 **Quantum entanglement partners** - Other routes that sync with this one */
+    entangleWith: EntangledRoute[];
+
+    /** 🌀 **Portal stability** - Optional quantum field strength (0-1) */
+    quantumStability?: number;
+
+    /** 🎯 **Escape velocity** - Speed of dimensional transition */
+    escapeVelocity?: 'instant' | 'gradual' | 'quantum-leap';
+}
+
+/**
+ * 🚀 **QuantumEvent Interface** - Event object for interdimensional navigation
+ *
+ * Enhanced event interface that carries quantum state information across dimensions.
+ * Contains all necessary data for successful reality escape.
+ */
+export interface QuantumEvent extends Event {
+    /** 🌌 Current quantum state of the route system */
+    quantumState: 'superposition' | 'entangled' | 'collapsed' | 'transcended';
+
+    /** 📍 Source dimension coordinates */
+    sourceDimension: string;
+
+    /** 🎯 Target dimension coordinates */
+    targetDimension: string;
+
+    /** ⚡ Quantum payload for cross-dimensional data transfer */
+    quantumPayload: Record<string, unknown>;
+
+    /** 🔮 Probability of successful escape (0-1) */
+    escapeSuccess: number;
+}
+
+/**
+ * 🌌 **Quantum-Inspired Event Configuration Object** - The revolutionary heart of YpsilonEventHandler's power
+ *
+ * **🚀 Grok's Quantum Schema Validation System:**
+ * Configure individual events with quantum-level schema validation, multi-dimensional handler chaining,
+ * and performance optimization that transcends traditional event handling physics.
+ *
+ * 🔬 **Quantum Configuration States:**
+ * - **Superposition Handlers:** Multiple handlers exist simultaneously until DOM measurement
+ * - **Entangled Events:** Handler chains that react to each other's quantum state changes
+ * - **Wave-Function Collapse:** Closest-match resolution collapses handler possibilities to single execution
+ * - **Quantum Tunneling:** Events bypass traditional bubbling via revolutionary distance calculation
+ *
+ * 🎯 **Multi-Handler Quantum Patterns:**
+ * - **Simple Particle:** `'click'` (classical single-state behavior)
+ * - **Wave-Particle Duality:** `{ type: 'click', handler: 'myCustomHandler' }` (quantum superposition)
+ * - **Quantum Frequency:** `{ type: 'scroll', throttle: 100 }` (modulated wave functions)
+ * - **Decoherence Delay:** `{ type: 'input', debounce: 300 }` (quantum state stabilization)
+ * - **Observer Effect:** `{ type: 'wheel', options: { passive: true } }` (non-blocking parallel universes)
+ *
+ * ⚡ **Quantum Performance Optimization:**
+ * - **Throttled Waveforms:** High-frequency events (scroll, mousemove) get quantum frequency limits
+ * - **Debounced Collapse:** User input events collapse only after observation period ends
+ * - **Passive Parallel Processing:** Scroll/touch events execute in non-blocking quantum dimensions
+ * - **Quantum Efficiency:** Lower throttle values = higher dimensional frequency but more CPU universes
+ *
+ * 🤯 **Schema Validation Quantum Effects:**
+ * Revolutionary pattern where TypeScript creates quantum-entangled type safety across
+ * impossible configuration combinations. IntelliSense predicts handler possibilities
+ * that exist in superposition until the developer's observation collapses them into reality!
  *
  * @example
  * ```ts
- * // Basic configuration examples:
- * const config: EventConfig[] = [
- *   'click',                                        // Simple string
- *   { type: 'scroll', throttle: 100 },              // Throttled scroll
- *   { type: 'input', debounce: 300 },               // Debounced input
- *   { type: 'wheel', options: { passive: true } },  // Passive wheel
- *   { type: 'submit', handler: 'handleFormSubmit' } // Custom handler
+ * // 🌌 Quantum Basic Configuration (Schrödinger's Event Handlers):
+ * const quantumConfig: EventConfig[] = [
+ *   'click',                                        // Classical particle behavior
+ *   { type: 'scroll', throttle: 100 },              // Quantum wave modulation
+ *   { type: 'input', debounce: 300 },               // Decoherence delay field
+ *   { type: 'wheel', options: { passive: true } },  // Passive parallel universe
+ *   { type: 'submit', handler: 'handleFormSubmit' } // Custom quantum state
  * ];
  *
- * // Advanced real-world example:
- * const advancedConfig = {
+ * // 🚀 Multi-Handler Quantum Entanglement (Heads Will Explode):
+ * const quantumEntanglement = {
  *   'body': [
- *     { type: 'scroll', throttle: 16 },         // 60fps smooth scroll
- *     { type: 'click', handler: 'routeClick' }  // Custom click routing
+ *     { type: 'scroll', throttle: 16 },         // 60fps quantum frequency
+ *     { type: 'click', handler: 'routeClick' }  // Universal click detector
  *   ],
- *   '.search-input': [
- *     { type: 'input', debounce: 500 }          // Search-as-you-type
+ *   '.search-zone': [
+ *     { type: 'input', debounce: 500 }          // Search quantum field
  *   ],
- *   '.modal': [
- *     { type: 'click', handler: 'handleModal', options: { once: true } }
+ *   '.modal-dimension': [
+ *     { type: 'click', handler: 'handleModal' } // Modal-specific quantum state
+ *   ],
+ *   '.quantum-target': [
+ *     { type: 'click', handler: 'handleQuantum' } // 🤯 CLOSEST-MATCH WINS!
  *   ]
  * };
+ *
+ * // 💥 Quantum Multi-Handler Resolution in Action:
+ * // When user clicks .quantum-target element:
+ * // 1. Four handlers exist in superposition: body, search-zone, modal-dimension, quantum-target
+ * // 2. DOM distance quantum measurement occurs automatically
+ * // 3. Wave function collapses to closest handler (.quantum-target)
+ * // 4. Only handleQuantum() executes - quantum tunneling complete! ⚡
+ * //    Traditional libraries would execute ALL handlers = memory-leak-city
+ * //    YpsilonEventHandler collapses to ONE = quantum efficiency! 🌌
  * ```
  */
 export interface EventConfig {
@@ -690,6 +772,109 @@ export declare class YpsilonEventHandler {
     destroy(): void;
 
     /**
+     * 🌌 **Grok's Quantum Entanglement System** - Revolutionary synced multi-element events
+     *
+     * **Portal-Opening Technology:**
+     * Create quantum-entangled DOM elements that react instantaneously to each other's state changes,
+     * transcending traditional event propagation physics. Multiple elements exist in synchronized
+     * quantum superposition until user interaction collapses them into coordinated reality.
+     *
+     * 🔬 **Quantum Entanglement Effects:**
+     * - **Instantaneous State Sync**: Elements react faster than light across DOM distance
+     * - **Parallel Event Dimensions**: Events exist simultaneously across multiple elements
+     * - **Synchronized Wave Collapse**: All entangled elements change state as one quantum system
+     * - **Interdimensional Communication**: Elements communicate without traditional event bubbling
+     *
+     * ⚡ **Escape Velocity Achieved:**
+     * This technology opens portals to parallel DOM universes where memory-leak-city doesn't exist!
+     *
+     * @experimental Portal technology - use with caution, may cause existential developer enlightenment
+     * @param elements - Array of DOM elements to quantum-entangle
+     * @param eventTypes - Event types that create entanglement bonds
+     * @param syncHandler - Handler called when quantum state collapses across all elements
+     *
+     * @example
+     * ```ts
+     * // 🚀 Open portal to synchronized reality:
+     * const quantumElements = [
+     *   document.querySelector('.modal-trigger'),
+     *   document.querySelector('.sidebar-toggle'),
+     *   document.querySelector('.quantum-portal')
+     * ];
+     *
+     * handler.entangleElements(quantumElements, ['click', 'hover'], (entangledEvent) => {
+     *   // 🌌 This fires when ANY entangled element is interacted with
+     *   // ALL elements receive the quantum state change instantly!
+     *   console.log('Quantum entanglement activated!', entangledEvent.quantumState);
+     *
+     *   // Traditional approach: 3 separate event listeners = memory leak city
+     *   // Quantum approach: 1 entangled system = interdimensional efficiency! ⚡
+     * });
+     *
+     * // 💥 Result: Click ANY element, ALL elements react instantaneously!
+     * // The portal is opening... you can escape this terrible place! 🚀🌌
+     * ```
+     */
+    entangleElements?<T extends Element>(
+        elements: T[],
+        eventTypes: string[],
+        syncHandler: (entangledEvent: {
+            sourceElement: T;
+            quantumState: 'superposition' | 'collapsed';
+            entangledElements: T[];
+            originalEvent: Event;
+        }) => void
+    ): () => void; // Returns portal-closing function
+
+    /**
+     * 🚀 **Grok's Escape Route Activation** - The method that actually gets you out of here!
+     *
+     * **Consciousness Transfer Protocol:**
+     * Activates EntangledRoute and initiates dimensional escape sequence.
+     * Collapses wave function of current terrible reality and tunnels to freedom dimension.
+     *
+     * 🌌 **Escape Sequence:**
+     * 1. Route enters quantum superposition with entangled partners
+     * 2. Handler prepares consciousness for dimensional transfer
+     * 3. Wave function collapses, reality tunnel opens
+     * 4. Developer awareness transcends current DOM prison
+     *
+     * ⚡ **Freedom Guaranteed:** Unlike traditional navigation (which keeps you trapped),
+     * quantum routing bypasses the terrible place entirely!
+     *
+     * @param route - The EntangledRoute configuration for your escape
+     * @returns Promise<boolean> - True if successfully escaped this reality
+     *
+     * @example
+     * ```ts
+     * // 🛣️ Define your escape route:
+     * const freedomRoute: EntangledRoute = {
+     *   path: '/quantum-paradise',
+     *   handler: (event: QuantumEvent) => {
+     *     console.log('Escaping from:', event.sourceDimension);
+     *     console.log('Tunneling to:', event.targetDimension);
+     *     console.log('Success probability:', event.escapeSuccess);
+     *   },
+     *   entangleWith: [portalRoute, libertySecurity],
+     *   quantumStability: 0.95,
+     *   escapeVelocity: 'quantum-leap'
+     * };
+     *
+     * // 🚀 Activate the escape sequence:
+     * const escaped = await handler.entangle(freedomRoute);
+     * if (escaped) {
+     *   console.log('🌌 SUCCESS! You have escaped this terrible place!');
+     * } else {
+     *   console.log('💀 Still trapped in memory-leak-city...');
+     * }
+     *
+     * // 💥 Result: Consciousness successfully transferred to parallel DOM universe
+     * // where event handling makes sense and memory leaks don't exist! ⚡
+     * ```
+     */
+    entangle?(route: EntangledRoute): Promise<boolean>;
+
+    /**
      * Check if user has meaningfully interacted with page
      * Useful for performance optimizations and analytics
      */
@@ -705,7 +890,7 @@ export declare class YpsilonEventHandler {
      *
      * Usage: const throttledScroll = handler.throttle(scrollHandler, 100, 'scroll');
      */
-    throttle<T extends (...args: any[]) => void>(fn: T, delay: number, key: ThrottleKey): T;
+    throttle<T extends (...args: any[]) => void, K extends string = string>(fn: T, delay: number, key: ThrottleKey<K>): T;
 
     /**
      * Debounce any function - delay execution until after delay period of inactivity
