@@ -14,6 +14,7 @@ class YpsilonEventHandler {
             passiveEvents: null,
             abortController: false,
             autoTargetResolution: false,
+            targetResolutionEvents: null,
             ...config
         };
         this.eventMapping = eventMapping;
@@ -35,9 +36,10 @@ class YpsilonEventHandler {
             'resize', 'orientationchange', 'load', 'beforeunload', 'unload'
         ];
 
+        this.handlerPrefix = this.config.handlerPrefix !== undefined ? this.config.handlerPrefix : 'handle';
         this.abortController = this.config.abortController ? new AbortController() : null;
         this.autoTargetResolution = this.config.autoTargetResolution;
-        this.targetResolutionEvents = ['click', 'touchstart', 'touchend', 'mousedown', 'mouseup'];
+        this.targetResolutionEvents = this.config.targetResolutionEvents || ['click', 'touchstart', 'touchend', 'mousedown', 'mouseup'];
 
         // DOM Distance Cache for performance optimization
         this.distanceCache = new Map();
@@ -95,11 +97,15 @@ class YpsilonEventHandler {
     }
 
     dispatch(type, detail = null, target = document) {
-        target.dispatchEvent(new CustomEvent(type, {
-            bubbles: true,
-            detail
-        }));
+        target.dispatchEvent(new CustomEvent(type, { bubbles: true, detail }));
         return this;
+    }
+
+    checkUserInteraction(event) {
+        // Only count real user interactions, not passive events
+        if (!this.userHasInteracted && !this.passiveEvents.includes(event.type)) {
+            this.userHasInteracted = true;
+        }
     }
 
     hasUserInteracted() {
@@ -156,35 +162,6 @@ class YpsilonEventHandler {
         }
 
         return distance;
-    }
-
-    /**
-     * Generate unique key for DOM element (for caching)
-     * @private
-     */
-    getElementKey(element) {
-        if (element === document) return 'document';
-        if (element === window) return 'window';
-        if (!element || !element.tagName) return 'unknown';
-
-        // Use tagName + id + class for uniqueness
-        const tagName = element.tagName.toLowerCase();
-        const id = element.id ? `#${element.id}` : '';
-
-        // Handle SVG elements where className is an SVGAnimatedString object
-        let className = '';
-        if (element.className) {
-            if (typeof element.className === 'string') {
-                className = `.${element.className.split(' ').join('.')}`;
-            } else if (element.className.baseVal) {
-                // SVG elements have className.baseVal
-                className = element.className.baseVal ? `.${element.className.baseVal.split(' ').join('.')}` : '';
-            }
-        }
-
-        const index = element.parentNode ? Array.from(element.parentNode.children).indexOf(element) : 0;
-
-        return `${tagName}${id}${className}[${index}]`;
     }
 
     /**
@@ -318,12 +295,9 @@ class YpsilonEventHandler {
         if (this.config.enableActionableTargets !== undefined && typeof this.config.enableActionableTargets !== 'boolean') {
             throw new Error('YpsilonEventHandler: enableActionableTargets must be a boolean');
         }
-    }
 
-    checkUserInteraction(event) {
-        // Only count real user interactions, not passive events
-        if (!this.userHasInteracted && !this.passiveEvents.includes(event.type)) {
-            this.userHasInteracted = true;
+        if (this.config.handlerPrefix !== undefined && typeof this.config.handlerPrefix !== 'string') {
+            throw new Error('YpsilonEventHandler: handlerPrefix must be a string');
         }
     }
 
@@ -342,6 +316,35 @@ class YpsilonEventHandler {
         }
     }
 
+    /**
+     * Generate unique key for DOM element (for caching)
+     * @private
+     */
+    getElementKey(element) {
+        if (element === document) return 'document';
+        if (element === window) return 'window';
+        if (!element || !element.tagName) return 'unknown';
+
+        // Use tagName + id + class for uniqueness
+        const tagName = element.tagName.toLowerCase();
+        const id = element.id ? `#${element.id}` : '';
+
+        // Handle SVG elements where className is an SVGAnimatedString object
+        let className = '';
+        if (element.className) {
+            if (typeof element.className === 'string') {
+                className = `.${element.className.split(' ').join('.')}`;
+            } else if (element.className.baseVal) {
+                // SVG elements have className.baseVal
+                className = element.className.baseVal ? `.${element.className.baseVal.split(' ').join('.')}` : '';
+            }
+        }
+
+        const index = element.parentNode ? Array.from(element.parentNode.children).indexOf(element) : 0;
+
+        return `${tagName}${id}${className}[${index}]`;
+    }
+
     getElements(selector) {
         if (typeof selector === 'string') {
             if (selector === 'document') return [document];
@@ -349,23 +352,6 @@ class YpsilonEventHandler {
             return Array.from(document.querySelectorAll(selector));
         }
         return selector instanceof Element ? [selector] : [];
-    }
-
-    debounce(fn, delay, key) {
-        return (...args) => {
-            if (this.debounceTimers.has(key)) {
-                clearTimeout(this.debounceTimers.get(key));
-            }
-            this.debounceTimers.set(key, setTimeout(() => {
-                fn.apply(this, args);
-                this.debounceTimers.delete(key);
-            }, delay));
-        };
-    }
-
-    throttle(fn, delay, key) {
-        // Use static implementation with instance-specific timer map
-        return YpsilonEventHandler._throttleImplementation(fn, delay, key, this.throttleTimers);
     }
 
     /**
@@ -378,18 +364,12 @@ class YpsilonEventHandler {
         // Apply throttle/debounce if specified
         if (typeof eventConfig === 'object') {
             if (eventConfig.throttle) {
-                // Create a throttled wrapper that preserves the original context
-                const throttledHandler = this.throttle((event) => this.handleEvent(event), eventConfig.throttle, `${key}-${eventType}-throttle`);
-
-                handler = {
-                    handleEvent: throttledHandler
+                handler = { // Create a throttled wrapper that preserves the original context
+                    handleEvent: this.throttle((event) => this.handleEvent(event), eventConfig.throttle, `${key}-${eventType}-throttle`)
                 };
             } else if (eventConfig.debounce) {
-                // Create a debounced wrapper that preserves the original context
-                const debouncedHandler = this.debounce((event) => this.handleEvent(event), eventConfig.debounce, `${key}-${eventType}-debounce`);
-
-                handler = {
-                    handleEvent: debouncedHandler
+                handler = { // Create a debounced wrapper that preserves the original context
+                    handleEvent: this.debounce((event) => this.handleEvent(event), eventConfig.debounce, `${key}-${eventType}-debounce`)
                 };
             }
         }
@@ -604,16 +584,18 @@ class YpsilonEventHandler {
             this.elementHandlers.set(element, []);
         }
 
-        // Get handler method name
-        const handlerMethod = typeof eventConfig === 'object' && eventConfig.handler
+        // Generate handler method name with configurable prefix
+        const handlerMethodName = typeof eventConfig === 'object' && eventConfig.handler
             ? eventConfig.handler
-            : `handle${eventType.charAt(0).toUpperCase() + eventType.slice(1)}`;
+            : this.handlerPrefix
+                ? `${this.handlerPrefix}${eventType.charAt(0).toUpperCase() + eventType.slice(1)}`
+                : eventType;
 
         // Validate handler exists using enhanced resolution
-        const validatedHandler = this.resolveHandler(handlerMethod, eventType);
+        const validatedHandler = this.resolveHandler(handlerMethodName, eventType);
         if (!validatedHandler) {
-            const resolvedName = this.resolveMethodName(handlerMethod, eventType);
-            const aliasMsg = resolvedName !== handlerMethod ? ` (resolved from alias '${handlerMethod}')` : '';
+            const resolvedName = this.resolveMethodName(handlerMethodName, eventType);
+            const aliasMsg = resolvedName !== handlerMethodName ? ` (resolved from alias '${handlerMethodName}')` : '';
             console.warn(`YpsilonEventHandler: Handler method '${resolvedName}'${aliasMsg} not found for event '${eventType}' on element '${selector}' (checked class, methods object, and global scope)`);
         }
 
@@ -628,7 +610,7 @@ class YpsilonEventHandler {
 
         this.eventHandlerMap.get(eventType).push({
             element: element,
-            handler: handlerMethod,
+            handler: handlerMethodName,
             selector: selector,
             config: eventConfig
         });
@@ -856,7 +838,23 @@ class YpsilonEventHandler {
         };
     }
 
-    // Static utility methods
+    debounce(fn, delay, key) {
+        return (...args) => {
+            if (this.debounceTimers.has(key)) {
+                clearTimeout(this.debounceTimers.get(key));
+            }
+            this.debounceTimers.set(key, setTimeout(() => {
+                fn.apply(this, args);
+                this.debounceTimers.delete(key);
+            }, delay));
+        };
+    }
+
+    throttle(fn, delay, key) {
+        // Use static implementation with instance-specific timer map
+        return YpsilonEventHandler._throttleImplementation(fn, delay, key, this.throttleTimers);
+    }
+
     /**
      * Shared throttle implementation used by both instance and static methods
      * @private
@@ -910,5 +908,5 @@ if (typeof module !== 'undefined' && module.exports) {
     module.exports.default = YpsilonEventHandler;
 } else if (typeof window !== 'undefined') {
     // Browser global
-    window.YpsilonEventHandler = YpsilonEventHandler;
+    window['YpsilonEventHandler'] = YpsilonEventHandler;
 }

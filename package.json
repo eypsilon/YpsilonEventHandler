@@ -1,34 +1,61 @@
 {
   "name": "ypsilon-event-handler",
-  "version": "1.6.7",
-  "description": "A production-ready event handling system for web applications with memory leak prevention, and method chaining support",
+  "version": "1.7.0",
+  "description": "Supercharged multi-handler event system with closest-match DOM resolution and QuantumType docs. The most advanced event delegation architecture available.",
+  "homepage": "https://github.com/eypsilon/YpsilonEventHandler#readme",
   "main": "ypsilon-event-handler.js",
   "types": "ypsilon-event-handler.d.ts",
+  "license": "MIT",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "echo \"No build step required\""
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
     "events",
     "event-handler",
     "dom-events",
     "passive-events",
+    "handle-event",
     "browser",
     "frontend",
     "memory-efficient",
-    "memory-leak-city",
     "memory-leak-zero",
     "debugging",
     "typescript",
-    "types"
+    "types",
+    "quantumtype",
+    "closest-match",
+    "event-delegation",
+    "multi-handler"
   ],
-  "author": "Engin Ypsilon",
-  "license": "MIT",
+  "engines": {
+    "node": ">=14.0.0",
+    "npm": ">=6.0.0"
+  },
+  "authors": [
+    "Engin Ypsilon - Core library architect and Medium",
+    "Claude Van DOM - TypeScript documentation system architect"
+  ],
+  "contributors": [
+    "Sunny DeepSeek - Revolutionary quantum suggestions and schema validation",
+    "Herr Von Grokk - Enhanced JSDoc examples and property-level documentation"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/eypsilon/YpsilonEventHandler.git"
   },
   "bugs": {
     "url": "https://github.com/eypsilon/YpsilonEventHandler/issues"
+  },
+  "files": [
+    "ypsilon-event-handler.js",
+    "ypsilon-event-handler.d.ts",
+    "LICENSE"
+  ],
+  "exports": {
+    ".": {
+      "import": "./ypsilon-event-handler.js",
+      "require": "./ypsilon-event-handler.js",
+      "types": "./ypsilon-event-handler.d.ts"
+    }
   }
 }

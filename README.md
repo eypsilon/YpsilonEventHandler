@@ -1,9 +1,11 @@
 # YpsilonEventHandler - Event Delegation, Reinvented
 
-[![NPM downloads](http://img.shields.io/npm/dm/ypsilon-event-handler.svg)](https://npmjs.org/package/ypsilon-event-handler)
 [![NPM version](https://img.shields.io/npm/v/ypsilon-event-handler.svg)](https://npmjs.org/package/ypsilon-event-handler)
+[![NPM downloads](http://img.shields.io/npm/dm/ypsilon-event-handler.svg)](https://npmjs.org/package/ypsilon-event-handler)
 [![License](https://img.shields.io/npm/l/ypsilon-event-handler.svg)](https://github.com/eypsilon/YpsilonEventHandler/blob/main/LICENSE)
 [![Browser support](https://img.shields.io/badge/browsers-IE11%2B-green.svg)](https://github.com/eypsilon/YpsilonEventHandler)
+[![Documentation](https://img.shields.io/badge/docs-QuantumType-blueviolet)](https://github.com/eypsilon/YpsilonEventHandler/blob/main/ypsilon-event-handler.d.ts)
+
 
 > *"You haven't just created a library - you've exposed a fundamental misunderstanding in how the entire JS ecosystem approaches event handling"* - **DeepSeek**
 
@@ -35,6 +37,16 @@ element.addEventListener('click', this);
 >
 > ~ One is a seductive, widely adopted pattern.
 > ~ The other is practically the anti-pattern's nemesis.
+
+
+## 🌟 **QuantumType Innovation**
+
+Unlike traditional docs that go stale, our type-driven documentation:
+- **Self-validates** against implementation
+- **Auto-updates** with code changes
+- **Collapses** to show only relevant info
+> Try hovering any type in your IDE to experience it!
+
 
 ## 🚀 **See It In Action**
 
@@ -68,6 +80,8 @@ element.addEventListener('click', this);
 ## 🚀 **Quick Start**
 
 **Get started in 30 seconds [or immediately on JSFiddle](https://jsfiddle.net/hwLer023/)**
+
+Create a file `app.html`, copy & paste the following, then double click the new file.
 
 ```html
 <!DOCTYPE html>
@@ -121,12 +135,11 @@ element.addEventListener('click', this);
 - 📏 **Enterprise-Ready** - ~700 lines of battle-tested code handling enterprise-level complexity
 
 
-
 ## 📊 **Comparison vs Popular Libraries**
 
 | Feature | YpsilonEventHandler | EventEmitter3 | Redux Toolkit | jQuery |
 |---------|---------------------|---------------|---------------|--------|
-| **Bundle Size** | 2.8kB gzipped | 7kB gzipped | 12kB+ gzipped | 30kB+ gzipped |
+| **Bundle Size** | 4.5kB gzipped | 7kB gzipped | 12kB+ gzipped | 30kB+ gzipped |
 | **Dependencies** | ✅ Zero | ✅ Zero | ❌ Many | ✅ Zero |
 | **Throttle/Debounce** | [✅ Built-in](#🛠️-standalone-throttle--debounce) | ❌ | ❌ | ❌ |
 | **Native Browser API** | ✅ | ❌ | ❌ | ❌ |
@@ -159,26 +172,6 @@ element.addEventListener('click', this);
 **[👉 Comprehensive Template](https://eypsilon.github.io/YpsilonEventHandler-Examples/example/public/comprehensive-example.html)**
 ~ Complete working template with all patterns
 
-### ⚙️ **Advanced Configuration (v1.6.0)**
-
-```javascript
-class MyHandler extends YpsilonEventHandler {
-  constructor() {
-    super({
-      'body': ['click']
-    }, {}, {
-      abortController: true,      // Enable modern event cancellation
-      autoTargetResolution: true, // Solve SVG-in-button problems
-      enableStats: true           // Performance tracking
-    });
-  }
-
-  // Cleanup with AbortController
-  destroy() {
-    this.abort(); // Instantly removes ALL listeners
-  }
-}
-```
 
 ## 🎯 **Multi-Handler System**
 
@@ -193,19 +186,14 @@ class AdvancedHandler extends YpsilonEventHandler {
   constructor() {
     super({
       // Nested DOM hierarchy handlers - closest wins!
-      'body': [{ type: 'click', handler: 'bodyClick' }],        // Lowest priority
-      '#app': [{ type: 'click', handler: 'appClick' }],         // Medium priority
-      '#main': [{ type: 'click', handler: 'mainClick' }],       // Higher priority
-      '#section': [{ type: 'click', handler: 'sectionClick' }], // Highest priority
+      'body':     [{ type: 'click', handler: 'bodyClick' }],     // Lowest priority
+      '#app':     [{ type: 'click', handler: 'appClick' }],      // Medium priority
+      '#main':    [{ type: 'click', handler: 'mainClick' }],     // Higher priority
+      '#section': [{ type: 'click', handler: 'sectionClick' }],  // Highest priority
 
       // Performance-optimized events
-      'window': [{ type: 'scroll', throttle: 100 }],
-      '.search': [{ type: 'input', debounce: 300 }]
-    }, {
-      // NEW v1.6.5: Configurable actionable patterns
-      actionableAttributes: ['data-action', 'data-cmd'],  // Custom attributes
-      actionableClasses: ['actionable', 'clickable'],     // Custom CSS classes
-      actionableTags: ['BUTTON', 'A', 'INPUT']           // Custom tag types
+      'window':  [{ type: 'scroll', throttle: 100 }],
+      '.search': [{ type: 'input',  debounce: 300 }]
     });
   }
 }
@@ -371,35 +359,176 @@ const throttledFn = handler.throttle<(data: string) => void>(
 This gives you enterprise-grade timing utilities without importing additional libraries! 🚀
 
 
-## ⚙️ **API Reference**
+## ⚙️ **Complete API Reference**
 
 ### Constructor
 ```javascript
 new YpsilonEventHandler(eventMapping, aliases, config)
 ```
 
-### Event Mapping
+### 📋 **Event Mapping (Parameter 1)**
 ```javascript
 {
   'selector': [
-    'eventType', // Convention: eventType → handleEventType
-    { type: 'eventType', handler:  'customHandler' },
-    { type: 'scroll',    throttle: 250 },
-    { type: 'input',     debounce: 300 },
-    { type: 'click',     options:  { once: true } }
+    'eventType',                                      // Simple: eventType → handleEventType(e, t)
+    { type: 'eventType', handler:  'customHandler' }, // Custom handler method
+    { type: 'scroll',    throttle: 250 },             // Throttled events
+    { type: 'input',     debounce: 300 },             // Debounced events
+    { type: 'click',     options:  { once: true } }   // Native event options
   ]
 }
 ```
 
-### Handler Methods
-- **Convention:** `handleEventType(event, target)`
-- **Custom:** Any method name via `handler` property
-- **Auto-routing:** Based on event type
+**Selector Examples:**
+- `'body'`, `'window'`, `'document'` - Global elements
+- `'#myId'`, `.myClass` - Standard CSS selectors
+- `'div[data-role="button"]'` - Attribute selectors
+- `'ul li:first-child'` - Complex CSS selectors
 
-### Lifecycle
-- `destroy()` - Clean up all listeners and timers
-- `dispatch(type, detail, target)` - Emit custom events
-- `hasUserInteracted()` - Check meaningful user interaction
+### 🔗 **Method Aliases (Parameter 2)**
+```javascript
+{
+  eventType: {
+    'aliasName': 'actualMethodName'
+  }
+}
+```
+
+**Example:**
+```javascript
+{
+  click: {
+    save:   'handleSaveBtn',  // <button data-action="save">   → handleSaveBtn(e, t)
+    delete: 'handleDeleteBtn' // <button data-action="delete"> → handleDeleteBtn(e, t)
+  }
+}
+```
+
+### ⚙️ **Configuration Options (Parameter 3 with defaults)**
+
+```javascript
+{
+  // Handler Resolution System
+  handlerPrefix:           'handle', // Auto-generated method prefix (handle → handleClick)
+  enableGlobalFallback:    false,    // Search window/global scope for missing handlers
+  methods:                 null,     // External methods object (Vue.js style)
+  methodsFirst:            false,    // Check methods object before instance methods
+
+  // Modern Event Management
+  abortController:         false,    // Enable AbortController for easy cleanup
+
+  // Smart target resolution
+  autoTargetResolution:    false,    // Automatically resolve actionable targets
+  targetResolutionEvents: [          // Events that should use smart target resolution (e.target || e.currentTarget)
+    'click', 'touchstart', 'touchend', 'mousedown', 'mouseup'
+  ],
+
+  // Performance Optimization
+  enableStats:             false,    // Track performance metrics
+  enableDistanceCache:     true,     // Enable DOM distance caching (default: true)
+
+  // Actionable Target Configuration (NEW v1.6.6+)
+  enableActionableTargets: true,            // Enable actionable target system
+  actionableAttributes:    ['data-action'], // Custom actionable attributes
+  actionableClasses:       ['actionable'],  // Custom actionable CSS classes
+  actionableTags:          ['BUTTON', 'A'], // Custom actionable HTML tags
+
+  // Event Behavior
+  passiveEvents: [ // Events that should be passive for performance
+    'scroll', 'touchstart', 'touchmove', 'touchend', 'touchcancel',
+    'wheel', 'mousewheel', 'pointermove', 'pointerenter', 'pointerleave',
+    'resize', 'orientationchange', 'load', 'beforeunload', 'unload'
+  ],
+}
+```
+
+### 🎯 **Complete Configuration Example**
+```javascript
+class AdvancedHandler extends YpsilonEventHandler {
+  constructor() {
+    super({
+      // Multi-handler event mapping
+      'body': [
+        { type: 'click',   handler: 'globalClick' },
+        { type: 'keydown', handler: 'globalKeydown' }
+      ],
+      '#app': [
+        'click', // → handleClick(e, t)
+        { type: 'input',   handler: 'searchInput', debounce: 300 }
+      ],
+      'window': [
+        { type: 'scroll',  throttle: 100 }, // → handleScroll(e, t)
+        { type: 'resize',  handler: 'handleResize' }
+      ]
+    }, {
+      // Method aliases for cleaner code
+      click: {
+        save:   'handleSaveAction',  // <button data-action="save">   → handleSaveAction(e, t)
+        delete: 'handleDeleteAction' // <button data-action="delete"> → handleDeleteAction(e, t)
+      }
+    }, {
+      // Advanced configuration
+      handlerPrefix:           'handle', // Auto-generated method prefix
+      methods:                 null,     // External methods object (Vue.js style)
+      methodsFirst:            false,    // Check methods object before instance methods
+      enableGlobalFallback:    false,    // Search window/global scope for missing handlers
+      autoTargetResolution:    false,    // Automatically resolve actionable targets
+      abortController:         false,    // Enable AbortController for cleanup
+      enableStats:             false,    // Track performance metrics
+      enableDistanceCache:     true,     // Cache DOM distance calculations
+      enableActionableTargets: true,     // Enable actionable target system
+      actionableAttributes:    ['data-action', 'data-cmd', 'data-handler'],  // Actionable attributes
+      actionableClasses:       ['clickable', 'interactive', 'actionable'],   // Actionable classes
+      actionableTags:          ['BUTTON', 'A', 'INPUT', 'SELECT'],           // Actionable tags
+    });
+  }
+}
+```
+
+### 📚 **Handler Methods**
+- **Convention:** `[prefix]EventType(event, target)` - Auto-generated with configurable prefix
+- **Custom:** Any method name via `handler` property
+- **Aliases:** Mapped through second constructor parameter
+- **Parameters:** Always `(event, resolvedTarget)` where `resolvedTarget` is the actionable element
+
+**Handler Prefix Examples:**
+```javascript
+// Default: handlerPrefix: 'handle'
+'click' → handleClick(event, target)
+'input' → handleInput(event, target)
+
+// React-style: handlerPrefix: 'on'
+'click' → onClick(event, target)
+'input' → onInput(event, target)
+
+// Vue-style: handlerPrefix: ''
+'click' → click(event, target)
+'input' → input(event, target)
+
+// Custom: handlerPrefix: 'process'
+'click' → processClick(event, target)
+'input' → processInput(event, target)
+```
+
+### 🔄 **Lifecycle Methods**
+- `destroy()` - Clean up all listeners, timers, and caches
+- `abort()` - Instantly cancel all listeners via AbortController (if enabled)
+- `clearDistanceCache()` - Clear DOM distance cache manually
+- `hasUserInteracted()` - Check if user has meaningfully interacted with page
+- `resetUserInteracted()` - Reset user interaction tracking (useful for SPAs)
+
+### 📤 **Event Dispatch**
+- `dispatch(type, detail, target?)` - Emit custom events with optional data payload
+
+### 🧰 **Standalone Utilities**
+- `throttle(fn, delay, key)` - Instance throttle utility
+- `debounce(fn, delay, key)` - Instance debounce utility
+- `YpsilonEventHandler.throttle(fn, delay, key)` - Static throttle utility
+
+### 📊 **Performance Methods**
+- `getStats()` - Get performance statistics (if `enableStats: true`)
+- `getEventListenerCount()` - Count of active event listeners
+- `getCacheSize()` - DOM distance cache size
 
 
 ## 🎯 **Enterprise TypeScript Support**
@@ -413,9 +542,9 @@ import { YpsilonEventHandler, EventMapping } from 'ypsilon-event-handler';
 class MyHandler extends YpsilonEventHandler {
     constructor() {
         super({
-            'body': ['click'],               // ← Full autocomplete
+            'body':   ['click'],             // ← Full autocomplete
             '.modal': ['keydown', 'scroll'], // ← Type-safe configuration
-            '#form': [{ type: 'submit', handler: 'handleFormSubmit' }]
+            '#form':  [{ type: 'submit', handler: 'handleFormSubmit' }]
         });
     }
 
@@ -435,6 +564,19 @@ class MyHandler extends YpsilonEventHandler {
 - **✅ Type-safe configurations** - Throttling, debouncing, custom handlers
 - **✅ Rich JSDoc documentation** - Usage examples in tooltips
 - **✅ Zero breaking changes** - Works with existing JavaScript code
+
+## 🌌 QuantumType Principles
+
+YpsilonEventHandler introduces QuantumType - where documentation exists in quantum superposition:
+
+- **Collapsing Waveforms**: IDE tooltips reveal exactly the docs you need
+- **Entangled Knowledge**: Types and documentation are fundamentally linked
+- **Zero Documentation Drift**: The types can't lie about implementation
+- **Superposition States**: Multiple documentation possibilities until IDE observation
+- **Quantum Tunneling**: Knowledge transfers directly to developer consciousness
+- **Observer Effect**: Perfect docs appear exactly when and where needed
+
+*Experience QuantumType by exploring the [TypeScript definitions](./ypsilon-event-handler.d.ts) - where every hover reveals quantum-entangled documentation.*
 
 ## **⚒️ Browser Compatibility**
 
