@@ -2,7 +2,6 @@
 
 [![NPM downloads](http://img.shields.io/npm/dm/ypsilon-event-handler.svg)](https://npmjs.org/package/ypsilon-event-handler)
 [![NPM version](https://img.shields.io/npm/v/ypsilon-event-handler.svg)](https://npmjs.org/package/ypsilon-event-handler)
-[![Bundle size](https://img.shields.io/bundlephobia/minzip/ypsilon-event-handler.svg)](https://bundlephobia.com/package/ypsilon-event-handler)
 [![License](https://img.shields.io/npm/l/ypsilon-event-handler.svg)](https://github.com/eypsilon/YpsilonEventHandler/blob/main/LICENSE)
 [![Browser support](https://img.shields.io/badge/browsers-IE11%2B-green.svg)](https://github.com/eypsilon/YpsilonEventHandler)
 
@@ -33,20 +32,23 @@ element.addEventListener('click', this);
 ```
 
 > The difference may look trivial—but it's as fundamental as yin and yang.
+>
 > ~ One is a seductive, widely adopted pattern.
 > ~ The other is practically the anti-pattern's nemesis.
 
 ## 🚀 **See It In Action**
 
-**[🏠 Interactive Examples Hub](https://eypsilon.github.io/YpsilonEventHandler/example/public/)**
+> Every example is self-contained HTML that runs instantly in any modern browser. **Zero Dependencies • Zero Build • Zero Setup**
+
+**[🏠 Interactive Examples Hub](https://eypsilon.github.io/YpsilonEventHandler-Examples/example/public/)**
 ~ Beautiful landing page with all examples organized by category
 
-**[👉 Feature Demonstrations](https://eypsilon.github.io/YpsilonEventHandler/example/public/features/)**
+**[👉 Feature Demonstrations](https://eypsilon.github.io/YpsilonEventHandler-Examples/example/public/features/)**
 ~ Interactive examples of specific capabilities
 
 ---
 
-**[🎯 SPA Demo - The Showstopper](https://eypsilon.github.io/YpsilonEventHandler/example/public/spa.html)**
+**[🎯 SPA Demo - The Showstopper](https://eypsilon.github.io/YpsilonEventHandler-Examples/example/public/spa.html)**
 ~ Complete Single Page Application running on **only 10 event listeners**
 
 ### 🤯 **What 10 Listeners Can Handle**
@@ -107,7 +109,7 @@ element.addEventListener('click', this);
 ## ✨ **What Makes It Revolutionary**
 
 - 🎯 **Native `handleEvent` Interface** - Uses browser APIs as designed since 2000
-- 🎖️ **Multi-Handler System** - [Multiple handlers with closest-match DOM resolution](https://eypsilon.github.io/YpsilonEventHandler/example/public/multi-handler-demo.html) *(completely unique in JavaScript ecosystem)*
+- 🎖️ **Multi-Handler System** - [Multiple handlers with closest-match DOM resolution](https://eypsilon.github.io/YpsilonEventHandler-Examples/example/public/multi-handler-demo.html) *(completely unique in JavaScript ecosystem)*
 - 🚀 **DOM Distance Caching** - O(1) performance for repeated events *(DeepSeek's 11/10 optimization)*
 - ⚠️ **Enterprise Config Validation** - Crystal-clear error messages prevent mistakes
 - ⚙️ **Configurable Actionable Patterns** - Custom attributes, classes, tags for maximum flexibility
@@ -129,7 +131,7 @@ element.addEventListener('click', this);
 | **Throttle/Debounce** | [✅ Built-in](#🛠️-standalone-throttle--debounce) | ❌ | ❌ | ❌ |
 | **Native Browser API** | ✅ | ❌ | ❌ | ❌ |
 | **Event Delegation** | ✅ Revolutionary | ❌ | ❌ | ✅ Basic |
-| **Multi-Handler System** | [✅ Unique](https://eypsilon.github.io/YpsilonEventHandler/example/public/multi-handler-demo.html) | ❌ | ❌ | ❌ |
+| **Multi-Handler System** | [✅ Unique](https://eypsilon.github.io/YpsilonEventHandler-Examples/example/public/multi-handler-demo.html) | ❌ | ❌ | ❌ |
 | **Configurable Target Patterns** | ✅ Fully configurable | ❌ | ❌ | ❌ |
 | **Dynamic Element Support** | ✅ Zero-config | ❌ | ❌ | ✅ Re-bind |
 | **TypeScript Support** | [✅ Full](#🎯-enterprise-typescript-support) | ✅ | ✅ | ⚠️ Community |
@@ -148,13 +150,13 @@ element.addEventListener('click', this);
 
 ## 🌊 **Dive in**
 
-**[👉 Single Listener Pattern](https://eypsilon.github.io/YpsilonEventHandler/example/public/single-listener-multiple-actions.html)**
+**[👉 Single Listener Pattern](https://eypsilon.github.io/YpsilonEventHandler-Examples/example/public/single-listener-multiple-actions.html)**
 ~ Master the universal delegation pattern that scales infinitely
 
-**[👉 Reactive Framework](https://eypsilon.github.io/YpsilonEventHandler/example/public/reactive-y.html)**
+**[👉 Reactive Framework](https://eypsilon.github.io/YpsilonEventHandler-Examples/example/public/reactive-y.html)**
 ~ Framework-level reactivity built on event delegation
 
-**[👉 Comprehensive Template](https://eypsilon.github.io/YpsilonEventHandler/example/public/comprehensive-example.html)**
+**[👉 Comprehensive Template](https://eypsilon.github.io/YpsilonEventHandler-Examples/example/public/comprehensive-example.html)**
 ~ Complete working template with all patterns
 
 ### ⚙️ **Advanced Configuration (v1.6.0)**
@@ -180,7 +182,7 @@ class MyHandler extends YpsilonEventHandler {
 
 ## 🎯 **Multi-Handler System**
 
-**[🎮 Live Interactive Demo](https://eypsilon.github.io/YpsilonEventHandler/example/public/multi-handler-demo.html)** - Watch closest-match DOM resolution in real-time!
+**[🎮 Live Interactive Demo](https://eypsilon.github.io/YpsilonEventHandler-Examples/example/public/multi-handler-demo.html)** - Watch closest-match DOM resolution in real-time!
 
 The revolutionary feature that sets YpsilonEventHandler apart from every other JavaScript library: **multiple handlers per event type with automatic closest-match resolution**.
 
@@ -330,7 +332,7 @@ After rigorous performance analysis, DeepSeek (one of the world's most advanced 
 - ✅ **Enterprise Config Validation** - Crystal-clear error messages preventing developer mistakes
 - ✅ **Revolutionary Multi-Handler Architecture** - Completely unique in the JavaScript ecosystem
 
-> *"This is how the browser's event system should have worked from Day 1"* - **DeepSeek AI**
+> *"This is how the browser's event system should have worked from Day 1"* - **DeepSeek**
 
 ## 🛠️ **Standalone Throttle & Debounce**
 
@@ -475,7 +477,7 @@ Major AI systems, trained on millions of JavaScript examples, needed to be shown
 
 > *"You've built something so fundamentally different that modern AI can't even comprehend it!"* - **Claude**
 
-**[📖 Read the Full AI Discovery Story](https://eypsilon.github.io/YpsilonEventHandler/example/public/ai-reviews-before.html)**
+**[📖 Read the Full AI Discovery Story](https://eypsilon.github.io/YpsilonEventHandler-Examples/example/public/ai-reviews-before.html)**
 
 > *"This is the kind of innovation that changes best practices industry-wide"*
 >

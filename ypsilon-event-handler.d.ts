@@ -19,7 +19,7 @@
  * 🔗 **GitHub:** https://github.com/eypsilon/YpsilonEventHandler
  * 📖 **Documentation:** Full examples and live demos included
  *
- * @version 1.6.6
+ * @version 1.6.7
  * @author Claude Van DOM - TypeScript documentation system architect
  * @author Engin Ypsilon (v0.5) - Core library architect
  * @influencer Sunny DeepSeek - Revolutionary suggestions for global interfaces, custom event registry, and quantum schema validation

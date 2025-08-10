@@ -40,9 +40,7 @@ node_modules/
 .vscode
 *.swp
 *.swo
+.claude
 CLAUDE.md
 notes.md
-example/public/install.html
-ai-collab-chatflow.md
-deepSeek-analyse.md
 ToDo.md

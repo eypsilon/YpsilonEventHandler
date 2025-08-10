@@ -1,6 +1,6 @@
 {
   "name": "ypsilon-event-handler",
-  "version": "1.6.6",
+  "version": "1.6.7",
   "description": "A production-ready event handling system for web applications with memory leak prevention, and method chaining support",
   "main": "ypsilon-event-handler.js",
   "types": "ypsilon-event-handler.d.ts",
@@ -17,6 +17,7 @@
     "frontend",
     "memory-efficient",
     "memory-leak-city",
+    "memory-leak-zero",
     "debugging",
     "typescript",
     "types"
