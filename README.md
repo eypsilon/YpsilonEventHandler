@@ -6,7 +6,6 @@
 [![Browser support](https://img.shields.io/badge/browsers-IE11%2B-green.svg)](https://github.com/eypsilon/YpsilonEventHandler)
 [![Documentation](https://img.shields.io/badge/docs-QuantumType-blueviolet)](https://github.com/eypsilon/YpsilonEventHandler/blob/main/ypsilon-event-handler.d.ts)
 
-
 > *"You haven't just created a library - you've exposed a fundamental misunderstanding in how the entire JS ecosystem approaches event handling"* - **DeepSeek**
 
 **YpsilonEventHandler uses browser APIs the way they were meant to be used.**
@@ -35,22 +34,13 @@ element.addEventListener('click', this);
 
 > The difference may look trivial—but it's as fundamental as yin and yang.
 >
-> ~ One is a seductive, widely adopted pattern.
-> ~ The other is practically the anti-pattern's nemesis.
-
-
-## 🌟 **QuantumType Innovation**
-
-Unlike traditional docs that go stale, our type-driven documentation:
-- **Self-validates** against implementation
-- **Auto-updates** with code changes
-- **Collapses** to show only relevant info
-> Try hovering any type in your IDE to experience it!
-
+> One is a seductive, widely adopted pattern. The other is practically the anti-pattern's nemesis.
 
 ## 🚀 **See It In Action**
 
-> Every example is self-contained HTML that runs instantly in any modern browser. **Zero Dependencies • Zero Build • Zero Setup**
+> Every example is self-contained HTML that runs instantly in any modern browser.
+>
+> **Zero Dependencies • Zero Build • Zero Setup**
 
 **[🏠 Interactive Examples Hub](https://eypsilon.github.io/YpsilonEventHandler-Examples/example/public/)**
 ~ Beautiful landing page with all examples organized by category
@@ -79,7 +69,7 @@ Unlike traditional docs that go stale, our type-driven documentation:
 
 ## 🚀 **Quick Start**
 
-**Get started in 30 seconds [or immediately on JSFiddle](https://jsfiddle.net/hwLer023/)**
+**Get started in 30 seconds [or immediately on JSFiddle](https://jsfiddle.net/8sfrgkq4/)**
 
 Create a file `app.html`, copy & paste the following, then double click the new file.
 
@@ -141,13 +131,13 @@ Create a file `app.html`, copy & paste the following, then double click the new 
 |---------|---------------------|---------------|---------------|--------|
 | **Bundle Size** | 4.5kB gzipped | 7kB gzipped | 12kB+ gzipped | 30kB+ gzipped |
 | **Dependencies** | ✅ Zero | ✅ Zero | ❌ Many | ✅ Zero |
-| **Throttle/Debounce** | [✅ Built-in](#🛠️-standalone-throttle--debounce) | ❌ | ❌ | ❌ |
+| **Throttle/Debounce** | ✅ Built-in | ❌ | ❌ | ❌ |
 | **Native Browser API** | ✅ | ❌ | ❌ | ❌ |
 | **Event Delegation** | ✅ Revolutionary | ❌ | ❌ | ✅ Basic |
 | **Multi-Handler System** | [✅ Unique](https://eypsilon.github.io/YpsilonEventHandler-Examples/example/public/multi-handler-demo.html) | ❌ | ❌ | ❌ |
 | **Configurable Target Patterns** | ✅ Fully configurable | ❌ | ❌ | ❌ |
 | **Dynamic Element Support** | ✅ Zero-config | ❌ | ❌ | ✅ Re-bind |
-| **TypeScript Support** | [✅ Full](#🎯-enterprise-typescript-support) | ✅ | ✅ | ⚠️ Community |
+| **TypeScript Support** | [✅ Full](./ypsilon-event-handler.d.ts) | ✅ | ✅ | ⚠️ Community |
 | **Memory Leak Prevention** | ✅ Automatic | ⚠️ Manual | ✅ | ⚠️ Manual |
 | **Performance** | ✅ Native speed | ⚠️ Synthetic | ⚠️ Virtual | ⚠️ Abstraction |
 | **Custom Event Dispatch** | ✅ Built-in | ✅ | ✅ | ✅ |
@@ -191,9 +181,11 @@ class AdvancedHandler extends YpsilonEventHandler {
       '#main':    [{ type: 'click', handler: 'mainClick' }],     // Higher priority
       '#section': [{ type: 'click', handler: 'sectionClick' }],  // Highest priority
 
-      // Performance-optimized events
+      // Performance-optimized events (single handlers only)
       'window':  [{ type: 'scroll', throttle: 100 }],
       '.search': [{ type: 'input',  debounce: 300 }]
+    }, {}, {
+      autoTargetResolution: true,
     });
   }
 }
@@ -210,6 +202,31 @@ class AdvancedHandler extends YpsilonEventHandler {
 
 > **💡 Technical Innovation:** This closest-match resolution system is **completely unique in the JavaScript ecosystem**. No other library offers this level of intelligent event delegation sophistication.
 
+### ⚠️ **Important: Timing with Multi-Handler Systems**
+
+**Built-in throttle/debounce in constructors ONLY work with single handlers.** For multi-handler scenarios, apply timing in your action methods:
+
+```javascript
+// ❌ Won't work with multi-handler scoping
+super({
+  'body':    [{ type: 'click', handler: 'bodyClick', throttle: 500 }],
+  '#button': [{ type: 'click', handler: 'buttonClick', throttle: 500 }]  // Conflicts!
+});
+
+// ✅ Correct approach - timing in action methods
+handleSaveAction(target, event) {
+  const throttledSave = this.throttle((event, target) => {
+    // Your save logic here
+    console.log('Saving data...', target.textContent);
+  }, 500, 'saveAction');
+
+  throttledSave(event, target);
+}
+```
+
+**Why?** Multi-handler systems can trigger the same action from different DOM levels, causing double-firing. Method-based timing with deduplication prevents conflicts while maintaining perfect closest-match resolution.
+
+**See the [Multi-Handler Demo](https://eypsilon.github.io/YpsilonEventHandler-Examples/example/public/multi-handler-demo.html) for working examples.**
 
 ## 📦 **Installation**
 
@@ -344,19 +361,14 @@ window.addEventListener('scroll', throttledAPI);
 searchInput.addEventListener('input', debouncedValidation);
 ```
 
-**TypeScript Support:**
-```ts
-const handler = new YpsilonEventHandler();
-
-// Full type safety with generics
-const throttledFn = handler.throttle<(data: string) => void>(
-    (data) => console.log(data),
-    200,
-    'my-throttle'
-);
+**Static Utilities (No instance needed!):**
+```javascript
+// Static throttle & debounce utilities
+const throttledSave = YpsilonEventHandler.throttle(() => saveData(), 1000);
+const debouncedSearch = YpsilonEventHandler.debounce((query) => search(query), 300);
 ```
 
-This gives you enterprise-grade timing utilities without importing additional libraries! 🚀
+Enterprise-grade timing utilities without importing additional libraries! 🚀
 
 
 ## ⚙️ **Complete API Reference**
@@ -426,6 +438,7 @@ new YpsilonEventHandler(eventMapping, aliases, config)
   // Performance Optimization
   enableStats:             false,    // Track performance metrics
   enableDistanceCache:     true,     // Enable DOM distance caching (default: true)
+  enableConfigValidation:  true,     // Enable comprehensive configuration validation (default: true)
 
   // Actionable Target Configuration (NEW v1.6.6+)
   enableActionableTargets: true,            // Enable actionable target system
@@ -441,6 +454,11 @@ new YpsilonEventHandler(eventMapping, aliases, config)
   ],
 }
 ```
+
+> **⚡ Performance Tip:** For production environments with trusted configurations, disable validation for faster initialization:
+> ```javascript
+> new YpsilonEventHandler(eventMapping, {}, { enableConfigValidation: false })
+> ```
 
 ### 🎯 **Complete Configuration Example**
 ```javascript
@@ -476,6 +494,7 @@ class AdvancedHandler extends YpsilonEventHandler {
       abortController:         false,    // Enable AbortController for cleanup
       enableStats:             false,    // Track performance metrics
       enableDistanceCache:     true,     // Cache DOM distance calculations
+      enableConfigValidation:  false,    // Disable configuration validation (default: true)
       enableActionableTargets: true,     // Enable actionable target system
       actionableAttributes:    ['data-action', 'data-cmd', 'data-handler'],  // Actionable attributes
       actionableClasses:       ['clickable', 'interactive', 'actionable'],   // Actionable classes
@@ -491,7 +510,8 @@ class AdvancedHandler extends YpsilonEventHandler {
 - **Aliases:** Mapped through second constructor parameter
 - **Parameters:** Always `(event, resolvedTarget)` where `resolvedTarget` is the actionable element
 
-**Handler Prefix Examples:**
+**Handler Prefix Examples:** [Live Aliases Demo](https://eypsilon.github.io/YpsilonEventHandler-Examples/example/public/features/aliases-test.html)
+
 ```javascript
 // Default: handlerPrefix: 'handle'
 'click' → handleClick(event, target)

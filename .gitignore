@@ -3,6 +3,8 @@
 *.swp
 *.swo
 .claude
+.npmignore
 CLAUDE.md
+RELEASE_NOTES.md
 test.html
 test-prefix.html

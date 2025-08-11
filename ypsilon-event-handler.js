@@ -15,6 +15,7 @@ class YpsilonEventHandler {
             abortController: false,
             autoTargetResolution: false,
             targetResolutionEvents: null,
+            enableConfigValidation: true,
             ...config
         };
         this.eventMapping = eventMapping;
@@ -57,7 +58,9 @@ class YpsilonEventHandler {
     }
 
     init() {
-        this.validateConfiguration();
+        if (this.config.enableConfigValidation) {
+            this.validateConfiguration();
+        }
         this.detectPassiveSupport();
         this.registerEvents();
     }
@@ -839,15 +842,8 @@ class YpsilonEventHandler {
     }
 
     debounce(fn, delay, key) {
-        return (...args) => {
-            if (this.debounceTimers.has(key)) {
-                clearTimeout(this.debounceTimers.get(key));
-            }
-            this.debounceTimers.set(key, setTimeout(() => {
-                fn.apply(this, args);
-                this.debounceTimers.delete(key);
-            }, delay));
-        };
+        // Use static implementation with instance-specific timer map
+        return YpsilonEventHandler._debounceImplementation(fn, delay, key, this.debounceTimers);
     }
 
     throttle(fn, delay, key) {
@@ -891,12 +887,42 @@ class YpsilonEventHandler {
         };
     }
 
+    /**
+     * Shared debounce implementation used by both instance and static methods
+     * @private
+     * @static
+     */
+    static _debounceImplementation(fn, delay, key, timers) {
+        return function(...args) {
+            // Clear existing timer
+            if (timers.has(key)) {
+                clearTimeout(timers.get(key));
+            }
+            
+            // Set new timer with latest arguments
+            const timerId = setTimeout(() => {
+                fn.apply(this, args);
+                timers.delete(key);
+            }, delay);
+            
+            timers.set(key, timerId);
+        };
+    }
+
     static throttle(fn, delay, key = 'default') {
         if (!YpsilonEventHandler._staticThrottleTimers) {
             YpsilonEventHandler._staticThrottleTimers = new Map();
         }
 
         return YpsilonEventHandler._throttleImplementation(fn, delay, key, YpsilonEventHandler._staticThrottleTimers);
+    }
+
+    static debounce(fn, delay, key = 'default') {
+        if (!YpsilonEventHandler._staticDebounceTimers) {
+            YpsilonEventHandler._staticDebounceTimers = new Map();
+        }
+
+        return YpsilonEventHandler._debounceImplementation(fn, delay, key, YpsilonEventHandler._staticDebounceTimers);
     }
 }
 
