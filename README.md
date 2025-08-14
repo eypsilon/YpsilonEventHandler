@@ -185,7 +185,8 @@ class AdvancedHandler extends YpsilonEventHandler {
 
       // Performance-optimized events (single handlers only)
       'window':  [{ type: 'scroll', throttle: 100 }],
-      '.search': [{ type: 'input',  debounce: 300 }]
+      '.search': [{ type: 'input',  debounce: 300 }],
+      '.touch':  [{ type: 'touchstart', options: { passive: true } }] // Auto-detects passive support
     }, {}, {
       autoTargetResolution: true,
     });
@@ -277,7 +278,7 @@ function destroy() {
 }
 ```
 
-**Global scope pollution: 7+ identifiers** (4 const + 3 functions)
+**Global scope pollution: 7+ identifiers** (4 const + 3 functions = 2 interactive elements)
 
 **🔥 The Traditional Approach Problems:**
 - **Exponential complexity** - The above monitors just 2 elements. Add one more input? Code nearly triples.
@@ -289,6 +290,24 @@ function destroy() {
 
 Modern websites routinely create hundreds of individual listeners, turning simple interactions into performance nightmares. YpsilonEventHandler solves this with intelligent delegation.
 
+Just check it for yourself, go to any popular page (or right here) and run the following script in the Console, and try not to be surprised. It grabs all elements in the page and checks each for eventListeners attached and displays a list with all matches. But, the elements in the list can have multiple event listeners, so it might look like there are ~100, but in reality, it's more likely what you see * 5.
+
+```js
+[
+  window, ...document.querySelectorAll('*')
+].filter(el => {
+    const listeners = getEventListeners(el);
+    return listeners && Object.keys(listeners).length > 0;
+}).forEach((el, i) => {
+    const elementName = el === window
+        ? 'window'
+        : el === document ? 'document' : el.tagName.toLowerCase() + (el.id ? '#' + el.id : '') + (el.className ? '.' + el.className.split(' ').join('.') : '');
+    const listeners = getEventListeners(el);
+    console.log(`${i}. ${elementName}:\n`, listeners);
+})
+```
+
+You need to see what it truly means to have 100+ elements listening to hundreds of events. Even I once thought individual listeners made elements more "bound" and secure, but that just creates a freezing mess for users. The more listeners you attach, the more your application becomes a performance nightmare.
 
 ### After (YpsilonEventHandler)
 
@@ -312,7 +331,7 @@ const handler = new MyHandler();
 handler.destroy(); // Perfect cleanup guaranteed
 ```
 
-**Global scope pollution: 3 identifiers** (1 const + 2 class)
+**Global scope pollution: 3 identifiers** (1 const + 2 class = ∞ interactive elements)
 
 **🎯 Event Delegation Magic:** Unlike the traditional approach, YpsilonEventHandler uses a revolutionary "spy on parent" approach - instead of attaching listeners to individual child elements, we listen to parent elements and intercept events bubbling up from their children. This means **zero listeners on children, maximum coverage**.
 
@@ -433,7 +452,7 @@ new YpsilonEventHandler(eventMapping, aliases, config)
 
   // Smart target resolution
   autoTargetResolution:    false,    // Automatically resolve actionable targets
-  targetResolutionEvents: [          // Events that should use smart target resolution (e.target || e.currentTarget)
+  targetResolutionEvents:  [         // Events that should use smart target resolution (e.target || e.currentTarget)
     'click', 'touchstart', 'touchend', 'mousedown', 'mouseup'
   ],
 
@@ -463,6 +482,7 @@ new YpsilonEventHandler(eventMapping, aliases, config)
 > ```
 
 ### 🎯 **Complete Configuration Example**
+
 ```javascript
 class AdvancedHandler extends YpsilonEventHandler {
   constructor() {
@@ -483,21 +503,21 @@ class AdvancedHandler extends YpsilonEventHandler {
     }, {
       // Method aliases for cleaner code
       click: {
-        save:   'handleSaveAction',  // <button data-action="save">   → handleSaveAction(e, t)
-        delete: 'handleDeleteAction' // <button data-action="delete"> → handleDeleteAction(e, t)
+        save:   'handleSaveAction',
+        delete: 'handleDeleteAction'
       }
     }, {
       // Advanced configuration
       handlerPrefix:           'handle', // Auto-generated method prefix
-      methods:                 null,     // External methods object (Vue.js style)
-      methodsFirst:            false,    // Check methods object before instance methods
-      enableGlobalFallback:    false,    // Search window/global scope for missing handlers
       autoTargetResolution:    false,    // Automatically resolve actionable targets
       abortController:         false,    // Enable AbortController for cleanup
+      enableGlobalFallback:    false,    // Search window/global scope for missing handlers
       enableStats:             false,    // Track performance metrics
       enableDistanceCache:     true,     // Cache DOM distance calculations
       enableConfigValidation:  false,    // Disable configuration validation (default: true)
       enableActionableTargets: true,     // Enable actionable target system
+      methodsFirst:            false,    // Check methods object before instance methods
+      methods:                 null,     // External methods object (Vue.js style)
       actionableAttributes:    ['data-action', 'data-cmd', 'data-handler'],  // Actionable attributes
       actionableClasses:       ['clickable', 'interactive', 'actionable'],   // Actionable classes
       actionableTags:          ['BUTTON', 'A', 'INPUT', 'SELECT'],           // Actionable tags
@@ -546,6 +566,7 @@ class AdvancedHandler extends YpsilonEventHandler {
 - `throttle(fn, delay, key)` - Instance throttle utility
 - `debounce(fn, delay, key)` - Instance debounce utility
 - `YpsilonEventHandler.throttle(fn, delay, key)` - Static throttle utility
+- `YpsilonEventHandler.debounce(fn, delay, key)` - Static debounce utility
 
 ### 📊 **Performance Methods**
 - `getStats()` - Get performance statistics (if `enableStats: true`)

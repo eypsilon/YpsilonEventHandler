@@ -54,13 +54,10 @@ class YpsilonEventHandler {
             enabled: this.config.enableActionableTargets !== false // Default: enabled
         };
 
-        this.init();
-    }
-
-    init() {
         if (this.config.enableConfigValidation) {
             this.validateConfiguration();
         }
+
         this.detectPassiveSupport();
         this.registerEvents();
     }
@@ -898,13 +895,13 @@ class YpsilonEventHandler {
             if (timers.has(key)) {
                 clearTimeout(timers.get(key));
             }
-            
+
             // Set new timer with latest arguments
             const timerId = setTimeout(() => {
                 fn.apply(this, args);
                 timers.delete(key);
             }, delay);
-            
+
             timers.set(key, timerId);
         };
     }
