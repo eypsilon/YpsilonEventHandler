@@ -136,9 +136,9 @@ Create a file `app.html`, copy & paste the following, then double click the new 
 *The biggest fear with event delegation is missing events, but YpsilonEventHandler captures every single one flawlessly across Firefox, Chrome, and Opera.*
 
 **StressMacher S-800 Results:**
-• **Traditional approach:** 1,250 elements = 1,250 listeners = performance nightmare
-• **YpsilonEventHandler:** 1,250 elements = 3 listeners = flawless execution
-• **Event accuracy:** Both handle exactly 3,116 events with zero misses
+- **Traditional approach:** 1,250 elements = 1,250 listeners = performance nightmare
+- **YpsilonEventHandler:** 1,250 elements = 3 listeners = flawless execution
+- **Event accuracy:** Both handle exactly 3,116 events with zero misses
 
 
 ## 📊 **Comparison vs Popular Libraries**
