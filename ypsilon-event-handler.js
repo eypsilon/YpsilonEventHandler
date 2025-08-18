@@ -89,7 +89,9 @@ class YpsilonEventHandler {
                 if (this.autoTargetResolution && this.targetResolutionEvents.includes(event.type)) {
                     resolvedTarget = this.findActionableTarget(event.target, closestHandler.element) || event.target;
                 }
-                handler.call(this, event, resolvedTarget, closestHandler.element);
+                // Find the actual closest matching element for this event target
+                const actualClosestElement = event.target.closest(closestHandler.selector);
+                handler.call(this, event, resolvedTarget, actualClosestElement);
                 event.stopPropagation();
                 return;
             }
