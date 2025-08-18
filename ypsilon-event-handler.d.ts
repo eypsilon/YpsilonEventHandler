@@ -32,17 +32,43 @@
  *     });
  *   }
  *
- *   handleClick(event, target) {
+ *   handleClick(event, target, element?) {
  *     const action = target.dataset.action;
  *     if (action && this[action]) this[action](target, event);
  *   }
  *
- *   handleInput(event, target) {
+ *   handleInput(event, target, element?) {
  *     console.log('Input changed:', target.value);
  *   }
  * }
  *
  * const handler = new MyHandler();
+ * ```
+ *
+ * @example
+ * ```ts
+ * // Event-scoped methods with optional container element:
+ * const methods = {
+ *   // Global methods
+ *   globalLogger(event, target, element?) {
+ *     console.log('Global method called');
+ *   },
+ *   
+ *   // Event-scoped methods
+ *   click: {
+ *     handleComponentClick(event, target, element?) {
+ *       // element = the selector-matched DOM element (optional)
+ *       if (element) {
+ *         const items = element.querySelectorAll('.item');
+ *         // Work within the matched element's scope
+ *       }
+ *     }
+ *   }
+ * };
+ * 
+ * const handler = new YpsilonEventHandler({
+ *   '.component': [{ type: 'click', handler: 'handleComponentClick' }]
+ * }, {}, { methods });
  * ```
  *
  * @example
@@ -324,9 +350,14 @@ export interface EventMapping {
 
 /**
  * Methods object for external handler definitions (Vue.js style)
+ * Supports both global methods and event-scoped methods
  */
 export interface Methods {
-    [methodName: string]: (this: YpsilonEventHandler, event: Event, target: EventTarget | null) => void;
+    [methodName: string]: 
+        | ((this: YpsilonEventHandler, event: Event, target: EventTarget | null, element?: Element) => void)
+        | {
+            [eventType: string]: (this: YpsilonEventHandler, event: Event, target: EventTarget | null, element?: Element) => void;
+        };
 }
 
 /**

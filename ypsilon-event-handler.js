@@ -89,7 +89,7 @@ class YpsilonEventHandler {
                 if (this.autoTargetResolution && this.targetResolutionEvents.includes(event.type)) {
                     resolvedTarget = this.findActionableTarget(event.target, closestHandler.element) || event.target;
                 }
-                handler.call(this, event, resolvedTarget);
+                handler.call(this, event, resolvedTarget, closestHandler.element);
                 event.stopPropagation();
                 return;
             }
@@ -469,8 +469,15 @@ class YpsilonEventHandler {
                     return this[resolvedName];
                 }
             } else if (source === 'methods') {
-                if (this.methods && typeof this.methods[resolvedName] === 'function') {
-                    return this.methods[resolvedName];
+                if (this.methods) {
+                    // First check event-scoped methods: methods.click.clickHandler
+                    if (this.methods[eventType] && typeof this.methods[eventType][resolvedName] === 'function') {
+                        return this.methods[eventType][resolvedName];
+                    }
+                    // Then check global methods: methods.globalHandler
+                    if (typeof this.methods[resolvedName] === 'function') {
+                        return this.methods[resolvedName];
+                    }
                 }
             } else if (source === 'global') {
                 if (this.enableGlobalFallback && typeof window !== 'undefined' && typeof window[resolvedName] === 'function') {

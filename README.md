@@ -306,19 +306,54 @@ Modern websites routinely create hundreds of individual listeners, turning simpl
 
 Just check it for yourself, go to any popular page (or right here) and run the following script in the Console, and try not to be surprised. It grabs all elements in the page and checks each for eventListeners attached and displays a list with all matches. But, the elements in the list can have multiple event listeners, so it might look like there are ~100, but in reality, it's more likely what you see * 5.
 
+> **Note:** When copy-pasting into DevTools Console, you'll get a security warning requiring you to type `allow pasting` to enable clipboard access. This is normal browser security behavior.
+
 ```js
-[
-  window, ...document.querySelectorAll('*')
-].filter(el => {
+// 🔍 Enhanced Real-World Listener Scanner with Counter
+let totalListeners = 0;
+const elementsWithListeners = [];
+
+[window, ...document.querySelectorAll('*')].filter(el => {
     const listeners = getEventListeners(el);
     return listeners && Object.keys(listeners).length > 0;
 }).forEach((el, i) => {
     const elementName = el === window
         ? 'window'
         : el === document ? 'document' : el.tagName.toLowerCase() + (el.id ? '#' + el.id : '') + (el.className ? '.' + el.className.split(' ').join('.') : '');
+
     const listeners = getEventListeners(el);
-    console.log(`${i}. ${elementName}:\n`, listeners);
-})
+
+    // Count total listeners for this element
+    let elementListenerCount = 0;
+    Object.values(listeners).forEach(eventArray => {
+        elementListenerCount += eventArray.length;
+    });
+    totalListeners += elementListenerCount;
+
+    // Enhanced display format
+    console.log(`${i + 1}. ${elementName}:`);
+    Object.entries(listeners).forEach(([eventType, eventArray]) => {
+        console.log(`  - ${eventType}: ${eventArray.length}`);
+    });
+    console.log(`  Total: ${elementListenerCount} listeners`);
+    console.log('  Raw data:', listeners);
+    console.log(''); // Empty line for readability
+
+    elementsWithListeners.push({elementName, count: elementListenerCount, listeners});
+});
+
+// Final summary
+console.log(`🎯 SCAN COMPLETE:`);
+console.log(`📊 Total Elements with Listeners: ${elementsWithListeners.length}`);
+console.log(`🔥 Total Event Listeners Found: ${totalListeners}`);
+console.log(`📈 Average Listeners per Element: ${(totalListeners / elementsWithListeners.length).toFixed(2)}`);
+
+// Top listener hotspots
+const sorted = elementsWithListeners.sort((a, b) => b.count - a.count).slice(0, 5);
+console.log(`🥇 Top 5 Listener Hotspots:`);
+sorted.forEach((item, i) => {
+    console.log(`${i + 1}. ${item.elementName}: ${item.count} listeners`);
+});
 ```
 
 You need to see what it truly means to have 100+ elements listening to hundreds of events. Even I once thought individual listeners made elements more "bound" and secure, but that just creates a freezing mess for users. The more listeners you attach, the more your application becomes a performance nightmare.
