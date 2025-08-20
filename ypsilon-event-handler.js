@@ -98,7 +98,7 @@ class YpsilonEventHandler {
                     // If actionable config is disabled, keep original target (backward compatibility)
                 }
                 // Find the actual closest matching element for this event target
-                const actualClosestElement = event.target.closest(closestHandler.selector);
+                const actualClosestElement = this.findClosest(event.target, closestHandler.selector);
                 handler.call(this, event, resolvedTarget, actualClosestElement);
                 event.stopPropagation();
                 return;
@@ -419,6 +419,41 @@ class YpsilonEventHandler {
             }
         }
 
+        return null;
+    }
+
+    /**
+     * Cross-browser closest() implementation
+     * @param {Element} element - Starting element
+     * @param {string} selector - CSS selector to match
+     * @returns {Element|null} - Closest matching ancestor or null
+     */
+    findClosest(element, selector) {
+        // Use native closest() if available (modern browsers)
+        if (element.closest) {
+            return element.closest(selector);
+        }
+
+        // Fallback for older browsers (IE11, old Chrome/Firefox)
+        let current = element;
+        
+        // Simple selector parsing for basic cases
+        const isIdSelector = selector.startsWith('#');
+        const isClassSelector = selector.startsWith('.');
+        const cleanSelector = selector.slice(1); // Remove # or .
+        
+        while (current && current !== document) {
+            if (isIdSelector && current.id === cleanSelector) {
+                return current;
+            } else if (isClassSelector && current.classList && current.classList.contains(cleanSelector)) {
+                return current;
+            } else if (!isIdSelector && !isClassSelector && current.tagName && current.tagName.toLowerCase() === selector.toLowerCase()) {
+                return current;
+            }
+            
+            current = current.parentElement;
+        }
+        
         return null;
     }
 
@@ -974,7 +1009,7 @@ class YpsilonEventHandler {
     }
 }
 
-// Initialize static cache, aovoid overriding
+// Initialize static cache, avoid overriding
 if (!YpsilonEventHandler._passiveSupportCache) {
     YpsilonEventHandler._passiveSupportCache = undefined;
 }
