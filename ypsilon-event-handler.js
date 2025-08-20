@@ -16,6 +16,7 @@ class YpsilonEventHandler {
             autoTargetResolution: false,
             targetResolutionEvents: null,
             enableConfigValidation: true,
+            enableHandlerValidation: true,
             ...config
         };
         this.eventMapping = eventMapping;
@@ -87,7 +88,14 @@ class YpsilonEventHandler {
                 // Use smart target resolution for problematic events if enabled
                 let resolvedTarget = event.target;
                 if (this.autoTargetResolution && this.targetResolutionEvents.includes(event.type)) {
-                    resolvedTarget = this.findActionableTarget(event.target, closestHandler.element) || event.target;
+                    const actionableTarget = this.findActionableTarget(event.target, closestHandler.element);
+
+                    if (actionableTarget) {
+                        resolvedTarget = actionableTarget;
+                    } else if (this.actionableConfig.enabled) {
+                        return; // If no actionable target found, block event
+                    }
+                    // If actionable config is disabled, keep original target (backward compatibility)
                 }
                 // Find the actual closest matching element for this event target
                 const actualClosestElement = event.target.closest(closestHandler.selector);
@@ -98,24 +106,18 @@ class YpsilonEventHandler {
         }
     }
 
-    dispatch(type, detail = null, target = document) {
-        target.dispatchEvent(new CustomEvent(type, { bubbles: true, detail }));
-        return this;
-    }
-
-    checkUserInteraction(event) {
-        // Only count real user interactions, not passive events
-        if (!this.userHasInteracted && !this.passiveEvents.includes(event.type)) {
-            this.userHasInteracted = true;
-        }
-    }
-
     hasUserInteracted() {
         return this.userHasInteracted;
     }
 
     resetUserInteracted() {
         this.userHasInteracted = false;
+    }
+
+    checkUserInteraction(event) {
+        if (!this.userHasInteracted && !this.passiveEvents.includes(event.type)) {
+            this.userHasInteracted = true;
+        }
     }
 
     /**
@@ -186,7 +188,6 @@ class YpsilonEventHandler {
             this.validateSelectorConfig(selector, config);
         }
 
-        // Validate actionable configuration
         this.validateActionableConfig();
     }
 
@@ -303,21 +304,6 @@ class YpsilonEventHandler {
         }
     }
 
-    detectPassiveSupport() {
-        try {
-            const opts = Object.defineProperty({}, 'passive', {
-                get: () => {
-                    this.passiveSupported = true;
-                    return true;
-                }
-            });
-            window.addEventListener('testPassive', null, opts);
-            window.removeEventListener('testPassive', null, opts);
-        } catch (e) {
-            this.passiveSupported = false;
-        }
-    }
-
     /**
      * Generate unique key for DOM element (for caching)
      * @private
@@ -363,14 +349,13 @@ class YpsilonEventHandler {
     createWrappedHandler(eventConfig, key, eventType) {
         let handler = this;
 
-        // Apply throttle/debounce if specified
         if (typeof eventConfig === 'object') {
             if (eventConfig.throttle) {
-                handler = { // Create a throttled wrapper that preserves the original context
+                handler = {
                     handleEvent: this.throttle((event) => this.handleEvent(event), eventConfig.throttle, `${key}-${eventType}-throttle`)
                 };
             } else if (eventConfig.debounce) {
-                handler = { // Create a debounced wrapper that preserves the original context
+                handler = {
                     handleEvent: this.debounce((event) => this.handleEvent(event), eventConfig.debounce, `${key}-${eventType}-debounce`)
                 };
             }
@@ -384,10 +369,8 @@ class YpsilonEventHandler {
      * Solves the SVG-in-button and nested element problems
      * Uses configurable actionable patterns for maximum flexibility
      */
-    findActionableTarget(target, boundary) {
-        if (!this.actionableConfig.enabled) {
-            return target; // Return original target if actionable resolution is disabled
-        }
+    findActionableTarget(target, boundary) { // Return if resolution is disabled
+        if (!this.actionableConfig.enabled) return target;
 
         let current = target;
 
@@ -492,6 +475,29 @@ class YpsilonEventHandler {
     }
 
     /**
+     * Validate that a resolved handler exists and is callable
+     * @param {string} handlerName - Original handler name for error reporting
+     * @param {string} eventType - Event type for context
+     * @param {Function|null} resolvedHandler - The resolved handler function
+     * @param {string} resolvedName - The resolved method name after alias processing
+     * @returns {boolean} - True if valid, false if validation disabled or handler missing
+     * @private
+     */
+    validateResolvedHandler(handlerName, eventType, resolvedHandler, resolvedName) {
+        if (!this.config.enableHandlerValidation) {
+            return !!resolvedHandler; // Skip validation but return boolean
+        }
+
+        if (!resolvedHandler) {
+            const aliasMsg = resolvedName !== handlerName ? ` (resolved from alias '${handlerName}')` : '';
+            console.warn(`YpsilonEventHandler: Handler method '${resolvedName}'${aliasMsg} not found for event '${eventType}' (checked class, methods object, and global scope)`);
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * Dynamically add a single event listener to existing instance
      * @param {string} target - CSS selector for target element
      * @param {string|object} eventConfig - Event type string or config object
@@ -527,10 +533,7 @@ class YpsilonEventHandler {
      * @returns {boolean} - True if removed, false if not found
      */
     removeEvent(target, eventType) {
-        // Check if mapping exists
-        if (!this.eventMapping[target]) {
-            return false;
-        }
+        if (!this.eventMapping[target]) return false;
 
         // Find and remove from eventMapping
         const initialLength = this.eventMapping[target].length;
@@ -562,9 +565,7 @@ class YpsilonEventHandler {
      * @returns {boolean} - True if event exists
      */
     hasEvent(target, eventType) {
-        if (!this.eventMapping[target]) {
-            return false;
-        }
+        if (!this.eventMapping[target]) return false;
 
         return this.eventMapping[target].some(config => {
             const configType = typeof config === 'string' ? config : config.type;
@@ -602,11 +603,8 @@ class YpsilonEventHandler {
 
         // Validate handler exists using enhanced resolution
         const validatedHandler = this.resolveHandler(handlerMethodName, eventType);
-        if (!validatedHandler) {
-            const resolvedName = this.resolveMethodName(handlerMethodName, eventType);
-            const aliasMsg = resolvedName !== handlerMethodName ? ` (resolved from alias '${handlerMethodName}')` : '';
-            console.warn(`YpsilonEventHandler: Handler method '${resolvedName}'${aliasMsg} not found for event '${eventType}' on element '${selector}' (checked class, methods object, and global scope)`);
-        }
+        const resolvedName = this.resolveMethodName(handlerMethodName, eventType);
+        this.validateResolvedHandler(handlerMethodName, eventType, validatedHandler, resolvedName);
 
         // Store tracking info
         this.eventListeners.get(key).events.push({ type: eventType, handler, options });
@@ -639,9 +637,7 @@ class YpsilonEventHandler {
             const key = `${selector}_${eventType}_${index}`;
 
             // Check if this exact combination is already registered
-            if (this.eventListeners.has(key)) {
-                return; // Already registered
-            }
+            if (this.eventListeners.has(key)) return; // Already registered
 
             this.registerEventListener(element, eventConfig, key, selector);
         });
@@ -813,9 +809,7 @@ class YpsilonEventHandler {
      * @returns {object|null} - Statistics object with various metrics, or null if stats disabled
      */
     getStats() {
-        if (!this.enableStats) {
-            return null;
-        }
+        if (!this.enableStats) return null;
 
         const configs = Array.from(this.eventListeners.values());
         const events = configs.flatMap(config => config.events);
@@ -848,13 +842,38 @@ class YpsilonEventHandler {
     }
 
     debounce(fn, delay, key) {
-        // Use static implementation with instance-specific timer map
         return YpsilonEventHandler._debounceImplementation(fn, delay, key, this.debounceTimers);
     }
 
     throttle(fn, delay, key) {
-        // Use static implementation with instance-specific timer map
         return YpsilonEventHandler._throttleImplementation(fn, delay, key, this.throttleTimers);
+    }
+
+    detectPassiveSupport() {
+        this.passiveSupported = YpsilonEventHandler.isPassiveSupported();
+    }
+
+    dispatch(type, detail = null, target = document) {
+        target.dispatchEvent(new CustomEvent(type, { bubbles: true, detail }));
+        return this;
+    }
+
+    /**
+     * Static dispatch method for use without instance
+     * @param {string} type - Event type to dispatch
+     * @param {any} detail - Event detail payload
+     * @param {Element} target - Target element (defaults to document)
+     * @returns {CustomEvent} - The dispatched event
+     */
+    static dispatch(type, detail = null, target = document) {
+        const event = new CustomEvent(type, {
+            detail,
+            bubbles: true,
+            cancelable: true
+        });
+
+        target.dispatchEvent(event);
+        return event;
     }
 
     /**
@@ -870,9 +889,7 @@ class YpsilonEventHandler {
                 // Leading edge: execute immediately
                 fn.apply(this, args);
                 timers.set(key, {
-                    timeout: setTimeout(() => {
-                        timers.delete(key);
-                    }, delay),
+                    timeout: setTimeout(() => { timers.delete(key) }, delay),
                     lastArgs: args
                 });
             } else {
@@ -901,9 +918,7 @@ class YpsilonEventHandler {
     static _debounceImplementation(fn, delay, key, timers) {
         return function(...args) {
             // Clear existing timer
-            if (timers.has(key)) {
-                clearTimeout(timers.get(key));
-            }
+            if (timers.has(key)) clearTimeout(timers.get(key));
 
             // Set new timer with latest arguments
             const timerId = setTimeout(() => {
@@ -930,15 +945,44 @@ class YpsilonEventHandler {
 
         return YpsilonEventHandler._debounceImplementation(fn, delay, key, YpsilonEventHandler._staticDebounceTimers);
     }
+
+    /**
+     * Check passive support globally (cached result shared across all instances)
+     * @returns {boolean} - True if passive listeners are supported
+     * @static
+     */
+    static isPassiveSupported() {
+        if (YpsilonEventHandler._passiveSupportCache !== undefined) {
+            return YpsilonEventHandler._passiveSupportCache;
+        }
+
+        // Perform the test once globally
+        try {
+            const opts = Object.defineProperty({}, 'passive', {
+                get: () => {
+                    YpsilonEventHandler._passiveSupportCache = true;
+                    return true;
+                }
+            });
+            window.addEventListener('testPassive', null, opts);
+            window.removeEventListener('testPassive', null, opts);
+        } catch (e) {
+            YpsilonEventHandler._passiveSupportCache = false;
+        }
+
+        return YpsilonEventHandler._passiveSupportCache;
+    }
+}
+
+// Initialize static cache, aovoid overriding
+if (!YpsilonEventHandler._passiveSupportCache) {
+    YpsilonEventHandler._passiveSupportCache = undefined;
 }
 
 // Export for ES6 modules and CommonJS
 if (typeof module !== 'undefined' && module.exports) {
-    // CommonJS
-    module.exports = { YpsilonEventHandler };
-    // Also support default export for compatibility
-    module.exports.default = YpsilonEventHandler;
-} else if (typeof window !== 'undefined') {
-    // Browser global
+    module.exports = { YpsilonEventHandler };     // CommonJS
+    module.exports.default = YpsilonEventHandler; // support default export
+} else if (typeof window !== 'undefined') {       // Browser global
     window['YpsilonEventHandler'] = YpsilonEventHandler;
 }

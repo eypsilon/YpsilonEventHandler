@@ -6,5 +6,6 @@
 .npmignore
 CLAUDE.md
 RELEASE_NOTES.md
+ToDo.md
 test.html
 test-prefix.html

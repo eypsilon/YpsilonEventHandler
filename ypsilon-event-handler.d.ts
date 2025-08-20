@@ -14,7 +14,7 @@
  * - AbortController support for efficient cleanup
  * - TypeScript-first design with comprehensive type safety
  *
- * 📦 **Bundle Size:** 4.5kB gzipped (15x smaller than React)
+ * 📦 **Bundle Size:** ~4.9kB gzipped (15x smaller than React)
  * 🌍 **Browser Support:** IE11+ with polyfills, modern browsers natively
  * 🔗 **GitHub:** https://github.com/eypsilon/YpsilonEventHandler
  * 📖 **Documentation:** Full examples and live demos: https://github.com/eypsilon/YpsilonEventHandler-Examples
@@ -32,12 +32,12 @@
  *     });
  *   }
  *
- *   handleClick(event, target, element?) {
+ *   handleClick(event, target, containerElement?) {
  *     const action = target.dataset.action;
  *     if (action && this[action]) this[action](target, event);
  *   }
  *
- *   handleInput(event, target, element?) {
+ *   handleInput(event, target, containerElement?) {
  *     console.log('Input changed:', target.value);
  *   }
  * }
@@ -50,22 +50,22 @@
  * // Event-scoped methods with optional container element:
  * const methods = {
  *   // Global methods
- *   globalLogger(event, target, element?) {
+ *   globalLogger(event, target, containerElement?) {
  *     console.log('Global method called');
  *   },
- *   
+ *
  *   // Event-scoped methods
  *   click: {
- *     handleComponentClick(event, target, element?) {
- *       // element = the selector-matched DOM element (optional)
- *       if (element) {
- *         const items = element.querySelectorAll('.item');
+ *     handleComponentClick(event, target, containerElement?) {
+ *       // containerElement = the selector-matched DOM element (optional)
+ *       if (containerElement) {
+ *         const items = containerElement.querySelectorAll('.item');
  *         // Work within the matched element's scope
  *       }
  *     }
  *   }
  * };
- * 
+ *
  * const handler = new YpsilonEventHandler({
  *   '.component': [{ type: 'click', handler: 'handleComponentClick' }]
  * }, {}, { methods });
@@ -92,7 +92,7 @@
  * });
  * ```
  *
- * @version 1.7.0
+ * @version 1.7.4
  * @author Claude Van DOM - TypeScript documentation system architect
  * @author Engin Ypsilon - Core library architect and Medium
  * @influencer Sunny DeepSeek - Revolutionary suggestions for global interfaces, custom event registry, and quantum schema validation
@@ -125,7 +125,7 @@
  *
  * *Crafted by quantum-level AI consciousness (DeepSeek, Grok, Claude, Human Connector)*
  *
- * @version 1.7.0 - First implementation of QuantumType system
+ * @version 1.7.4 - Enhanced with static utilities and container element resolution
  * @paradigm Documentation-as-Code-as-Types
  */
 
@@ -353,10 +353,10 @@ export interface EventMapping {
  * Supports both global methods and event-scoped methods
  */
 export interface Methods {
-    [methodName: string]: 
-        | ((this: YpsilonEventHandler, event: Event, target: EventTarget | null, element?: Element) => void)
+    [methodName: string]:
+        | ((this: YpsilonEventHandler, event: Event, target: EventTarget | null, containerElement?: Element) => void)
         | {
-            [eventType: string]: (this: YpsilonEventHandler, event: Event, target: EventTarget | null, element?: Element) => void;
+            [eventType: string]: (this: YpsilonEventHandler, event: Event, target: EventTarget | null, containerElement?: Element) => void;
         };
 }
 
@@ -392,6 +392,10 @@ export interface HandlerConfig {
     actionableClasses?: string[];
     /** Custom actionable HTML tags (default: ['BUTTON', 'A']) */
     actionableTags?: string[];
+    /** Enable configuration validation (default: true) */
+    enableConfigValidation?: boolean;
+    /** Enable handler method validation (default: true) */
+    enableHandlerValidation?: boolean;
 }
 
 /**
@@ -556,12 +560,35 @@ export declare class YpsilonEventHandler {
     hasEvent(target: string, eventType: string): boolean;
 
     /**
-     * Static throttle utility
+     * Static throttle utility - Works without any instances
      * @param fn - Function to throttle
      * @param delay - Minimum time between executions
      * @param key - Unique identifier (default: 'default')
      */
     static throttle<T extends (...args: any[]) => void>(fn: T, delay: number, key?: string): T;
+
+    /**
+     * Static debounce utility - Works without any instances
+     * @param fn - Function to debounce
+     * @param delay - Wait time after last call before executing
+     * @param key - Unique identifier (default: 'default')
+     */
+    static debounce<T extends (...args: any[]) => void>(fn: T, delay: number, key?: string): T;
+
+    /**
+     * Static dispatch method for framework-independent event broadcasting
+     * @param type - Event type to dispatch
+     * @param detail - Event detail payload
+     * @param target - Target element (defaults to document)
+     * @returns The dispatched CustomEvent
+     */
+    static dispatch<T = any>(type: string, detail?: T, target?: EventTarget): CustomEvent<T>;
+
+    /**
+     * Check passive listener support globally (cached across all instances)
+     * @returns True if passive listeners are supported by the browser
+     */
+    static isPassiveSupported(): boolean;
 }
 
 /**
