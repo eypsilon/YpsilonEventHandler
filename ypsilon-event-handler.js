@@ -436,12 +436,12 @@ class YpsilonEventHandler {
 
         // Fallback for older browsers (IE11, old Chrome/Firefox)
         let current = element;
-        
+
         // Simple selector parsing for basic cases
         const isIdSelector = selector.startsWith('#');
         const isClassSelector = selector.startsWith('.');
         const cleanSelector = selector.slice(1); // Remove # or .
-        
+
         while (current && current !== document) {
             if (isIdSelector && current.id === cleanSelector) {
                 return current;
@@ -450,10 +450,10 @@ class YpsilonEventHandler {
             } else if (!isIdSelector && !isClassSelector && current.tagName && current.tagName.toLowerCase() === selector.toLowerCase()) {
                 return current;
             }
-            
+
             current = current.parentElement;
         }
-        
+
         return null;
     }
 
@@ -991,7 +991,6 @@ class YpsilonEventHandler {
             return YpsilonEventHandler._passiveSupportCache;
         }
 
-        // Perform the test once globally
         try {
             const opts = Object.defineProperty({}, 'passive', {
                 get: () => {
@@ -1009,12 +1008,8 @@ class YpsilonEventHandler {
     }
 }
 
-// Initialize static cache, avoid overriding
-if (!YpsilonEventHandler._passiveSupportCache) {
-    YpsilonEventHandler._passiveSupportCache = undefined;
-}
+YpsilonEventHandler._passiveSupportCache = undefined;
 
-// Export for ES6 modules and CommonJS
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = { YpsilonEventHandler };     // CommonJS
     module.exports.default = YpsilonEventHandler; // support default export

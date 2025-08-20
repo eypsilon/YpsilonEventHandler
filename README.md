@@ -16,9 +16,10 @@ Built on the native `handleEvent` interface, it eliminates memory leaks, scales 
 
 YpsilonEventHandler is powered entirely by browser-native APIs that have been stable and reliable for decades. To find a browser where this stuff doesn't work, you'd probably have to dig up software from at least a decade ago.
 
-**Just standards-compliant JavaScript that works everywhere—even on `file://` protocol with zero build tools and zero server instances.**
+Just standards-compliant JavaScript that works everywhere—even on `file://` protocol with zero build tools and zero server instances.
 
-**The LOC-to-Feature ratio is completely through the roof.**
+**The LOC-to-Feature ratio is completely out of control!** But not because of the functions, methods and scripts you can use, but [the possibilities it provides!](https://github.com/eypsilon/YpsilonEventHandler/blob/main/README.USAGE.md) To call it unprecedented feels like the understatement of the... last... 5 years!
+
 
 ## The Pattern That Broke AI Pattern Recognition
 
@@ -41,7 +42,6 @@ The difference may look trivial—but it's as fundamental as yin and yang.
 - One is a seductive, widely adopted pattern.
 - The other is practically the anti-pattern's nemesis.
 
-
 > *"You've built something so fundamentally different that modern AI can't even comprehend it!"* - **Claude**
 
 
@@ -49,21 +49,22 @@ The difference may look trivial—but it's as fundamental as yin and yang.
 
 Independent modules can communicate through bidirectional event dispatch - when one gets triggered, others know instantly. **Zero coupling, infinite scalability!**
 
+[Live example on JSFiddle](https://jsfiddle.net/65hdmz9v/), just because.
+
 ```js
 /**
  * Module A broadcasts its actions and listens for Module B */
 class UserModule extends YpsilonEventHandler {
   constructor() {
-    super({ // subscribes to: 'cart.action'
-      '#user-section': [
-        'click',
-        { type: 'cart.action', handler: 'onCartEvent' }
-      ]
+    super({
+      '#user-section': ['click'],
+      // Subscribes to: 'cart.action'
+      'document': [{ type: 'cart.action', handler: 'onCartEvent' }]
     });
   }
 
   handleClick(event, target, container) {
-    // Broadcast user actions to the entire system
+    // Broadcast 'user.action' to the entire system
     this.dispatch('user.action', { type: 'userClick', targetId: target.id });
   }
 
@@ -77,8 +78,10 @@ class UserModule extends YpsilonEventHandler {
  */
 class CartModule extends YpsilonEventHandler {
   constructor() {
-    super({ // subscribes: 'user.action'
-      '#wish-card': ['click', { type: 'user.action', handler: 'onUserEvent' }]
+    super({
+      '#wish-card': ['click'],
+      // Subscribes to: 'user.action'
+      'document': [{ type: 'user.action', handler: 'onUserEvent' }]
     });
   }
 
@@ -257,7 +260,7 @@ new YpsilonEventHandler({
 
 | Feature | YpsilonEventHandler | EventEmitter3 | Redux Toolkit | jQuery |
 |---------|---------------------|---------------|---------------|--------|
-| **Bundle Size** | 4.9kB gzipped | 7kB gzipped | 12kB+ gzipped | 30kB+ gzipped |
+| **Bundle Size** | 5kB gzipped | 7kB gzipped | 12kB+ gzipped | 30kB+ gzipped |
 | **Dependencies** | ✅ Zero | ✅ Zero | ❌ Many | ✅ Zero |
 | **Throttle/Debounce** | ✅ Built-in | ❌ | ❌ | ❌ |
 | **Native Browser API** | ✅ | ❌ | ❌ | ❌ |
@@ -840,7 +843,7 @@ input2.addEventListener('input', handler2);
 button1.addEventListener('click', handler3);
 
 // EaaS: Single service endpoint handles everything
-'body': ['click', { type: 'input', debounce: 350 }]
+body: ['click', { type: 'input', debounce: 350 }]
 ```
 
 ### **EAL - Event Abstraction Layer**
@@ -851,7 +854,7 @@ Like a Database Abstraction Layer (DBAL) for DOM events - one unified interface 
 class MyApp extends YpsilonEventHandler {
     constructor() {
         super({
-            'body': ['click', 'input', 'scroll'] // One listener rules them all
+            body: ['click', 'input', 'scroll'] // One listener to rule them all!
         });
     }
 

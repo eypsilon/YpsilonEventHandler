@@ -14,6 +14,8 @@ All examples work with `file://` protocol - no build, no setup, no server needed
 
 Write your code where your HTML lives and inject methods into the handler on the fly.
 
+[Live example on JSFiddle](https://jsfiddle.net/xrju1gca/), where I copy&pasted from below to there.
+
 ```html
 <!DOCTYPE html>
 <html lang="en">
@@ -73,8 +75,14 @@ class AdvancedHandler extends YpsilonEventHandler {
     constructor() {
         super({
             // Target specific sections for true component isolation
-            '#test-section': ['click', { type: 'test.started', handler: 'onTestEvent' }],
-            '#user-form': ['click', 'input', { type: 'modal.open', handler: 'onModalEvent' }]
+            '#test-section': ['click',        ],
+            '#user-form':    ['click', 'input'],
+            'document': [
+                // Emit + Subscribe
+                { type: 'test.started', handler: 'onTestEvent'  },
+                { type: 'modal.open',   handler: 'onModalEvent' },
+                { type: 'app.ready',    handler: 'onAppReady' },
+            ]
         }, {}, {
             methods: advancedMethods,        // Inject external methods
             methodsFirst: true,              // Check methods object first (performance optimization)
@@ -120,10 +128,39 @@ class AdvancedHandler extends YpsilonEventHandler {
         console.log('🔄 Modal event received:', event.detail);
     }
 
-    // 🚀 Pattern 4: Built-in Caching System
-    setCache(key, value) { this.cache.set(key, value); }
-    getCache(key) { return this.cache.get(key); }
-    clearCache() { this.cache.clear(); }
+    onAppReady(event, target) {
+        console.log('🔄 App is loaded and unlocked, ready to engage!', event.detail);
+    }
+
+    // 🚀 Advanced Caching System - Copy & Paste Ready!
+    setCache(key, value) {
+        this.cache.set(key, value);
+    }
+
+    // Smart element finder with caching - perfect for repeated DOM queries
+    getCache(key, isMultiple = false, refresh = false, scope = document.body) {
+        return this._cacheManager(key, isMultiple, refresh, scope);
+    }
+
+    getAllCache() { return this.cache }
+
+    deleteCacheItem(key) { return this.cache.delete(key) } // Clean cache item removal
+
+    clearCache() { this.cache.clear() }
+
+    // Advanced cache manager - handles DOM element caching automatically
+    _cacheManager(cacheKey, isMultiple, refresh, scope) {
+        // cacheKey doubles as CSS selector - genius optimization!
+        let getElements = refresh ? null : this.cache.get(cacheKey);
+
+        if (!getElements || !getElements.length) {
+            const select = isMultiple ? 'querySelectorAll' : 'querySelector';
+            getElements = scope[select](cacheKey);
+            this.cache.set(cacheKey, getElements);
+        }
+
+        return getElements;
+    }
 }
 
 // Initialize the advanced handler
@@ -151,13 +188,19 @@ console.log('📊 Performance stats:', handler.getStats());
 
 Independent modules that communicate through event dispatch without coupling.
 
+Event-driven architecture in minutes and zero configuration.
+
+[Live example on JSFiddle](https://jsfiddle.net/65hdmz9v/), just because.
+
 ```js
 // Module A: User Interface (can be in same file or separate files)
 class UserInterface extends YpsilonEventHandler {
     constructor() {
         super({
-            // Only handles clicks within its own UI section
-            '#user-panel': ['click', { type: 'data.update', handler: 'onDataChange' }]
+            // Handles clicks within its own UI section, subscribes: 'data.update'
+            '#user-panel': ['click'],
+            // Subscriber, subscribes to 'data.update'
+            'document': [{ type: 'data.update', handler: 'onDataChange' }]
         });
     }
 
@@ -179,8 +222,9 @@ class UserInterface extends YpsilonEventHandler {
 class DataManager extends YpsilonEventHandler {
     constructor() {
         super({
-            // Only handles clicks within its own control section  
-            '#data-controls': ['click', { type: 'ui.action', handler: 'onUIAction' }]
+            // Handles clicks within its own control section, subscribes: 'ui.action'
+            '#data-controls': ['click'],
+            'document': [{ type: 'ui.action', handler: 'onUIAction' }]
         });
     }
 
@@ -216,10 +260,11 @@ class SuperDelegator extends YpsilonEventHandler {
     constructor() {
         super({
             // One listener for the entire application
-            'body': [
+            body: [
                 'click',
-                { type: 'input', debounce: 300 },
+                { type: 'input',  debounce: 300 },
                 { type: 'scroll', throttle: 100 }
+                // 'scroll', 'resize', 'touchstart', 'touchmove', 'touchend'...
             ]
         });
     }
@@ -239,24 +284,231 @@ class SuperDelegator extends YpsilonEventHandler {
     }
 
     // Component-specific handlers
-    handleModalClick(event, target, containerElement) {
-        console.log('🪟 Modal component click');
-    }
-
-    handleFormClick(event, target, containerElement) {
-        console.log('📋 Form component click');
-    }
+    handleModalClick(event, target, containerElement) { console.log('🪟 Modal component click', arguments) }
+    handleFormClick(event, target, containerElement)  { console.log('📋 Form component click', arguments) }
 
     // Action handlers
-    saveData(event, target, containerElement) {
-        console.log('💾 Saving data...');
-    }
-
-    deleteItem(event, target, containerElement) {
-        console.log('🗑️ Deleting item...');
-    }
+    saveData(event, target, containerElement)         { console.log('💾 Saving data...', arguments) }
+    deleteItem(event, target, containerElement)       { console.log('🗑️ Deleting item...', arguments) }
 }
 ```
+
+## 🏗️ **Pattern: Self-Contained Module Architecture**
+
+**Build completely independent modules that manage their own lifecycle, configuration, and event handling.**
+
+**Use When**: Creating reusable components, building plugin systems, or developing modular applications where each module should be completely self-sufficient.
+
+```js
+function deepMerge(target, source) {
+    for (const key in source) {
+        if (source[key] instanceof Object && !Array.isArray(source[key])) {
+            target[key] = YaiUtils.deepMerge(target[key] || {}, source[key]);
+        } else {
+            target[key] = source[key];
+        }
+    }
+    return target;
+}
+
+// Self-contained module that handles everything internally
+class YpsExample {
+    constructor(customConfig = {}) {
+        // Deep merge configuration system
+        this.config = deepMerge({
+            rootSelector: '[data-y-tabs]', // Module root selector
+            selectors: {},                 // component-specific selectors
+            events: {}                     // Event configuration overrides
+        }, customConfig);
+
+        // Own YpsilonEventHandler instance with complete lifecycle
+        this.events = new YpsilonEventHandler({
+            [this.config.rootSelector]: ['click']
+        }, {
+            click: { run: 'runAction' } // Event-scoped aliases
+        }, {
+            methods: {
+                // Event-scoped method organization
+                click: {
+                    handleClick: (event, target, container) => {
+                        const action = target.dataset.tabAction;
+                        if (!action) return;
+
+                        // Smart method resolution with fallbacks
+                        const handler = this[action] ||
+                                      this[this.events.resolveMethodName(action, event.type)];
+                        if (handler) return handler.call(this, target, event, container);
+
+                        console.warn(`No handler for action: ${action}`);
+                    }
+                }
+            },
+            methodsFirst: true,   // Check methods object first
+            abortController: true // Enable clean abort capability
+        });
+    }
+
+    // Module-specific business logic
+    runAction(target, event, container) {
+        console.log('🎯 Module action executed:', target.dataset.tabAction);
+        // Module handles its own business logic completely independently
+    }
+
+    // Lifecycle management - critical for clean module systems
+    destroy() {
+        this.events.destroy();     // Complete YpsilonEventHandler cleanup
+        this.config = null;        // Clean up configuration
+        // Clean up any other module resources
+    }
+
+    abort() {
+        this.events.abort();       // Quick abort if abortController enabled
+    }
+}
+
+// Usage: Multiple independent instances - zero conflicts!
+const tabsModule1 = new YpsExample({ rootSelector: '[data-tabs-primary]' });
+const tabsModule2 = new YpsExample({ rootSelector: '[data-tabs-secondary]' });
+
+// Each module is completely self-contained and independent
+```
+
+**Perfect for building plugin architectures where each module is completely independent!** 🚀
+
+## ⚡ **Pattern: Reactive State Management**
+
+**Build React/Vue-style reactivity with pure vanilla JavaScript. State changes instantly update the entire UI.**
+
+**Use When**: You need reactive interfaces without framework overhead, building configuration panels, or creating dynamic dashboards.
+
+[Live example on JSFiddle](https://jsfiddle.net/4zqem37g/), where I copy&pasted from below to there, again.
+
+```html
+<label>
+    Font size
+    <input
+        value="16"
+        data-key="fontSize"
+        data-action="setConfig"
+        type="number" min="10" max="40" step="1">
+</label>
+
+<label>
+    Distance top
+    <input
+        value="10"
+        data-key="marginTop"
+        data-action="setConfig"
+        type="number" min="5" max="100" step="1">
+</label>
+
+<pre id="show-config">Loading configuration</pre>
+
+fontSize: <span data-config-key="fontSize">Loading value of fontSize</span>
+
+<script src="https://cdn.jsdelivr.net/npm/ypsilon-event-handler@latest/ypsilon-event-handler.min.js"></script>
+<script>
+// Our reactive state - just a plain object
+const config = {
+    ui: {
+        fontSize: 0,  // Will become 16 after init
+        marginTop: 0, // Will become 10 after init
+    }
+};
+
+class ConfigHandler extends YpsilonEventHandler {
+    constructor() {
+        // MAGIC #1: Super delegation! Single listener handles all config inputs
+        super({
+            // One body listener instead of listeners on every input
+            // New config form elements work automatically when added via JS
+            body: [
+                { type: 'change', handler: 'handleChange' }
+            ]
+        });
+
+        // Cache DOM queries to avoid repeated querySelectorAll calls
+        this.cache = new Map();
+
+        this._parseConfigs();
+        this._updateUiConfig();
+    }
+
+    // MAGIC #2: Super router - configurable via data-action attributes
+    handleChange(event, target) {
+        const action = target.dataset.action;
+        if (action && this[action]) {
+            this[action](target, event);
+        }
+    }
+
+    // Reactive config setter - the heart of reactivity
+    setConfig(target, event) {
+        const key = target.dataset.key;
+        config.ui[key] = this._getConfigValue(key, target);
+
+        // DRY principled UI updater - this is where the magic happens
+        this._updateUiConfig();
+    }
+
+    // Flexible value resolver - customize per config type
+    _getConfigValue(key, target) {
+        switch(key) {
+            case 'fontSize':
+            case 'marginTop': return parseInt(target.value, 10);
+        }
+        return null; // Handle validation/fallbacks as needed
+    }
+
+    // Initialize reactivity - existing input values become defaults
+    _parseConfigs() {
+        let setConfigElements = this.getCache('setConfigElements');
+        if (!setConfigElements) {
+            setConfigElements = document.querySelectorAll('[data-action="setConfig"]');
+            this.setCache('setConfigElements', setConfigElements);
+        }
+
+        setConfigElements.forEach(element => {
+            const key = element.dataset.key;
+            config.ui[key] = this._getConfigValue(key, element);
+        });
+    }
+
+    // The reactive core - updates happen everywhere instantly
+    _updateUiConfig() {
+        // Update the main config display
+        let showConfig = this.getCache('showConfig');
+        if (!showConfig) {
+            showConfig = document.getElementById('show-config');
+            this.setCache('showConfig', showConfig);
+        }
+        showConfig.textContent = JSON.stringify(config, null, 2);
+
+        // Update individual elements scattered throughout the page
+        let individualElements = this.getCache('individualElements');
+        if (!individualElements) {
+            individualElements = document.querySelectorAll('[data-config-key]');
+            this.setCache('individualElements', individualElements);
+        }
+
+        individualElements.forEach(element => {
+            const configKey = element.dataset.configKey;
+            element.textContent = config.ui[configKey];
+        });
+    }
+
+    // Simple cache management
+    getCache(key) { return this.cache.get(key); }
+    setCache(key, value) { this.cache.set(key, value); }
+}
+
+// Initialize and enjoy React-style reactivity in vanilla JS!
+const configHandler = new ConfigHandler();
+// configHandler.destroy() // Clean removal when needed
+</script>
+```
+
+**React/Vue developers will be amazed - full reactivity with zero framework overhead!** ⚡
 
 ## 📊 **Pattern: Performance Monitoring**
 
@@ -268,11 +520,11 @@ class SuperDelegator extends YpsilonEventHandler {
 class PerformanceHandler extends YpsilonEventHandler {
     constructor() {
         super({
-            'body': ['click', 'input', 'scroll']
+            body: ['click', 'input', 'scroll']
         }, {}, {
-            enableStats: true,                 // Enable performance tracking
-            enableDistanceCache: true,         // Cache DOM distance calculations
-            enableHandlerValidation: false     // Skip validation for production speed
+            enableStats: true,                 // Enable performance tracking          (default: false)
+            enableDistanceCache: true,         // Cache DOM distance calculations      (default: true)
+            enableHandlerValidation: false     // Skip validation for production speed (default: false)
         });
         // See main README.md "Configuration Options" for all performance settings
 
@@ -314,11 +566,13 @@ class PerformanceHandler extends YpsilonEventHandler {
 3. **Super Router Pattern** - Universal event proxy with data-action routing
 4. **Quantum-Entangled Modules** - Independent modules with event communication
 5. **Super Delegation** - One listener handles infinite elements
-6. **Performance Monitoring** - Built-in stats and optimization
+6. **Self-Contained Module Architecture** - Complete lifecycle management with plugin systems
+7. **Reactive State Management** - React/Vue-style reactivity with zero framework overhead
+8. **Performance Monitoring** - Built-in stats and optimization
 
 ---
 
-## 🚨 **WARNING: OUT OF CONTROL!** 
+## 🚨 **WARNING: OUT OF CONTROL!**
 
 > ⚠️ **YpsilonEventHandler may cause sudden bursts of inspiration, code refactoring frenzies, or feelings of deep satisfaction. Proceed at your own risk.**
 
@@ -334,8 +588,8 @@ class PerformanceHandler extends YpsilonEventHandler {
 // Broadcast events across browser tabs - because why not?
 class CrossTabHandler extends YpsilonEventHandler {
     constructor() {
-        super({ 'body': ['click'] });
-        
+        super({ body: ['click'] });
+
         // Listen for events from other tabs
         window.addEventListener('storage', (e) => {
             if (e.key === 'ypsilon-event') {
@@ -344,7 +598,7 @@ class CrossTabHandler extends YpsilonEventHandler {
             }
         });
     }
-    
+
     handleClick(event, target) {
         // Broadcast to ALL open tabs instantly
         localStorage.setItem('ypsilon-event', JSON.stringify({
@@ -362,23 +616,23 @@ class CrossTabHandler extends YpsilonEventHandler {
 // CSS as a service via events - completely unhinged
 class CSSEventHandler extends YpsilonEventHandler {
     constructor() {
-        super({ 'body': ['click', { type: 'theme-change', handler: 'applyTheme' }] });
+        super({ body: ['click', { type: 'theme-change', handler: 'applyTheme' }] });
     }
-    
+
     handleClick(event, target) {
         // Dispatch CSS changes as events
-        this.dispatch('theme-change', { 
+        this.dispatch('theme-change', {
             theme: target.dataset.theme,
             colors: target.dataset.colors?.split(',') || []
         });
     }
-    
+
     applyTheme(event) {
         const { theme, colors } = event.detail;
         // Inject CSS dynamically via events
         const style = document.createElement('style');
         style.textContent = `
-            .theme-${theme} { 
+            .theme-${theme} {
                 --primary: ${colors[0] || '#000'};
                 --secondary: ${colors[1] || '#fff'};
             }
@@ -395,26 +649,26 @@ class CSSEventHandler extends YpsilonEventHandler {
 // Handlers that rewrite themselves - pure madness
 class SelfModifyingHandler extends YpsilonEventHandler {
     constructor() {
-        super({ 'body': ['click'] });
+        super({ body: ['click'] });
         this.clickCount = 0;
     }
-    
+
     handleClick(event, target) {
         this.clickCount++;
-        
+
         // After 10 clicks, completely change behavior
         if (this.clickCount === 10) {
             // Replace the handler method at runtime!
             this.handleClick = function(event, target) {
                 console.log('🤯 Handler has evolved!');
                 // Now dispatch different events
-                this.dispatch('handler-evolved', { 
+                this.dispatch('handler-evolved', {
                     originalClicks: this.clickCount,
                     newBehavior: 'chaos-mode'
                 });
             };
         }
-        
+
         console.log(`Click ${this.clickCount} - ${this.clickCount < 10 ? 'Normal' : 'ERROR: Should not see this'}`);
     }
 }
@@ -422,12 +676,25 @@ class SelfModifyingHandler extends YpsilonEventHandler {
 
 ### **🚨 Pattern: DOM-to-WebWorker Event Bridge**
 
+Revolutionary data flow architecture bridging DOM events to WebWorker computations:
+
+**Event Chain:**
+```
+DOM input → handleInput() → worker.postMessage() →
+  WebWorker computation → worker.onmessage →
+    this.dispatch('worker-result') → displayResult()
+```
+
+**Key Innovation:** Seamless DOM-to-WebWorker-to-DOM event bridging through YpsilonEventHandler's custom event system. Heavy computations never block the UI.
+
+[Live example on JSFiddle](https://jsfiddle.net/j0ev6woq/).
+
 ```js
 // Bridge DOM events to WebWorkers via custom events
 class WebWorkerBridge extends YpsilonEventHandler {
     constructor() {
-        super({ 'body': ['input'] });
-        
+        super({ body: ['input'] });
+
         // Create worker for heavy computations
         this.worker = new Worker('data:application/javascript,' + encodeURIComponent(`
             self.onmessage = function(e) {
@@ -436,13 +703,13 @@ class WebWorkerBridge extends YpsilonEventHandler {
                 self.postMessage({ type: 'computation-done', result, input: e.data });
             };
         `));
-        
+
         this.worker.onmessage = (e) => {
             // Worker results become DOM events
             this.dispatch('worker-result', e.data);
         };
     }
-    
+
     handleInput(event, target) {
         // Send DOM input to WebWorker
         this.worker.postMessage(target.value);
@@ -454,14 +721,15 @@ class WorkerResultHandler extends WebWorkerBridge {
     constructor() {
         super();
         // Add worker result handling
-        this.eventMapping.body.push({ type: 'worker-result', handler: 'displayResult' });
-        this.registerEvents(); // Re-register with new mapping
+        this.addEvent('document', { type: 'worker-result', handler: 'displayResult' });
     }
-    
+
     displayResult(event) {
         console.log('🧠 Worker computed:', event.detail);
     }
 }
+
+new WorkerResultHandler();
 ```
 
 **"Out of Control!" isn't a bug - it's our superpower.** 🚀

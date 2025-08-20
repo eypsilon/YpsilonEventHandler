@@ -589,6 +589,12 @@ export declare class YpsilonEventHandler {
      * @returns True if passive listeners are supported by the browser
      */
     static isPassiveSupported(): boolean;
+    
+    /**
+     * Internal static cache for passive support detection
+     * @private
+     */
+    static _passiveSupportCache: boolean | undefined;
 }
 
 /**
