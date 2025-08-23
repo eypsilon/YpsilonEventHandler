@@ -14,7 +14,7 @@
  * - AbortController support for efficient cleanup
  * - TypeScript-first design with comprehensive type safety
  *
- * 📦 **Bundle Size:** ~4.9kB gzipped (15x smaller than React)
+ * 📦 **Bundle Size:** ~5kB gzipped (15x smaller than React)
  * 🌍 **Browser Support:** IE11+ with polyfills, modern browsers natively
  * 🔗 **GitHub:** https://github.com/eypsilon/YpsilonEventHandler
  * 📖 **Documentation:** Full examples and live demos: https://github.com/eypsilon/YpsilonEventHandler-Examples
@@ -589,12 +589,75 @@ export declare class YpsilonEventHandler {
      * @returns True if passive listeners are supported by the browser
      */
     static isPassiveSupported(): boolean;
-    
+
     /**
      * Internal static cache for passive support detection
      * @private
      */
     static _passiveSupportCache: boolean | undefined;
+
+    /**
+     * 🔗 **Fluent API: Register Event Listener**
+     * 
+     * Chainable alias for addEvent() - register event listeners with fluent interface.
+     * Perfect for building complex event chains in a single statement.
+     * 
+     * @param type - Event type to listen for
+     * @param handler - Handler method name or function
+     * @param target - CSS selector for target element (defaults to 'document')
+     * @returns this for method chaining
+     * 
+     * @example
+     * ```js
+     * // Fluent chaining - multiple listeners in one statement
+     * this.on('click', 'handleClick')
+     *     .on('input', 'handleInput', '#form-container')
+     *     .emit('ready', { initialized: true });
+     * ```
+     */
+    on(type: string, handler: string | EventHandlerFunction, target?: string): this;
+
+    /**
+     * 🔗 **Fluent API: Subscribe to Event**
+     * 
+     * Chainable alias for on() - semantic sugar for event subscription patterns.
+     * Identical functionality to on() but with clearer intent for event-driven architectures.
+     * 
+     * @param type - Event type to subscribe to
+     * @param handler - Handler method name or function
+     * @param target - CSS selector for target element (defaults to 'document')
+     * @returns this for method chaining
+     * 
+     * @example
+     * ```js
+     * // Subscribe to custom events with clear intent
+     * this.subscribe('data-updated', 'onDataUpdate')
+     *     .subscribe('user-login', 'onUserLogin')
+     *     .emit('app-ready', { loaded: true });
+     * ```
+     */
+    subscribe(type: string, handler: string | EventHandlerFunction, target?: string): this;
+
+    /**
+     * 🔗 **Fluent API: Emit Custom Event**
+     * 
+     * Chainable alias for dispatch() - emit custom events with fluent interface.
+     * Supports string selectors and element targets for maximum flexibility.
+     * 
+     * @param type - Event type to emit
+     * @param detail - Event detail payload
+     * @param target - CSS selector string or Element (defaults to document)
+     * @returns this for method chaining
+     * 
+     * @example
+     * ```js
+     * // Chain registrations and emissions in one statement
+     * this.on('data-ready', 'handleData')
+     *     .emit('data-ready', { users: [...] })
+     *     .emit('ui-update', { refresh: true }, '#main-content');
+     * ```
+     */
+    emit<T = any>(type: string, detail?: T, target?: string | EventTarget): this;
 }
 
 /**

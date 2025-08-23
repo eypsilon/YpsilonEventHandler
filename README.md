@@ -14,11 +14,9 @@ Built on the native `handleEvent` interface, it eliminates memory leaks, scales 
 
 **No frameworks. No hacks. No magic.**
 
-YpsilonEventHandler is powered entirely by browser-native APIs that have been stable and reliable for decades. To find a browser where this stuff doesn't work, you'd probably have to dig up software from at least a decade ago.
+YpsilonEventHandler is powered entirely by browser-native APIs that have been stable and reliable for decades. Just standards-compliant JavaScript that works everywhere—even on `file://` protocol with zero build tools and zero server instances.
 
-Just standards-compliant JavaScript that works everywhere—even on `file://` protocol with zero build tools and zero server instances.
-
-**The LOC-to-Feature ratio is completely out of control!** But not because of the functions, methods and scripts you can use, but [the possibilities it provides!](https://github.com/eypsilon/YpsilonEventHandler/blob/main/README.USAGE.md) To call it unprecedented feels like the understatement of the... last... 5 years!
+**The LOC-to-Feature ratio is completely out of control, though!** [The possibilities it offers are seemingly endless!](https://github.com/eypsilon/YpsilonEventHandler/blob/main/README.USAGE.md)
 
 
 ## The Pattern That Broke AI Pattern Recognition
@@ -249,6 +247,37 @@ new YpsilonEventHandler({
 });
 ```
 
+## 🔗 **Fluent Chaining API**
+
+**Revolutionary fluent interface for complex event orchestration:**
+```javascript
+class FluentHandler extends YpsilonEventHandler {
+    constructor() {
+        super({ body: ['click'] });
+
+        // Register multiple listeners and emit events in one statement
+        this.on('data-ready', 'handleData')
+            .on('user-login', 'handleLogin')
+            .subscribe('app-ready', 'handleAppReady')
+            .emit('init-complete', { loaded: true });
+    }
+
+    handleClick(event, target) {
+        // Chain registrations and emissions dynamically
+        this.on('dynamic-event', 'handleDynamic')
+            .emit('user-action', { action: 'click', target: target.id })
+            .emit('analytics', { event: 'interaction', timestamp: Date.now() });
+    }
+}
+```
+
+**Fluent Methods:**
+- **`on(type, handler, target)`** - Register event listener (chainable)
+- **`subscribe(type, handler, target)`** - Semantic alias for on() (chainable)
+- **`emit(type, detail, target)`** - Dispatch custom event (chainable)
+
+All methods return `this` for unlimited chaining possibilities!
+
 **Why This Is Revolutionary:**
 - ✅ **Zero DOM searching** - Container element provided automatically
 - ✅ **Perfect component isolation** - Each instance gets its own scope
@@ -428,7 +457,7 @@ Just check it for yourself, go to any popular page (or right here) and run the f
 let totalListeners = 0;
 const elementsWithListeners = [];
 
-[window, ...document.querySelectorAll('*')].filter(el => {
+[window, document, ...document.querySelectorAll('*')].filter(el => {
     const listeners = getEventListeners(el);
     return listeners && Object.keys(listeners).length > 0;
 }).forEach((el, i) => {
