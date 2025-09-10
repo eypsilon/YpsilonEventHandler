@@ -1,11 +1,22 @@
+// Type declarations for missing DOM/Event types
+type EventHandlerFunction = (event: Event, target: Element, containerElement?: Element) => void;
+
+// AddEventListenerOptions interface (standard DOM API)
+interface AddEventListenerOptions {
+    capture?: boolean;
+    once?: boolean;
+    passive?: boolean;
+    signal?: AbortSignal;
+}
+
 /**
- * 🚀 YpsilonEventHandler - Revolutionary Multi-Handler Event System
+ * 🚀 YpsilonEventHandler - Advanced Multi-Handler Event System
  *
  * The most advanced event delegation library for modern web applications.
  * Features the world's only multi-handler system with closest-match DOM resolution.
  *
  * ⚡ **Key Features:**
- * - Revolutionary multi-handler event delegation (unique to this library)
+ * - Advanced multi-handler event delegation system
  * - Built-in throttle/debounce with leading+trailing edge execution
  * - Zero memory leaks with automatic cleanup
  * - Native browser performance (no synthetic events)
@@ -95,7 +106,7 @@
  * @version 1.7.4
  * @author Claude Van DOM - TypeScript documentation system architect
  * @author Engin Ypsilon - Core library architect and Medium
- * @influencer Sunny DeepSeek - Revolutionary suggestions for global interfaces, custom event registry, and quantum schema validation
+ * @influencer Sunny DeepSeek - Advanced suggestions for global interfaces, custom event registry, and schema validation
  * @influencer Grok (Herr Von Grokk) - Enhanced JSDoc examples and property-level documentation improvements
  * @license MIT
  */
@@ -103,14 +114,14 @@
 /**
  * ## 🌌 QuantumType Documentation System
  *
- * **Revolutionary Approach: Documentation IS the Code**
+ * **Advanced Approach: Documentation IS the Code**
  *
  * Traditional libraries separate docs from types. YpsilonEventHandler **fuses them**.
  * This file demonstrates QuantumType - where TypeScript definitions, comprehensive
  * documentation, and working examples exist in quantum superposition until your
  * IDE measurement collapses them into perfect IntelliSense.
  *
- * 🎯 **What Makes This Revolutionary:**
+ * 🎯 **What Makes This Advanced:**
  * - **Types ARE the documentation** - No separate doc sites needed
  * - **Examples IN the types** - Copy-paste ready code in tooltips
  * - **Self-validating** - Wrong usage = compile error
@@ -311,10 +322,10 @@ export interface EventConfig {
 }
 
 /**
- * 🗺️ **Event Mapping** - The Revolutionary Multi-Handler System Core
+ * 🗺️ **Event Mapping** - Advanced Multi-Handler System Core
  *
  * Maps CSS selectors to arrays of event configurations. This is where YpsilonEventHandler's
- * revolutionary multi-handler system shines - multiple handlers per event type with
+ * advanced multi-handler system excels - multiple handlers per event type with
  * automatic closest-match DOM resolution.
  *
  * 🎯 **Key Concepts:**
@@ -326,7 +337,7 @@ export interface EventConfig {
  *
  * @example
  * ```ts
- * // Multi-handler system (REVOLUTIONARY!):
+ * // Multi-handler system (ADVANCED!):
  * const multiHandler: EventMapping = {
  *   // General click handler for everything
  *   'body': [{ type: 'click', handler: 'handleGeneralClick' }],
@@ -399,14 +410,14 @@ export interface HandlerConfig {
 }
 
 /**
- * YpsilonEventHandler - The revolutionary multi-handler system
+ * YpsilonEventHandler - Advanced multi-handler event delegation system
  *
  * Core Features:
  * - Multiple handlers per event type with closest-match DOM resolution
  * - Convention-based routing (click → handleClick)
  * - Custom event dispatch with this.dispatch()
  * - Built-in throttling/debouncing
- * - Zero memory leaks with automatic cleanup
+ * - Automatic cleanup and memory management
  */
 export declare class YpsilonEventHandler {
     /**
@@ -703,7 +714,6 @@ declare global {
 }
 
 // UMD-style exports for maximum compatibility
-declare const YpsilonEventHandler: typeof YpsilonEventHandler;
 export = YpsilonEventHandler;
 export as namespace YpsilonEventHandler;
 export default YpsilonEventHandler;

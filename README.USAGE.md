@@ -1,8 +1,10 @@
 # YpsilonEventHandler - Advanced Usage Patterns
 
-Revolutionary patterns and techniques discovered during YpsilonEventHandler development.
+Advanced patterns and techniques for YpsilonEventHandler event delegation.
 
 All examples work with `file://` protocol - no build, no setup, no server needed. **Just open in your browser.**
+
+**🚀 [Interactive Examples Hub](https://eypsilon.github.io/YpsilonEventHandler-Examples/example/public/)** - Live demos of all patterns
 
 - [🌌 Pattern: Quantum-Entangled Modules](#-pattern-quantum-entangled-modules)
 - [⚡ Pattern: Reactive State Management](#-pattern-reactive-state-management)
@@ -11,8 +13,8 @@ All examples work with `file://` protocol - no build, no setup, no server needed
 - [🎯 Pattern: Inline Method Injection](#-pattern-inline-method-injection)
 - [📊 Pattern: Performance Monitoring](#-pattern-performance-monitoring)
 - [🎯 Key Patterns Summary](#-key-patterns-summary)
-- [🚨 WARNING: OUT OF CONTROL!](#-warning-out-of-control)
-- [🤯 Unhinged Usage Patterns](#-unhinged-usage-patterns)
+- [🚨 Advanced Patterns](#-advanced-patterns)
+- [🔬 Experimental Usage Patterns](#-experimental-usage-patterns)
 - [🚨 Pattern: Cross-Tab Event Broadcasting](#-pattern-cross-tab-event-broadcasting)
 - [🚨 Pattern: Event-Driven CSS Toggling](#-pattern-event-driven-css-toggling)
 - [🚨 Pattern: Self-Modifying Handlers](#-pattern-self-modifying-handlers)
@@ -583,26 +585,24 @@ class PerformanceHandler extends YpsilonEventHandler {
 
 ## 🎯 **Key Patterns Summary**
 
-1. **Inline Method Injection** - Write methods where HTML lives
-2. **Event-Scoped Organization** - Organize methods by event type
-3. **Super Router Pattern** - Universal event proxy with data-action routing
-4. **Quantum-Entangled Modules** - Independent modules with event communication
-5. **Super Delegation** - One listener handles infinite elements
-6. **Self-Contained Module Architecture** - Complete lifecycle management with plugin systems
-7. **Reactive State Management** - React/Vue-style reactivity with zero framework overhead
-8. **Performance Monitoring** - Built-in stats and optimization
+1. **Quantum-Entangled Modules** - Independent modules with event communication
+2. **Reactive State Management** - React/Vue-style reactivity without framework overhead
+3. **Super Delegation** - Single listener handles unlimited elements
+4. **Self-Contained Module Architecture** - Complete lifecycle management and plugin systems
+5. **Inline Method Injection** - Write methods where HTML lives
+6. **Performance Monitoring** - Built-in stats and optimization
 
 ---
 
-## 🚨 **WARNING: OUT OF CONTROL!**
+## 🚨 **Advanced Patterns**
 
-> ⚠️ **YpsilonEventHandler may cause sudden bursts of inspiration, code refactoring frenzies, or feelings of deep satisfaction. Proceed at your own risk.**
+> ⚠️ **These patterns push the boundaries of what's possible with event delegation.**
 
-**The LOC-to-Feature ratio is completely out of control.**
+**Experimental techniques that showcase YpsilonEventHandler's flexibility.**
 
-### 🤯 **Unhinged Usage Patterns**
+### 🔬 **Experimental Usage Patterns**
 
-*Nobody expects these to work, but they do. Welcome to the bleeding edge.*
+*Advanced techniques that demonstrate the library's versatility and power.*
 
 ### 🚨 **Pattern: Cross-Tab Event Broadcasting**
 
@@ -754,6 +754,6 @@ class WorkerResultHandler extends WebWorkerBridge {
 new WorkerResultHandler();
 ```
 
-**"Out of Control!" isn't a bug - it's our superpower.** 🚀
+**These patterns demonstrate YpsilonEventHandler's versatility and power.** 🚀
 
-These patterns enable enterprise-level architecture with radical simplicity - all running on `file://` protocol with zero build tools and zero server instances.
+Advanced event delegation patterns that enable sophisticated architecture with simple implementation - all running on `file://` protocol with zero build tools required.

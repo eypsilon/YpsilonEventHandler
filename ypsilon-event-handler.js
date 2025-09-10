@@ -1,8 +1,8 @@
 "use strict";
 
 /**
- * YpsilonEventHandler - Revolutionary multi-handler event system with closest-match DOM resolution
- * The most advanced event delegation architecture available - features no other library offers out of the box
+ * YpsilonEventHandler - Lightweight multi-handler event system with closest-match DOM resolution.
+ * Simplifies event management by centralizing listeners and providing advanced event delegation and routing options.
  */
 class YpsilonEventHandler {
     constructor(eventMapping = {}, aliases = {}, config = {}) {

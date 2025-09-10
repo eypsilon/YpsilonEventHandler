@@ -1,6 +1,6 @@
 {
   "name": "ypsilon-event-handler",
-  "version": "1.8.2",
+  "version": "1.8.3",
   "description": "Supercharged multi-handler event system with closest-match DOM resolution and QuantumType docs. The most advanced event delegation architecture available.",
   "homepage": "https://github.com/eypsilon/YpsilonEventHandler#readme",
   "main": "ypsilon-event-handler.js",
